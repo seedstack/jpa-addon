@@ -18,7 +18,7 @@
         <version>2.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>seed-persistence-jpa</artifactId>
+    <artifactId>seed-jpa</artifactId>
     <version>2.0.1-SNAPSHOT</version>
 
     <properties>
