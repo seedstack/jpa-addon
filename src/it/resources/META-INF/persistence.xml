@@ -28,4 +28,19 @@
         <class>org.seedstack.seed.persistence.jpa.sample.Item3</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
     </persistence-unit>
+
+    <persistence-unit name="seed-biz-support" transaction-type="RESOURCE_LOCAL">
+        <class>org.seedstack.business.jpa.samples.domain.tinyaggregate.TinyAggRoot</class>
+
+        <class>org.seedstack.business.jpa.samples.domain.base.SampleBaseJpaAggregateRoot</class>
+        <class>org.seedstack.business.jpa.samples.domain.base.SampleBaseJpaEntity</class>
+        <class>org.seedstack.business.jpa.samples.domain.embed.SampleEmbedJpaAggregateRoot</class>
+        <class>org.seedstack.business.jpa.samples.domain.embed.SampleEmbedJpaEntity</class>
+        <class>org.seedstack.business.jpa.samples.domain.simple.SampleSimpleJpaAggregateRoot</class>
+        <class>org.seedstack.business.jpa.samples.domain.simple.SampleSimpleJpaEntity</class>
+
+        <class>org.seedstack.business.jpa.samples.domain.identity.MyAggregate</class>
+        <class>org.seedstack.business.jpa.samples.domain.identity.MyEntity</class>
+
+    </persistence-unit>
 </persistence>

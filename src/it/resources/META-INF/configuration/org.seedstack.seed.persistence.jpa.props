@@ -9,7 +9,7 @@
 #
 
 [org.seedstack.seed]
-persistence.jpa.units=unit1, unit2, unit3, unit4
+persistence.jpa.units=unit1, unit2, unit3, unit4, seed-biz-support
 
 [org.seedstack.seed.persistence.jdbc]
 datasources=datasource1
@@ -60,3 +60,22 @@ property.sql.enforce_strict_size=true
 
 [org.seedstack.seed.persistence.jpa.sample2.*]
 jpa-unit = unit4
+
+[org.seedstack.seed.persistence.jpa.unit.seed-biz-support.property]
+javax.persistence.jdbc.driver=org.hsqldb.jdbcDriver
+javax.persistence.jdbc.url=jdbc:hsqldb:mem:testdb
+javax.persistence.jdbc.user=sa
+javax.persistence.jdbc.password=
+hibernate.dialect=org.hibernate.dialect.HSQLDialect
+hibernate.hbm2ddl.auto=create
+sql.enforce_strict_size=true
+
+[org.seedstack.business.jpa.samples.domain.identity.MyAggregate]
+identity.handler-qualifier = inmemory-sequence
+identity.sequence-name = SEQTEST
+
+[org.seedstack.business.jpa.samples.domain.identity.MyEntity]
+identity.handler-qualifier = simple-UUID
+
+[org.seedstack.business.event]
+domain.watch=true

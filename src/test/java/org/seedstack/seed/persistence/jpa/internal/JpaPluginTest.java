@@ -15,6 +15,7 @@ import io.nuun.kernel.api.plugin.context.InitContext;
 import org.apache.commons.configuration.Configuration;
 import org.assertj.core.api.Assertions;
 import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +59,8 @@ public class JpaPluginTest {
                         mockJdbcPlugin()
                 )
         );
-        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses").ofType(Map.class).in(pluginUnderTest).get();
+        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses").ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {
+        }).in(pluginUnderTest).get();
         Assertions.assertThat(exceptionHandlerClasses).isNotNull();
         Assertions.assertThat(exceptionHandlerClasses).hasSize(1);
     }
@@ -70,7 +72,8 @@ public class JpaPluginTest {
                         mockJdbcPlugin()
                 )
         );
-        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses").ofType(Map.class).in(pluginUnderTest).get();
+        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses").ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {
+        }).in(pluginUnderTest).get();
         Assertions.assertThat(exceptionHandlerClasses).isNotNull();
         Assertions.assertThat(exceptionHandlerClasses).hasSize(1);
     }
