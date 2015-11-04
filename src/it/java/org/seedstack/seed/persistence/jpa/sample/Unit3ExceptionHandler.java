@@ -7,7 +7,7 @@
  */
 package org.seedstack.seed.persistence.jpa.sample;
 
-import org.seedstack.seed.core.api.Logging;
+import org.seedstack.seed.Logging;
 import org.seedstack.seed.persistence.jpa.api.JpaExceptionHandler;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
 import org.slf4j.Logger;

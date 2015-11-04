@@ -7,7 +7,7 @@
  */
 package org.seedstack.business.jpa.samples.domain.simple;
 
-import org.seedstack.business.api.domain.BaseEntity;
+import org.seedstack.business.domain.BaseEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -10,9 +10,9 @@
  */
 package org.seedstack.business.jpa.samples.domain.identity;
 
-import org.seedstack.business.api.domain.BaseAggregateRoot;
-import org.seedstack.business.api.domain.Identity;
-import org.seedstack.business.api.domain.identity.SequenceHandler;
+import org.seedstack.business.domain.BaseAggregateRoot;
+import org.seedstack.business.domain.Identity;
+import org.seedstack.business.domain.identity.SequenceHandler;
 
 import java.util.Set;
 

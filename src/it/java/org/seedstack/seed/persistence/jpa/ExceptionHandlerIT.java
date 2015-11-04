@@ -15,7 +15,7 @@ import org.seedstack.seed.persistence.jpa.api.JpaExceptionHandler;
 import org.seedstack.seed.persistence.jpa.api.JpaUnit;
 import org.seedstack.seed.persistence.jpa.sample.Item3Repository;
 import org.seedstack.seed.persistence.jpa.sample.Unit3ExceptionHandler;
-import org.seedstack.seed.transaction.api.Transactional;
+import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;

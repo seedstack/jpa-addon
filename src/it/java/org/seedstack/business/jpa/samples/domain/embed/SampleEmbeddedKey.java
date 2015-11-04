@@ -7,7 +7,7 @@
  */
 package org.seedstack.business.jpa.samples.domain.embed;
 
-import org.seedstack.business.api.domain.BaseValueObject;
+import org.seedstack.business.domain.BaseValueObject;
 
 import javax.persistence.Embeddable;
 

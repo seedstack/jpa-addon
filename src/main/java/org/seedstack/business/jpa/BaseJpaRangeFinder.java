@@ -7,9 +7,9 @@
  */
 package org.seedstack.business.jpa;
 
-import org.seedstack.business.api.interfaces.finder.Range;
-import org.seedstack.business.api.interfaces.finder.RangeFinder;
-import org.seedstack.business.api.interfaces.finder.Result;
+import org.seedstack.business.finder.Range;
+import org.seedstack.business.finder.RangeFinder;
+import org.seedstack.business.finder.Result;
 
 import javax.persistence.Query;
 import java.util.List;

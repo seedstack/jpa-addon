@@ -7,7 +7,7 @@
  */
 package org.seedstack.business.jpa.samples.utils;
 
-import org.seedstack.business.api.Service;
+import org.seedstack.business.Service;
 
 /**
  * @author epo.jemba@ext.mpsa.com

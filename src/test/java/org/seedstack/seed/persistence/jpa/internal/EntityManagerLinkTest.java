@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import org.seedstack.seed.core.api.SeedException;
+import org.seedstack.seed.SeedException;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;

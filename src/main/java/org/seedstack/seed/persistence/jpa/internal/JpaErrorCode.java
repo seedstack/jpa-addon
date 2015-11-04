@@ -10,7 +10,7 @@
  */
 package org.seedstack.seed.persistence.jpa.internal;
 
-import org.seedstack.seed.core.api.ErrorCode;
+import org.seedstack.seed.ErrorCode;
 
 /**
  * @author redouane.loulou@ext.mpsa.com

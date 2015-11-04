@@ -9,7 +9,7 @@ package org.seedstack.business.jpa.samples.utils;
 
 import org.seedstack.business.jpa.samples.domain.simple.SampleSimpleFactory;
 import org.seedstack.business.jpa.samples.domain.simple.SampleSimpleJpaAggregateRoot;
-import org.seedstack.seed.transaction.api.Transactional;
+import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

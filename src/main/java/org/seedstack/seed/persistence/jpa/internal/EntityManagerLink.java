@@ -7,7 +7,7 @@
  */
 package org.seedstack.seed.persistence.jpa.internal;
 
-import org.seedstack.seed.core.api.SeedException;
+import org.seedstack.seed.SeedException;
 import org.seedstack.seed.transaction.spi.TransactionalLink;
 
 import javax.persistence.EntityManager;

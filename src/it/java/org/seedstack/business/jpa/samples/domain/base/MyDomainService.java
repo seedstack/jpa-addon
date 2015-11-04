@@ -7,7 +7,7 @@
  */
 package org.seedstack.business.jpa.samples.domain.base;
 
-import org.seedstack.business.api.Service;
+import org.seedstack.business.Service;
 
 /**
  * @author pierre.thirouin@ext.mpsa.com

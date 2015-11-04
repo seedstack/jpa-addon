@@ -8,7 +8,7 @@
 package org.seedstack.business.jpa.internal;
 
 import com.google.inject.assistedinject.Assisted;
-import org.seedstack.business.api.domain.AggregateRoot;
+import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.jpa.BaseJpaRepository;
 import org.seedstack.business.spi.GenericImplementation;
 import org.seedstack.seed.core.utils.SeedCheckUtils;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
 /**
  * Default Jpa implementation for Repository. Used only when no implementation is provided for an aggregate.
  *
- * To inject this implementation you have to use {@link org.seedstack.business.api.domain.Repository} as follows:
+ * To inject this implementation you have to use {@link org.seedstack.business.domain.Repository} as follows:
  * <pre>
  * {@literal @}Inject
  * Repository{@literal <MyAggregateRoot, MyKey>} myAggregateRepository;
@@ -29,7 +29,7 @@ import javax.inject.Inject;
  * @param <KEY>       the aggregate key
  * @author pierre.thirouin@ext.mpsa.com
 
- * @see org.seedstack.business.api.domain.Repository
+ * @see org.seedstack.business.domain.Repository
  * @see org.seedstack.business.jpa.BaseJpaRepository
  */
 @Jpa

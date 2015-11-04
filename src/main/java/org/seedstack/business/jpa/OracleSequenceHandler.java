@@ -11,11 +11,11 @@ import jodd.typeconverter.impl.LongConverter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.lang.StringUtils;
-import org.seedstack.business.api.domain.BaseEntity;
-import org.seedstack.business.api.domain.Entity;
-import org.seedstack.business.api.domain.identity.IdentityErrorCodes;
-import org.seedstack.business.api.domain.identity.SequenceHandler;
-import org.seedstack.seed.core.api.SeedException;
+import org.seedstack.business.domain.BaseEntity;
+import org.seedstack.business.domain.Entity;
+import org.seedstack.business.domain.identity.IdentityErrorCodes;
+import org.seedstack.business.domain.identity.SequenceHandler;
+import org.seedstack.seed.SeedException;
 
 import javax.inject.Inject;
 import javax.inject.Named;

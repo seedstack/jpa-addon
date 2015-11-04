@@ -10,7 +10,7 @@ package org.seedstack.seed.persistence.jpa.sample2;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import org.seedstack.seed.it.api.ITBind;
+import org.seedstack.seed.it.ITBind;
 
 @ITBind
 public class ItemRepository {

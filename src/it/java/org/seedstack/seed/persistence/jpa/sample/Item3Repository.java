@@ -8,7 +8,7 @@
 package org.seedstack.seed.persistence.jpa.sample;
 
 
-import org.seedstack.seed.it.api.ITBind;
+import org.seedstack.seed.it.ITBind;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

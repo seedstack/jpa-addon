@@ -9,7 +9,7 @@
 [org.seedstack.seed]
 persistence.jpa.units=unit1, unit2, unit3, unit4, seed-biz-support
 
-[org.seedstack.seed.persistence.jdbc]
+[org.seedstack.jdbc]
 datasources=datasource1
 
 
@@ -47,7 +47,7 @@ mapping-files = META-INF/otherItem.xml
 property.hibernate.dialect=org.hibernate.dialect.HSQLDialect
 property.hibernate.hbm2ddl.auto=create
 
-[org.seedstack.seed.persistence.jdbc.datasource.datasource1]
+[org.seedstack.jdbc.datasource.datasource1]
 #context=someContext
 #jndi-name=java:/myAppDS
 driver=org.hsqldb.jdbcDriver

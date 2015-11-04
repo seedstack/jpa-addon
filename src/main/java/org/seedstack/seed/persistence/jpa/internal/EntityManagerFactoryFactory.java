@@ -11,9 +11,9 @@
 package org.seedstack.seed.persistence.jpa.internal;
 
 import org.apache.commons.configuration.Configuration;
-import org.seedstack.seed.core.api.Application;
-import org.seedstack.seed.core.api.SeedException;
-import org.seedstack.seed.persistence.jdbc.internal.JdbcRegistry;
+import org.seedstack.seed.Application;
+import org.seedstack.seed.SeedException;
+import org.seedstack.jdbc.internal.JdbcRegistry;
 
 import javax.persistence.*;
 import javax.persistence.spi.PersistenceProvider;

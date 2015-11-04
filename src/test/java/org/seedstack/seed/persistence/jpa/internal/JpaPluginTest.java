@@ -19,9 +19,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.seedstack.seed.core.api.Application;
+import org.seedstack.seed.Application;
 import org.seedstack.seed.core.internal.application.ApplicationPlugin;
-import org.seedstack.seed.persistence.jdbc.internal.JdbcPlugin;
+import org.seedstack.jdbc.internal.JdbcPlugin;
 import org.seedstack.seed.persistence.jpa.api.JpaExceptionHandler;
 import org.seedstack.seed.transaction.internal.TransactionPlugin;
 
@@ -33,9 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Persistence.class)

@@ -7,8 +7,8 @@
  */
 package org.seedstack.business.jpa.samples.domain.base;
 
-import org.seedstack.business.api.domain.BaseAggregateRoot;
-import org.seedstack.seed.core.api.Logging;
+import org.seedstack.business.domain.BaseAggregateRoot;
+import org.seedstack.seed.Logging;
 import org.slf4j.Logger;
 
 import javax.persistence.Entity;

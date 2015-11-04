@@ -7,7 +7,7 @@
  */
 package org.seedstack.business.jpa.samples.finders;
 
-import org.seedstack.business.api.interfaces.finder.Range;
+import org.seedstack.business.finder.Range;
 import org.seedstack.business.jpa.BaseJpaRangeFinder;
 
 import javax.inject.Inject;

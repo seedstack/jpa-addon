@@ -14,7 +14,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation accompanies the {@link org.seedstack.seed.transaction.api.Transactional} annotation to define the
+ * This annotation accompanies the {@link org.seedstack.seed.transaction.Transactional} annotation to define the
  * transaction as a JPA one and specify the concerned JPA unit.
  *
  * @author adrien.lauer@mpsa.com

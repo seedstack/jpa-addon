@@ -21,7 +21,7 @@ import org.seedstack.seed.persistence.jpa.api.JpaUnit;
 import org.seedstack.seed.persistence.jpa.sample2.Item;
 import org.seedstack.seed.persistence.jpa.sample2.ItemRepository;
 import org.seedstack.seed.persistence.jpa.sample2.OtherItem;
-import org.seedstack.seed.transaction.api.Transactional;
+import org.seedstack.seed.transaction.Transactional;
 
 @Transactional
 @JpaUnit("unit4")

@@ -12,7 +12,7 @@ import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 import org.seedstack.seed.persistence.jpa.api.JpaExceptionHandler;
 import org.seedstack.seed.transaction.spi.TransactionConcern;
-import org.seedstack.seed.transaction.utils.TransactionalProxy;
+import org.seedstack.seed.transaction.spi.TransactionalProxy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

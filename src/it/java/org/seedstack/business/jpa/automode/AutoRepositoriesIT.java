@@ -10,13 +10,13 @@ package org.seedstack.business.jpa.automode;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.business.api.domain.Factory;
-import org.seedstack.business.api.domain.Repository;
+import org.seedstack.business.domain.Factory;
+import org.seedstack.business.domain.Repository;
 import org.seedstack.business.jpa.samples.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.persistence.jpa.api.Jpa;
 import org.seedstack.seed.persistence.jpa.api.JpaUnit;
-import org.seedstack.seed.transaction.api.Transactional;
+import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 

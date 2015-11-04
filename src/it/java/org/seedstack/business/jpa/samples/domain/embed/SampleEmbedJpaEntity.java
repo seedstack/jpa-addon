@@ -7,7 +7,7 @@
  */
 package org.seedstack.business.jpa.samples.domain.embed;
 
-import org.seedstack.business.api.domain.BaseEntity;
+import org.seedstack.business.domain.BaseEntity;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

@@ -16,8 +16,8 @@ import org.seedstack.seed.persistence.jpa.sample.Item1;
 import org.seedstack.seed.persistence.jpa.sample.Item1Repository;
 import org.seedstack.seed.persistence.jpa.sample.Item2;
 import org.seedstack.seed.persistence.jpa.sample.Item2Repository;
-import org.seedstack.seed.transaction.api.Propagation;
-import org.seedstack.seed.transaction.api.Transactional;
+import org.seedstack.seed.transaction.Propagation;
+import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 

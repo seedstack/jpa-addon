@@ -14,7 +14,7 @@ import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.persistence.jpa.api.JpaUnit;
 import org.seedstack.seed.persistence.jpa.sample.Item1;
 import org.seedstack.seed.persistence.jpa.sample.Item1Repository;
-import org.seedstack.seed.transaction.api.Transactional;
+import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 

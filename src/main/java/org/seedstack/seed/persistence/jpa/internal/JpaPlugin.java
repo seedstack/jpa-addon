@@ -15,10 +15,10 @@ import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequestBuilder;
 import io.nuun.kernel.core.AbstractPlugin;
 import org.apache.commons.configuration.Configuration;
-import org.seedstack.seed.core.api.Application;
+import org.seedstack.seed.Application;
 import org.seedstack.seed.core.internal.application.ApplicationPlugin;
-import org.seedstack.seed.persistence.jdbc.internal.JdbcPlugin;
-import org.seedstack.seed.persistence.jdbc.internal.JdbcRegistry;
+import org.seedstack.jdbc.internal.JdbcPlugin;
+import org.seedstack.jdbc.internal.JdbcRegistry;
 import org.seedstack.seed.persistence.jpa.api.JpaExceptionHandler;
 import org.seedstack.seed.transaction.internal.TransactionPlugin;
 import org.slf4j.Logger;
@@ -27,12 +27,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * This plugin enables JPA support by creating an {@link javax.persistence.EntityManagerFactory} per persistence unit configured.
