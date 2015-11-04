@@ -6,14 +6,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-[org.seedstack.seed]
-persistence.jpa.units=unit1, unit2, unit3, unit4, seed-biz-support
-
-[org.seedstack.seed.persistence.jdbc]
+[org.seedstack.jdbc]
 datasources=datasource1
 
+[org.seedstack.jpa]
+units=unit1, unit2, unit3, unit4, seed-biz-support
 
-[org.seedstack.seed.persistence.jpa.unit.unit1]
+[org.seedstack.jpa.unit.unit1]
 property.javax.persistence.jdbc.driver=org.hsqldb.jdbcDriver
 property.javax.persistence.jdbc.url=jdbc:hsqldb:mem:testdb1
 property.javax.persistence.jdbc.user=sa
@@ -22,7 +21,7 @@ property.hibernate.dialect=org.hibernate.dialect.HSQLDialect
 property.hibernate.hbm2ddl.auto=create
 property.sql.enforce_strict_size=true
 
-[org.seedstack.seed.persistence.jpa.unit.unit2]
+[org.seedstack.jpa.unit.unit2]
 property.javax.persistence.jdbc.driver=org.hsqldb.jdbcDriver
 property.javax.persistence.jdbc.url=jdbc:hsqldb:mem:testdb2
 property.javax.persistence.jdbc.user=sa
@@ -31,8 +30,8 @@ property.hibernate.dialect=org.hibernate.dialect.HSQLDialect
 property.hibernate.hbm2ddl.auto=create
 property.sql.enforce_strict_size=true
 
-[org.seedstack.seed.persistence.jpa.unit.unit3]
-exception-handler=org.seedstack.seed.persistence.jpa.sample.Unit3ExceptionHandler
+[org.seedstack.jpa.unit.unit3]
+exception-handler=org.seedstack.jpa.sample.Unit3ExceptionHandler
 property.javax.persistence.jdbc.driver=org.hsqldb.jdbcDriver
 property.javax.persistence.jdbc.url=jdbc:hsqldb:mem:testdb3
 property.javax.persistence.jdbc.user=sa
@@ -41,13 +40,13 @@ property.hibernate.dialect=org.hibernate.dialect.HSQLDialect
 property.hibernate.hbm2ddl.auto=create
 property.sql.enforce_strict_size=true
 
-[org.seedstack.seed.persistence.jpa.unit.unit4]
+[org.seedstack.jpa.unit.unit4]
 datasource=datasource1
 mapping-files = META-INF/otherItem.xml
 property.hibernate.dialect=org.hibernate.dialect.HSQLDialect
 property.hibernate.hbm2ddl.auto=create
 
-[org.seedstack.seed.persistence.jdbc.datasource.datasource1]
+[org.seedstack.jdbc.datasource.datasource1]
 #context=someContext
 #jndi-name=java:/myAppDS
 driver=org.hsqldb.jdbcDriver
@@ -56,10 +55,10 @@ user=sa
 password=
 property.sql.enforce_strict_size=true
 
-[org.seedstack.seed.persistence.jpa.sample2.*]
+[org.seedstack.jpa.sample2.*]
 jpa-unit = unit4
 
-[org.seedstack.seed.persistence.jpa.unit.seed-biz-support.property]
+[org.seedstack.jpa.unit.seed-biz-support.property]
 javax.persistence.jdbc.driver=org.hsqldb.jdbcDriver
 javax.persistence.jdbc.url=jdbc:hsqldb:mem:testdb
 javax.persistence.jdbc.user=sa
@@ -68,11 +67,11 @@ hibernate.dialect=org.hibernate.dialect.HSQLDialect
 hibernate.hbm2ddl.auto=create
 sql.enforce_strict_size=true
 
-[org.seedstack.business.jpa.samples.domain.identity.MyAggregate]
+[org.seedstack.jpa.samples.domain.identity.MyAggregate]
 identity.handler-qualifier = inmemory-sequence
 identity.sequence-name = SEQTEST
 
-[org.seedstack.business.jpa.samples.domain.identity.MyEntity]
+[org.seedstack.jpa.samples.domain.identity.MyEntity]
 identity.handler-qualifier = simple-UUID
 
 [org.seedstack.business.event]
