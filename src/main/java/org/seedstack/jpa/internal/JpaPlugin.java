@@ -7,7 +7,7 @@
  */
 package org.seedstack.jpa.internal;
 
-import io.nuun.kernel.api.Plugin;
+import com.google.common.collect.Lists;
 import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.PluginException;
 import io.nuun.kernel.api.plugin.context.InitContext;
@@ -15,11 +15,10 @@ import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequestBuilder;
 import io.nuun.kernel.core.AbstractPlugin;
 import org.apache.commons.configuration.Configuration;
-import org.seedstack.seed.Application;
-import org.seedstack.seed.core.internal.application.ApplicationPlugin;
-import org.seedstack.jdbc.internal.JdbcPlugin;
 import org.seedstack.jdbc.internal.JdbcRegistry;
 import org.seedstack.jpa.JpaExceptionHandler;
+import org.seedstack.seed.Application;
+import org.seedstack.seed.core.internal.application.ApplicationPlugin;
 import org.seedstack.seed.transaction.internal.TransactionPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,32 +50,10 @@ public class JpaPlugin extends AbstractPlugin {
     @Override
     @SuppressWarnings("unchecked")
     public InitState init(InitContext initContext) {
-        Configuration jpaConfiguration = null;
-        TransactionPlugin transactionPlugin = null;
-        JdbcRegistry jdbcRegistry = null;
-        Application application = null;
-
-        for (Plugin plugin : initContext.pluginsRequired()) {
-            if (plugin instanceof ApplicationPlugin) {
-                application = ((ApplicationPlugin) plugin).getApplication();
-                jpaConfiguration = application.getConfiguration().subset(JpaPlugin.JPA_PLUGIN_CONFIGURATION_PREFIX);
-            } else if (plugin instanceof TransactionPlugin) {
-                transactionPlugin = (TransactionPlugin) plugin;
-            } else if (plugin instanceof JdbcPlugin) {
-                jdbcRegistry = (JdbcRegistry) plugin;
-            }
-        }
-
-        if (jpaConfiguration == null) {
-            throw new PluginException("Unable to find application plugin");
-        }
-        if (transactionPlugin == null) {
-            throw new PluginException("Unable to find transaction plugin");
-        }
-
-        if (jdbcRegistry == null) {
-            throw new PluginException("Unable to find jdbc plugin");
-        }
+        TransactionPlugin transactionPlugin = initContext.dependency(TransactionPlugin.class);
+        JdbcRegistry jdbcRegistry = initContext.dependency(JdbcRegistry.class);
+        Application application = initContext.dependency(ApplicationPlugin.class).getApplication();
+        Configuration jpaConfiguration = application.getConfiguration().subset(JpaPlugin.JPA_PLUGIN_CONFIGURATION_PREFIX);
 
         String[] persistenceUnitNames = jpaConfiguration.getStringArray("units");
 
@@ -144,12 +121,8 @@ public class JpaPlugin extends AbstractPlugin {
     }
 
     @Override
-    public Collection<Class<? extends Plugin>> requiredPlugins() {
-        Collection<Class<? extends Plugin>> plugins = new ArrayList<Class<? extends Plugin>>();
-        plugins.add(ApplicationPlugin.class);
-        plugins.add(TransactionPlugin.class);
-        plugins.add(JdbcPlugin.class);
-        return plugins;
+    public Collection<Class<?>> requiredPlugins() {
+        return Lists.<Class<?>>newArrayList(ApplicationPlugin.class, TransactionPlugin.class, JdbcRegistry.class);
     }
 
     @Override
