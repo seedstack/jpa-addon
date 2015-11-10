@@ -8,7 +8,6 @@
 package org.seedstack.jpa.internal;
 
 import io.nuun.kernel.api.Plugin;
-import io.nuun.kernel.api.plugin.PluginException;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import org.apache.commons.configuration.Configuration;
 import org.assertj.core.api.Assertions;
@@ -19,16 +18,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.seedstack.jdbc.internal.JdbcRegistry;
+import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.core.internal.application.ApplicationPlugin;
-import org.seedstack.jdbc.internal.JdbcPlugin;
-import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.transaction.internal.TransactionPlugin;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,75 +36,41 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @PrepareForTest(Persistence.class)
 public class JpaPluginTest {
 
-    JpaPlugin pluginUnderTest;
+    private JpaPlugin underTest;
 
     @Before
     public void before() {
-        pluginUnderTest = new JpaPlugin();
+        underTest = new JpaPlugin();
     }
 
     @Test
-    public void initSeedJpaPluginTest() {
-        mockPersitanceCreateEntityManagerFactory();
-        pluginUnderTest.init(mockInitContext(
-                        mockApplicationPlugin(mockConfiguration("org.seedstack.jpa.sample.Unit3ExceptionHandler")),
-                        mockTransactionPlugin(),
-                        mockJdbcPlugin()
-                )
-        );
-        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses").ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {
-        }).in(pluginUnderTest).get();
+    public void initTest() {
+        mockPersistenceCreateEntityManagerFactory();
+        ApplicationPlugin applicationPlugin = mockApplicationPlugin(mockConfiguration("org.seedstack.jpa.sample.Unit3ExceptionHandler"));
+        underTest.init(mockInitContext(applicationPlugin, mockTransactionPlugin(), mockJdbcRegistry()));
+
+        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses")
+                .ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {}).in(underTest).get();
+
         Assertions.assertThat(exceptionHandlerClasses).isNotNull();
         Assertions.assertThat(exceptionHandlerClasses).hasSize(1);
     }
 
-    @Test(expected = PluginException.class)
-    public void initSeedJpaPluginTest2() {
-        pluginUnderTest.init(mockInitContext(
-                        mockApplicationPlugin(mockConfiguration("org.seedstack.jpa.sample.Unit3ExceptionHandler")),
-                        mockJdbcPlugin()
-                )
-        );
-        Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses").ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {
-        }).in(pluginUnderTest).get();
-        Assertions.assertThat(exceptionHandlerClasses).isNotNull();
-        Assertions.assertThat(exceptionHandlerClasses).hasSize(1);
-    }
-
-    @Test(expected = PluginException.class)
-    public void initSeedJpaPluginTest3() {
-        pluginUnderTest.init(mockInitContext(mockTransactionPlugin(), mockJdbcPlugin()));
-    }
-
-    @Test(expected = PluginException.class)
-    public void initSeedJpaPluginTest4() {
-        pluginUnderTest.init(mockInitContext(
-                        mockApplicationPlugin(mockConfiguration("org.seedstack.jpa.sample.Unit3ExceptionHandler")),
-                        mockTransactionPlugin()
-                )
-        );
-    }
-
-    @Test(expected = PluginException.class)
-    public void initSeedJpaPluginTest5() {
-        mockPersitanceCreateEntityManagerFactory();
-        pluginUnderTest.init(mockInitContext(mockApplicationPlugin(mockConfiguration("toto")), mockTransactionPlugin()));
-    }
-
-    public void mockPersitanceCreateEntityManagerFactory() {
+    public void mockPersistenceCreateEntityManagerFactory() {
         mockStatic(Persistence.class);
         when(Persistence.createEntityManagerFactory("hsql-in-memory", getProperties())).thenReturn(mock(EntityManagerFactory.class));
     }
 
-    private <T extends Plugin> InitContext mockInitContext(T... plugins) {
+    private <T extends Plugin> InitContext mockInitContext(ApplicationPlugin applicationPlugin, TransactionPlugin transactionPlugin, JdbcRegistry jdbcRegistry) {
         InitContext initContext = mock(InitContext.class);
-        when(initContext.pluginsRequired()).thenReturn((Collection) Arrays.asList(plugins));
-        Assertions.assertThat(initContext).isNotNull();
+        when(initContext.dependency(ApplicationPlugin.class)).thenReturn(applicationPlugin);
+        when(initContext.dependency(TransactionPlugin.class)).thenReturn(transactionPlugin);
+        when(initContext.dependency(JdbcRegistry.class)).thenReturn(jdbcRegistry);
         return initContext;
     }
 
-    public JdbcPlugin mockJdbcPlugin() {
-        return mock(JdbcPlugin.class);
+    public JdbcRegistry mockJdbcRegistry() {
+        return mock(JdbcRegistry.class);
     }
 
     public ApplicationPlugin mockApplicationPlugin(Configuration configuration) {
