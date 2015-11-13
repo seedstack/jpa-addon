@@ -37,7 +37,7 @@ public class JpaPlugin extends AbstractPlugin {
     public static final String JPA_PLUGIN_CONFIGURATION_PREFIX = "org.seedstack.jpa";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaPlugin.class);
-
+    public static final String JPA_UNIT_PROPERTY = "jpa-unit";
     private final EntityManagerFactoryFactory confResolver = new EntityManagerFactoryFactory();
     private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<String, EntityManagerFactory>();
     private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<String, Class<? extends JpaExceptionHandler>>();
