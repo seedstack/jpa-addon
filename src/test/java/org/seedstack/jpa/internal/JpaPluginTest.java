@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.seedstack.jdbc.internal.JdbcRegistry;
+import org.seedstack.jdbc.spi.JdbcRegistry;
 import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.core.internal.application.ApplicationPlugin;

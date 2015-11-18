@@ -13,7 +13,7 @@ package org.seedstack.jpa.internal;
 import org.apache.commons.configuration.Configuration;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
-import org.seedstack.jdbc.internal.JdbcRegistry;
+import org.seedstack.jdbc.spi.JdbcRegistry;
 
 import javax.persistence.*;
 import javax.persistence.spi.PersistenceProvider;

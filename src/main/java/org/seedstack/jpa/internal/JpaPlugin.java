@@ -15,7 +15,7 @@ import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequestBuilder;
 import io.nuun.kernel.core.AbstractPlugin;
 import org.apache.commons.configuration.Configuration;
-import org.seedstack.jdbc.internal.JdbcRegistry;
+import org.seedstack.jdbc.spi.JdbcRegistry;
 import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.core.internal.application.ApplicationPlugin;
