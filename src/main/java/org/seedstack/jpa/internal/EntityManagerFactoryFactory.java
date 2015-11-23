@@ -23,7 +23,8 @@ import javax.sql.DataSource;
 import java.util.*;
 
 class EntityManagerFactoryFactory {
-    EntityManagerFactory createEntityManagerFactory(String persistenceUnit, Properties properties) {
+
+	EntityManagerFactory createEntityManagerFactory(String persistenceUnit, Properties properties) {
         return Persistence.createEntityManagerFactory(persistenceUnit, properties);
     }
 
@@ -38,7 +39,7 @@ class EntityManagerFactoryFactory {
 
         ArrayList<String> classNames = new ArrayList<String>();
         for (Class<?> scannedClass : scannedClasses) {
-            if (unitInfo.getPersistenceUnitName().equals(application.getConfiguration(scannedClass).getString("jpa-unit"))) {
+            if (unitInfo.getPersistenceUnitName().equals(application.getConfiguration(scannedClass).getString(JpaPlugin.JPA_UNIT_PROPERTY))) {
                 classNames.add(scannedClass.getName());
             }
         }

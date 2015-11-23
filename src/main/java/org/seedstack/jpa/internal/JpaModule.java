@@ -30,14 +30,16 @@ class JpaModule extends PrivateModule {
 
     @Override
     protected void configure() {
-        EntityManagerLink entityManagerLink = new EntityManagerLink();
-        bind(EntityManager.class).toInstance(TransactionalProxy.create(EntityManager.class, entityManagerLink));
-
-        for (Map.Entry<String, EntityManagerFactory> entry : entityManagerFactories.entrySet()) {
-            bindUnit(entry.getKey(), entry.getValue(), entityManagerLink);
-        }
-
-        expose(EntityManager.class);
+		if (entityManagerFactories != null && !entityManagerFactories.isEmpty()) {
+    		EntityManagerLink entityManagerLink = new EntityManagerLink();
+    		bind(EntityManager.class).toInstance(TransactionalProxy.create(EntityManager.class, entityManagerLink));
+    		
+    		for (Map.Entry<String, EntityManagerFactory> entry : entityManagerFactories.entrySet()) {
+    			bindUnit(entry.getKey(), entry.getValue(), entityManagerLink);
+    		}
+    		
+    		expose(EntityManager.class);
+    	}
     }
 
     private void bindUnit(String name, EntityManagerFactory entityManagerFactory, EntityManagerLink entityManagerLink) {
