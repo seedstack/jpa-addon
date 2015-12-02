@@ -6,6 +6,8 @@ author: "SeedStack"
 description: "Provides configuration, injection and transactions for Java Persistence API 1.0, 2.0 and 2.1."
 min-version: "15.11+"
 backend: true
+aliases:
+    - /docs/seed/manual/persistence/jpa
 menu:
     AddonJPA:
         weight: 10
