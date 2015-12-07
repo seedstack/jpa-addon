@@ -1,6 +1,6 @@
 # SeedStack JPA add-on
 
-[![Build status](https://travis-ci.org/seedstack/jpa-addon.svg?branch=master)](https://travis-ci.org/seedstack/jpa-addon) [![Coverage Status](https://coveralls.io/repos/seedstack/jpa-addon/badge.svg?branch=master)](https://coveralls.io/r/seedstack/jpa-addon?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.seedstack/seed-jpa/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.seedstack/seed-jpa)
+[![Build status](https://travis-ci.org/seedstack/jpa-addon.svg?branch=master)](https://travis-ci.org/seedstack/jpa-addon) [![Coverage Status](https://coveralls.io/repos/seedstack/jpa-addon/badge.svg?branch=master)](https://coveralls.io/r/seedstack/jpa-addon?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.seedstack.jpa/jpa-addon/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.seedstack.jpa/jpa-addon)
 
 Official JPA integration for SeedStack.
 
