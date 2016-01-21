@@ -1,4 +1,14 @@
-# Version 2.1.0 (2015-11-26)
+# Version 2.1.2 (2016-01-21)
+
+* [chg] Error messages were referencing outdated information.
+* [chg] `BaseJpaRangeFinder` is deprecated and replaced by persistence-agnostic `BaseRangeFinder` in the business framework.
+
+# Version 2.1.1 (2015-11-25)
+
+* [chg] Update to work with JDBC add-on 2.1.1+
+* [chg] Don't bind EntityManager if no JPA unit is configured
+
+# Version 2.1.0 (2015-11-15)
 
 * [chg] Refactored as an add-on and updated to work with Seed 2.1.0+
 
