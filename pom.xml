@@ -21,9 +21,9 @@
     <version>2.1.2-SNAPSHOT</version>
 
     <properties>
-        <seed.version>2.2.0-SNAPSHOT</seed.version>
-        <business.version>2.2.0-SNAPSHOT</business.version>
-        <jdbc.version>2.1.2-SNAPSHOT</jdbc.version>
+        <seed.version>2.2.0</seed.version>
+        <business.version>2.2.0</business.version>
+        <jdbc.version>2.1.2</jdbc.version>
         <powermock.version>1.6.3</powermock.version>
 
         <compatibility.version>2.1.0</compatibility.version>
