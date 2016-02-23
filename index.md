@@ -21,6 +21,7 @@ ORM. Note that:
 
 {{< dependency g="org.seedstack.addons.jpa" a="jpa" >}}
 
+{{% callout tips %}}
 If you want to use the popular [Hibernate ORM](http://hibernate.org/orm/), use the following Maven dependency:
 
     <dependency>
@@ -34,59 +35,34 @@ If you want to use the popular [Hibernate ORM](http://hibernate.org/orm/), use t
         <version>...</version>
     </dependency>
 
-Add following dependency to declare entity classes in another module that does not have the hibernate dependency:
+Only add the JPA specification to declare entity classes in any module that does not have the hibernate dependency:
 
     <dependency>
         <groupId>org.hibernate.javax.persistence</groupId>
-        <artifactId>hibernate-jpa-2.0-api</artifactId>
-        <version>1.0.1.Final</version>
+        <artifactId>hibernate-jpa-2.1-api</artifactId>
+        <version>1.0.0.Final</version>
         <scope>provided</scope>
     </dependency>
+{{% /callout %}}
 
 # Configuration
 
-There are two ways of configuring the JPA add-on. 
-
-* Without an explicit `persistence.xml` where Seed will scan all entities in the classpath and compute the persistence
-unit(s) information at startup. In this mode, the JDBC connections must be supplied by the JDBC add-on instead
-of being managed internally by the JPA provider.
-* With an explicit `persistence.xml` file in which case all JPA initialization is delegated to the provider. There are 
-some limitations in this mode, mainly that the `persistence.xml` must list all entity classes and that the choice of 
-JNDI or not must be hard-coded in the file.
-
-In any case you must always declare the list of your persistence units in the configuration:
+The JPA add-on doesn't need any `persistence.xml` file in its default mode of operation as it will automatically generate
+persistence unit information. First, declare the list of your persistence units in the configuration:
 
 ```ini
 [org.seedstack.jpa]
 units = my-jpa-unit, ...
 ```
     
-Each unit can then be configured with the following configuration:
+The you must reference a JDBC datasource for each JPA unit. To do so, please refer to the [JDBC add-on configuration]
+(../jdbc):
 
-```ini
-[org.seedstack.jpa.unit.my-jpa-unit]
-...
-```
-
-In any mode you can pass set properties on the persistence unit with the following configuration:
-
-```ini
-[org.seedstack.jpa.unit.my-jpa-unit]
-property.name.of.the.property1 = value-of-the-property1
-property.name.of.the.property2 = value-of-the-property2
-...
-```
-
-## Without persistence.xml
-
-You must first define a JDBC datasource in the configuration. To do so, please refer to the [JDBC add-on configuration]
-(../jdbc). You can then declare a JPA unit that will refer to this datasource by its name:
- 
 ```ini
 [org.seedstack.jpa.unit.my-jpa-unit]
 datasource = my-datasource
 ```
-    
+
 Note that Seed has no way of knowing to which persistence unit belong each entity class, so you must indicate this with
 the following configuration:
 
@@ -94,11 +70,11 @@ the following configuration:
 [org.myorganization.myapp.domain.*]
 jpa-unit = my-jpa-unit
 ```
-    
+
 This will put all the entities scanned in the `org.myorganization.myapp.domain` package and its subpackages into the
 `my-jpa-unit` persistence unit.
 
-### Configuration options
+## Options
 
 You can specify the type of transactions by using the following configuration
 ([more info](http://docs.oracle.com/javaee/6/api/javax/persistence/spi/PersistenceUnitInfo.html#getTransactionType%28%29)):
@@ -107,7 +83,7 @@ You can specify the type of transactions by using the following configuration
 [org.seedstack.jpa.unit.my-jpa-unit]
 transaction-type = JTA | RESOURCE_LOCAL
 ```
-    
+
 If you prefer to use XML JPA mapping files instead of annotations you can specify them with the following configuration
 ([more info](http://docs.oracle.com/javaee/6/api/javax/persistence/spi/PersistenceUnitInfo.html#getMappingFileNames%28%29)):
 
@@ -115,7 +91,7 @@ If you prefer to use XML JPA mapping files instead of annotations you can specif
 [org.seedstack.jpa.unit.my-jpa-unit]
 mapping-files = path/to/mapping/file1.xml, path/to/mapping/file2.xml, ...
 ```
-    
+
 You can specify the validation mode with the following configuration
 ([more info](http://docs.oracle.com/javaee/6/api/javax/persistence/spi/PersistenceUnitInfo.html#getValidationMode%28%29)):
 
@@ -132,90 +108,16 @@ You can specify the shared cache mode with the following configuration
 shared-cache-mode = ALL | NONE | ENABLE_SELECTIVE | DISABLE_SELECTIVE | UNSPECIFIED
 ```
 
-## With persistence.xml
+## Properties
 
-In this mode you must provide a `persistence.xml` file. This file has to be placed under the `META-INF` directory of your
-classpath (for instance in `src/main/resources/META-INF`).
-
-```xml
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-    version="2.0">
-
-    <persistence-unit name="my-jpa-unit" transaction-type="RESOURCE_LOCAL">
-        <class>org.seedstack.jpa.sample.Item1</class>
-    </persistence-unit>
-</persistence>
-```
-
-In this example you can find:
-
-* The JPA version (2.0 in this example)
-* A unit named `my-jpa-unit` 
-* A local transaction type (`RESOURCE_LOCAL`) 
-* The list of persistence classes to map
-
-You can declare as many units as required in a `persistence.xml` file. You can also add configuration properties directly 
-in this file, although it is recommended to specify them in the configuration. When using a `persistence.xml` file, you 
-must either specify a datasource via properties or via JNDI.
-
-### Datasource via properties 
-
-The datasource can be specified through properties, either in the configuration:
+If you need to pass any property to the persistence unit, you can do so with the following configuration:
 
 ```ini
 [org.seedstack.jpa.unit.my-jpa-unit]
-property.javax.persistence.jdbc.driver = ...
-property.javax.persistence.jdbc.url = ...
-property.javax.persistence.jdbc.user = ...
-property.javax.persistence.jdbc.password = ...
+property.name.of.the.property1 = value-of-the-property1
+property.name.of.the.property2 = value-of-the-property2
+...
 ```
-    
-Or in the directly in the `persistence.xml` file:
-
-```xml        
-<persistence-unit name="my-jpa-unit" transaction-type="RESOURCE_LOCAL">
-    ...
-    
-    <properties>
-        <property name="..." value="..."/>
-    </properties>
-    
-    ...
-</persistence-unit>
-```
-
-The specification of properties in the configuration is recommended as it allows greater flexibility (access to
-environment variables and system properties, usage of configuration profiles, macros, ...). 
-
-### Datasource via JNDI
-
-In some environments like in a Web server, it is recommended to use JNDI instead of configuration properties. You can
-do so by specifying the JNDI name of the datasource in the `persistence.xml` file:
-
-```xml
-<non-jta-data-source>java:comp/env/jdbc/my-datasource</non-jta-data-source>
-```
-
-In case of a JTA data source, use following line instead:
-
-```xml
-<jta-data-source>java:comp/env/jdbc/my-datasource</jta-data-source>
-```
-
-In case of a Web application, add the following JNDI reference in your `web.xml` file:
-
-```xml
-<resource-ref>
-    <res-ref-name>jdbc/my-datasource</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-    <res-auth>Container</res-auth>
-</resource-ref>
-```
-
-You may need to add additional files depending on your Web container. Please refer to the the dedicated container 
-documentation.
 
 # Using the Entity Manager
 
