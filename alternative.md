@@ -1,7 +1,17 @@
 ---
 title: "Alternate configuration"
-addon: "JPA"
+name: "JPA"
 repo: "https://github.com/seedstack/jpa-addon"
+tags:
+    - "jpa"
+    - "persistence"
+    - "data"
+    - "database"
+    - "relational"
+    - "unit"
+    - "xml"
+zones:
+    - Addons
 menu:
     AddonJPA:
         weight: 20

@@ -1,6 +1,6 @@
 ---
-title: "Overview"
-addon: "JPA"
+title: "Basics"
+name: "JPA"
 repo: "https://github.com/seedstack/jpa-addon"
 author: "SeedStack"
 description: "Provides configuration, injection and transactions for Java Persistence API 1.0, 2.0 and 2.1."
@@ -8,6 +8,16 @@ min-version: "15.11+"
 backend: true
 aliases:
     - /docs/seed/manual/persistence/jpa
+weight: -1
+tags:
+    - "jpa"
+    - "persistence"
+    - "data"
+    - "database"
+    - "relational"
+    - "unit"
+zones:
+    - Addons
 menu:
     AddonJPA:
         weight: 10
