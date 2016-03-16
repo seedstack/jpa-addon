@@ -11,14 +11,12 @@ import com.google.inject.PrivateModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 import org.seedstack.jpa.JpaExceptionHandler;
-import org.seedstack.seed.transaction.spi.TransactionConcern;
 import org.seedstack.seed.transaction.spi.TransactionalProxy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.Map;
 
-@TransactionConcern
 class JpaModule extends PrivateModule {
     private final Map<String, EntityManagerFactory> entityManagerFactories;
     private final Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses;

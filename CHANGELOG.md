@@ -1,3 +1,9 @@
+# Version 2.1.3 (?)
+
+* [chg] Update Seed dependency to 2.3.0
+* [chg] Update Business dependency to 2.3.0
+* [chg] Update JDBC add-on dependency to 2.1.3
+
 # Version 2.1.2 (2016-01-21)
 
 * [chg] Error messages were referencing outdated information.
