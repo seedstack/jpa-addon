@@ -1,8 +1,6 @@
 # Version 2.1.3 (?)
 
-* [chg] Update Seed dependency to 2.3.0
-* [chg] Update Business dependency to 2.3.0
-* [chg] Update JDBC add-on dependency to 2.1.3
+* [chg] Update for SeedStack 16.4
 
 # Version 2.1.2 (2016-01-21)
 
