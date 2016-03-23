@@ -10,8 +10,9 @@ package org.seedstack.jpa.events;
 import org.seedstack.business.EventHandler;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.domain.events.AggregatePersistedEvent;
-import org.seedstack.jpa.samples.domain.base.SampleBaseJpaAggregateRoot;
-import org.seedstack.jpa.samples.domain.tinyaggregate.TinyAggRoot;
+import org.seedstack.jpa.EventTransactionIT;
+import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
+import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.core.utils.SeedCheckUtils;
 import org.seedstack.jpa.Jpa;
 

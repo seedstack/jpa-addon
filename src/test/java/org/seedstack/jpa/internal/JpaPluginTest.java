@@ -46,7 +46,7 @@ public class JpaPluginTest {
     @Test
     public void initTest() {
         mockPersistenceCreateEntityManagerFactory();
-        ApplicationPlugin applicationPlugin = mockApplicationPlugin(mockConfiguration("org.seedstack.jpa.sample.Unit3ExceptionHandler"));
+        ApplicationPlugin applicationPlugin = mockApplicationPlugin(mockConfiguration("org.seedstack.jpa.fixtures.sample.Unit3ExceptionHandler"));
         underTest.init(mockInitContext(applicationPlugin, mockTransactionPlugin(), mockJdbcRegistry()));
 
         Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses")
