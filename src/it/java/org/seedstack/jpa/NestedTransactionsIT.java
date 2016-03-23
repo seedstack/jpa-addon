@@ -10,11 +10,11 @@ package org.seedstack.jpa;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.jpa.sample.Item1;
-import org.seedstack.jpa.sample.Item2;
-import org.seedstack.jpa.sample.Item2Repository;
+import org.seedstack.jpa.fixtures.sample.Item1;
+import org.seedstack.jpa.fixtures.sample.Item2;
+import org.seedstack.jpa.fixtures.sample.Item2Repository;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.jpa.sample.Item1Repository;
+import org.seedstack.jpa.fixtures.sample.Item1Repository;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 

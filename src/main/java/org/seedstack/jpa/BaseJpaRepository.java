@@ -16,15 +16,15 @@ import javax.persistence.EntityNotFoundException;
 
 
 /**
- * This class serves as inheritance base for the JPA repositories.
+ * This class can serve as a base class for the JPA repositories. It provides methods for common CRUD operations as
+ * well as access to the entity manager through the {@link #getEntityManager()} protected method.
  *
- * @param <A> JPA Entity Type (DDD: Aggregate)
- * @param <K> key type
+ * @param <A> Aggregate root class
+ * @param <K> Key class
  * @author epo.jemba@ext.mpsa.com
  * @author pierre.thirouin@ext.mpsa.com
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends BaseRepository<A, K> {
-
     @Inject
     protected EntityManager entityManager;
 
@@ -38,9 +38,23 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
         super(aggregateRootClass, kClass);
     }
 
+    /**
+     * Provides access to the entity manager for implementing custom data access methods.
+     *
+     * @return the entity manager.
+     */
+    protected EntityManager getEntityManager() {
+        return entityManager;
+    }
+
     @Override
     protected A doLoad(K id) {
         return entityManager.find(getAggregateRootClass(), id);
+    }
+
+    @Override
+    protected void doClear() {
+        entityManager.createQuery("delete from " + getAggregateRootClass().getCanonicalName()).executeUpdate();
     }
 
     @Override
@@ -66,6 +80,4 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
     protected A doSave(A aggregate) {
         return entityManager.merge(aggregate);
     }
-
-
 }

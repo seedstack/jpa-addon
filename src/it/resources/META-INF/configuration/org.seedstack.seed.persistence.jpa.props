@@ -31,7 +31,7 @@ property.hibernate.hbm2ddl.auto=create
 property.sql.enforce_strict_size=true
 
 [org.seedstack.jpa.unit.unit3]
-exception-handler=org.seedstack.jpa.sample.Unit3ExceptionHandler
+exception-handler=org.seedstack.jpa.fixtures.sample.Unit3ExceptionHandler
 property.javax.persistence.jdbc.driver=org.hsqldb.jdbcDriver
 property.javax.persistence.jdbc.url=jdbc:hsqldb:mem:testdb3
 property.javax.persistence.jdbc.user=sa
@@ -55,7 +55,7 @@ user=sa
 password=
 property.sql.enforce_strict_size=true
 
-[org.seedstack.jpa.sample2.*]
+[org.seedstack.jpa.fixtures.sample2.*]
 jpa-unit = unit4
 
 [org.seedstack.jpa.unit.seed-biz-support.property]
@@ -65,13 +65,14 @@ javax.persistence.jdbc.user=sa
 javax.persistence.jdbc.password=
 hibernate.dialect=org.hibernate.dialect.HSQLDialect
 hibernate.hbm2ddl.auto=create
+hibernate.show_sql=true
 sql.enforce_strict_size=true
 
-[org.seedstack.jpa.samples.domain.identity.MyAggregate]
+[org.seedstack.jpa.fixtures.samples.domain.identity.MyAggregate]
 identity.handler-qualifier = inmemory-sequence
 identity.sequence-name = SEQTEST
 
-[org.seedstack.jpa.samples.domain.identity.MyEntity]
+[org.seedstack.jpa.fixtures.samples.domain.identity.MyEntity]
 identity.handler-qualifier = simple-UUID
 
 [org.seedstack.business.event]

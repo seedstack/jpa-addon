@@ -12,9 +12,9 @@ package org.seedstack.jpa;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.jpa.sample2.Item;
-import org.seedstack.jpa.sample2.ItemRepository;
-import org.seedstack.jpa.sample2.OtherItem;
+import org.seedstack.jpa.fixtures.sample2.Item;
+import org.seedstack.jpa.fixtures.sample2.ItemRepository;
+import org.seedstack.jpa.fixtures.sample2.OtherItem;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
