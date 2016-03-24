@@ -5,8 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.jpa;
+package org.seedstack.jpa.internal;
 
+import com.google.inject.Inject;
 import jodd.typeconverter.impl.LongConverter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConversionException;
@@ -17,7 +18,6 @@ import org.seedstack.business.domain.identity.IdentityErrorCodes;
 import org.seedstack.business.domain.identity.SequenceHandler;
 import org.seedstack.seed.SeedException;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
@@ -29,9 +29,8 @@ import javax.persistence.EntityManager;
  * @author redouane.loulou@ext.mpsa.com
  */
 @Named("oracle-sequence")
-public class OracleSequenceHandler implements SequenceHandler<BaseEntity<Long>, Long> {
-
-    @Inject
+class OracleSequenceHandler implements SequenceHandler<BaseEntity<Long>, Long> {
+    @Inject(optional = true)
     private EntityManager entityManager;
 
     private static final String SEQUENCE_NAME = "identity.sequence-name";
@@ -42,8 +41,14 @@ public class OracleSequenceHandler implements SequenceHandler<BaseEntity<Long>, 
         if (StringUtils.isBlank(sequence)) {
             throw SeedException.createNew(IdentityErrorCodes.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY).put("entityClass", entity.getClass());
         }
-        Object id = entityManager.createNativeQuery("SELECT " + sequence + ".NEXTVAL FROM DUAL").getSingleResult();
 
+        if (entityManager == null) {
+            throw SeedException
+                    .createNew(JpaErrorCode.NO_ENTITY_MANAGER_CONFIGURED)
+                    .put("reason", "incrementing Oracle sequence " + sequence);
+        }
+
+        Object id = entityManager.createNativeQuery("SELECT " + sequence + ".NEXTVAL FROM DUAL").getSingleResult();
         Long convertedId;
         try {
             convertedId = new LongConverter().convert(id);
