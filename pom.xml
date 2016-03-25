@@ -71,6 +71,7 @@
                             <excludes>
                                 <exclude>*.internal.*</exclude>
                                 <exclude>org.seedstack.jpa.OracleSequenceHandler</exclude>
+                                <exclude>org.seedstack.jpa.BaseJpaRepository</exclude>
                             </excludes>
                         </parameter>
                     </configuration>

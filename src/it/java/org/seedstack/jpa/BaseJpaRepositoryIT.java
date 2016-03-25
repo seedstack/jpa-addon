@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 
 /**
  * @author pierre.thirouin@ext.mpsa.com
@@ -34,37 +33,27 @@ public class BaseJpaRepositoryIT {
 
     @Test
     @Transactional
-    public void persist_and_load() {
+    public void persist() {
         sampleBaseRepository.persist(sampleBaseJpaFactory.create("test1"));
         assertThat(sampleBaseRepository.load("test1")).isNotNull();
     }
 
     @Test
     @Transactional
-    public void persist_and_save() {
+    public void load() {
+        sampleBaseRepository.persist(sampleBaseJpaFactory.create("test2"));
+        assertThat(sampleBaseRepository.load("test2")).isNotNull();
+    }
+
+    @Test
+    @Transactional
+    public void save() {
         SampleBaseJpaAggregateRoot test3 = sampleBaseJpaFactory.create("test3");
         sampleBaseRepository.persist(test3);
         assertThat(sampleBaseRepository.load("test3").getField1()).isNull();
         test3.setField1("modified");
         sampleBaseRepository.save(test3);
         assertThat(sampleBaseRepository.load("test3").getField1()).isEqualTo("modified");
-    }
-
-    @Test
-    @Transactional
-    public void persist_and_delete() {
-        SampleBaseJpaAggregateRoot test4 = sampleBaseJpaFactory.create("test4");
-        sampleBaseRepository.persist(test4);
-        assertThat(sampleBaseRepository.load("test4")).isNotNull();
-        sampleBaseRepository.delete(test4);
-        assertThat(sampleBaseRepository.load("test3")).isNull();
-    }
-
-    @Test(expected = EntityNotFoundException.class)
-    @Transactional
-    public void delete_inexistent_entity() {
-        sampleBaseRepository.delete("test5");
-        fail("should have failed");
     }
 
     @Test
@@ -75,13 +64,37 @@ public class BaseJpaRepositoryIT {
 
     @Transactional
     protected void doClear() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create("test2"));
-        assertThat(sampleBaseRepository.load("test2")).isNotNull();
+        sampleBaseRepository.persist(sampleBaseJpaFactory.create("test4"));
+        assertThat(sampleBaseRepository.load("test4")).isNotNull();
         sampleBaseRepository.clear();
     }
 
     @Transactional()
     protected void checkClearResult() {
-        assertThat(sampleBaseRepository.load("test2")).isNull();
+        assertThat(sampleBaseRepository.load("test4")).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void delete() {
+        SampleBaseJpaAggregateRoot test5 = sampleBaseJpaFactory.create("test5");
+        sampleBaseRepository.persist(test5);
+        assertThat(sampleBaseRepository.load("test5")).isNotNull();
+        sampleBaseRepository.delete(test5);
+        assertThat(sampleBaseRepository.load("test5")).isNull();
+        try {
+            sampleBaseRepository.delete("test6");
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(EntityNotFoundException.class);
+        }
+    }
+
+    @Test
+    @Transactional
+    public void exists() {
+        SampleBaseJpaAggregateRoot test7 = sampleBaseJpaFactory.create("test7");
+        sampleBaseRepository.persist(test7);
+        assertThat(sampleBaseRepository.exists("test7")).isTrue();
+        assertThat(sampleBaseRepository.exists("test8")).isFalse();
     }
 }

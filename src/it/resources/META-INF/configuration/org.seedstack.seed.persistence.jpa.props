@@ -65,7 +65,6 @@ javax.persistence.jdbc.user=sa
 javax.persistence.jdbc.password=
 hibernate.dialect=org.hibernate.dialect.HSQLDialect
 hibernate.hbm2ddl.auto=create
-hibernate.show_sql=true
 sql.enforce_strict_size=true
 
 [org.seedstack.jpa.fixtures.samples.domain.identity.MyAggregate]
