@@ -77,13 +77,13 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
     @Override
     public long count() {
         // query as JPQL for JPA 1.0 compatibility
-        return (Long) entityManager.createQuery("select count from " + getAggregateRootClass().getCanonicalName()).getSingleResult();
+        return (Long) entityManager.createQuery(String.format("select count(e) from %s e", getAggregateRootClass().getCanonicalName())).getSingleResult();
     }
 
     @Override
     public void clear() {
         // query as JPQL for JPA 1.0 compatibility
-        entityManager.createQuery("delete from " + getAggregateRootClass().getCanonicalName()).executeUpdate();
+        entityManager.createQuery(String.format("delete from %s", getAggregateRootClass().getCanonicalName())).executeUpdate();
     }
 
     @Override
