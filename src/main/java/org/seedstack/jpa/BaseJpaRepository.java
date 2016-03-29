@@ -9,10 +9,14 @@ package org.seedstack.jpa;
 
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
+import org.seedstack.seed.core.utils.SeedReflectionUtils;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 
 /**
@@ -26,7 +30,7 @@ import javax.persistence.EntityNotFoundException;
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends BaseRepository<A, K> {
     @Inject
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     /**
      * Constructor.
@@ -48,17 +52,42 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
     }
 
     @Override
-    protected A doLoad(K id) {
+    public A load(K id) {
         return entityManager.find(getAggregateRootClass(), id);
     }
 
     @Override
-    protected void doClear() {
+    public boolean exists(K id) {
+        if (SeedReflectionUtils.isClassPresent("javax.persistence.criteria.CriteriaBuilder")) {
+            Class<K> keyClass = getKeyClass();
+            Class<A> aggregateRootClass = getAggregateRootClass();
+
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<A> criteriaQuery = criteriaBuilder.createQuery(aggregateRootClass);
+            Root<A> root = criteriaQuery.from(aggregateRootClass);
+            criteriaQuery.select(root.<A>get(root.getModel().<K>getId(keyClass).getName()));
+            criteriaQuery.where(criteriaBuilder.equal(root.get(root.getModel().getId(keyClass)), criteriaBuilder.parameter(keyClass, "id")));
+
+            return entityManager.createQuery(criteriaQuery).setParameter("id", id).getResultList().size() == 1;
+        } else {
+            return load(id) != null;
+        }
+    }
+
+    @Override
+    public long count() {
+        // query as JPQL for JPA 1.0 compatibility
+        return (Long) entityManager.createQuery("select count from " + getAggregateRootClass().getCanonicalName()).getSingleResult();
+    }
+
+    @Override
+    public void clear() {
+        // query as JPQL for JPA 1.0 compatibility
         entityManager.createQuery("delete from " + getAggregateRootClass().getCanonicalName()).executeUpdate();
     }
 
     @Override
-    protected void doDelete(K id) {
+    public void delete(K id) {
         A aggregate = load(id);
         if (aggregate == null) {
             throw new EntityNotFoundException("Attempt to delete non-existent aggregate with id " + id + " of class " + getAggregateRootClass().getCanonicalName());
@@ -67,17 +96,17 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
     }
 
     @Override
-    protected void doDelete(A aggregate) {
+    public void delete(A aggregate) {
         entityManager.remove(aggregate);
     }
 
     @Override
-    protected void doPersist(A aggregate) {
+    public void persist(A aggregate) {
         entityManager.persist(aggregate);
     }
 
     @Override
-    protected A doSave(A aggregate) {
+    public A save(A aggregate) {
         return entityManager.merge(aggregate);
     }
 }

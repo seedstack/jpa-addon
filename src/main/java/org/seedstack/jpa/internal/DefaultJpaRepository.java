@@ -9,9 +9,8 @@ package org.seedstack.jpa.internal;
 
 import com.google.inject.assistedinject.Assisted;
 import org.seedstack.business.domain.AggregateRoot;
-import org.seedstack.jpa.BaseJpaRepository;
 import org.seedstack.business.spi.GenericImplementation;
-import org.seedstack.seed.core.utils.SeedCheckUtils;
+import org.seedstack.jpa.BaseJpaRepository;
 import org.seedstack.jpa.Jpa;
 
 import javax.inject.Inject;
@@ -28,7 +27,6 @@ import javax.inject.Inject;
  * @param <AGGREGATE> the aggregate root
  * @param <KEY>       the aggregate key
  * @author pierre.thirouin@ext.mpsa.com
-
  * @see org.seedstack.business.domain.Repository
  * @see BaseJpaRepository
  */
@@ -44,10 +42,6 @@ public class DefaultJpaRepository<AGGREGATE extends AggregateRoot<KEY>, KEY> ext
     @SuppressWarnings("unchecked")
     @Inject
     public DefaultJpaRepository(@Assisted Object[] genericClasses) {
-        Object[] clonedClasses = genericClasses.clone();
-        SeedCheckUtils.checkIfNotNull(clonedClasses);
-        SeedCheckUtils.checkIf(clonedClasses.length == 2);
-        this.aggregateRootClass = (Class) clonedClasses[0];
-        this.keyClass = (Class) clonedClasses[1];
+        super((Class<AGGREGATE>) genericClasses[0], (Class<KEY>) genericClasses[1]);
     }
 }
