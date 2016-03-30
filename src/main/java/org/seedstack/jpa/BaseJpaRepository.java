@@ -30,16 +30,24 @@ import javax.persistence.criteria.Root;
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends BaseRepository<A, K> {
     @Inject
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     /**
-     * Constructor.
+     * Default constructor.
      */
     public BaseJpaRepository() {
     }
 
-    protected BaseJpaRepository(Class<A> aggregateRootClass, Class<K> kClass) {
-        super(aggregateRootClass, kClass);
+    /**
+     * This protected constructor is intended to be used by JPA repositories that already know their aggregate root and
+     * key classes. It is notably used internally by {@link org.seedstack.jpa.internal.DefaultJpaRepository} for providing
+     * a default JPA repository for all aggregates.
+     *
+     * @param aggregateRootClass the aggregate root class.
+     * @param keyClass           the key class.
+     */
+    protected BaseJpaRepository(Class<A> aggregateRootClass, Class<K> keyClass) {
+        super(aggregateRootClass, keyClass);
     }
 
     /**
