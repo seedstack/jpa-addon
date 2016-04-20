@@ -45,10 +45,15 @@ class EntityManagerLink implements TransactionalLink<EntityManager> {
     }
 
     void push(EntityManager entityManager) {
-    	perThreadObjectContainer.get().push(entityManager);
+        perThreadObjectContainer.get().push(entityManager);
     }
 
     EntityManager pop() {
-        return perThreadObjectContainer.get().pop();
+        Deque<EntityManager> entityManagers = perThreadObjectContainer.get();
+        EntityManager entityManager = entityManagers.pop();
+        if (entityManagers.isEmpty()) {
+            perThreadObjectContainer.remove();
+        }
+        return entityManager;
     }
 }

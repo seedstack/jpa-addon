@@ -1,6 +1,7 @@
 # Version 2.1.3 (?)
 
 * [chg] Update for SeedStack 16.4
+* [fix] Correctly cleanup `ThreadLocal` in `EntityManagerLink`
 
 # Version 2.1.2 (2016-01-21)
 
