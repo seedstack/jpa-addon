@@ -12,7 +12,6 @@ import jodd.typeconverter.impl.LongConverter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.lang.StringUtils;
-import org.seedstack.business.domain.BaseEntity;
 import org.seedstack.business.domain.Entity;
 import org.seedstack.business.domain.identity.IdentityErrorCodes;
 import org.seedstack.business.domain.identity.SequenceHandler;
@@ -29,14 +28,14 @@ import javax.persistence.EntityManager;
  * @author redouane.loulou@ext.mpsa.com
  */
 @Named("oracle-sequence")
-class OracleSequenceHandler implements SequenceHandler<BaseEntity<Long>, Long> {
+class OracleSequenceHandler implements SequenceHandler<Entity<Long>, Long> {
     @Inject(optional = true)
     private EntityManager entityManager;
 
     private static final String SEQUENCE_NAME = "identity.sequence-name";
 
     @Override
-    public Long handle(Entity entity, Configuration entityConfiguration) {
+    public Long handle(Entity<Long> entity, Configuration entityConfiguration) {
         String sequence = entityConfiguration.getString(SEQUENCE_NAME);
         if (StringUtils.isBlank(sequence)) {
             throw SeedException.createNew(IdentityErrorCodes.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY).put("entityClass", entity.getClass());
@@ -60,5 +59,4 @@ class OracleSequenceHandler implements SequenceHandler<BaseEntity<Long>, Long> {
 
         return convertedId;
     }
-
 }

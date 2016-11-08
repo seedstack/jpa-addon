@@ -43,9 +43,6 @@ class EntityManagerFactoryFactory {
                 classNames.add(scannedClass.getName());
             }
         }
-        if (classNames.isEmpty()) {
-            throw SeedException.createNew(JpaErrorCode.NO_PERSISTED_CLASSES_IN_UNIT).put("unit", unitInfo.getPersistenceUnitName());
-        }
         unitInfo.setManagedClassNames(classNames);
 
 
@@ -53,6 +50,10 @@ class EntityManagerFactoryFactory {
             unitInfo.setMappingFileNames(Arrays.asList(unitConfiguration.getStringArray("mapping-files")));
         } else {
             unitInfo.setMappingFileNames(Collections.<String>emptyList());
+        }
+
+        if (unitInfo.getManagedClassNames().isEmpty() && unitInfo.getMappingFileNames().isEmpty()) {
+            throw SeedException.createNew(JpaErrorCode.NO_PERSISTED_CLASSES_IN_UNIT).put("unit", unitInfo.getPersistenceUnitName());
         }
 
         unitInfo.setProperties(properties);
