@@ -26,7 +26,7 @@
         <jdbc.version>3.0.0-SNAPSHOT</jdbc.version>
         <powermock.version>1.6.3</powermock.version>
 
-        <compatibility.version>2.1.0</compatibility.version>
+        <compatibility.skip>true</compatibility.skip>
 
         <bintray.package>jpa-addon</bintray.package>
     </properties>
@@ -65,19 +65,6 @@
                             <licenseMerge>IGNORED_LICENSE|MPL 1.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
                         </licenseMerges>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.siom79.japicmp</groupId>
-                    <artifactId>japicmp-maven-plugin</artifactId>
-                    <configuration>
-                        <parameter>
-                            <excludes>
-                                <exclude>*.internal.*</exclude>
-                                <exclude>org.seedstack.jpa.OracleSequenceHandler</exclude>
-                                <exclude>org.seedstack.jpa.BaseJpaRepository</exclude>
-                            </excludes>
-                        </parameter>
                     </configuration>
                 </plugin>
             </plugins>
