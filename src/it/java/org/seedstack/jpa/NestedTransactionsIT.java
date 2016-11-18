@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -11,10 +11,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.jpa.fixtures.sample.Item1;
+import org.seedstack.jpa.fixtures.sample.Item1Repository;
 import org.seedstack.jpa.fixtures.sample.Item2;
 import org.seedstack.jpa.fixtures.sample.Item2Repository;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.jpa.fixtures.sample.Item1Repository;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,15 +24,12 @@ import javax.persistence.EntityManager;
  * Handles oracle sequence for identity management. This handler needs the oracle
  * sequence name property passed through props configuration using the full
  * entity class name as section and <b>identity.sequence-name</b> as key
- *
- * @author redouane.loulou@ext.mpsa.com
  */
 @Named("oracle-sequence")
 class OracleSequenceHandler implements SequenceHandler<Entity<Long>, Long> {
+    private static final String SEQUENCE_NAME = "identity.sequence-name";
     @Inject(optional = true)
     private EntityManager entityManager;
-
-    private static final String SEQUENCE_NAME = "identity.sequence-name";
 
     @Override
     public Long handle(Entity<Long> entity, Configuration entityConfiguration) {

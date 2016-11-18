@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,18 +26,20 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * This plugin enables JPA support by creating an {@link javax.persistence.EntityManagerFactory} per persistence unit configured.
- *
- * @author adrien.lauer@mpsa.com
  */
 public class JpaPlugin extends AbstractPlugin {
-    public static final String JPA_PLUGIN_CONFIGURATION_PREFIX = "org.seedstack.jpa";
-
+    static final String JPA_PLUGIN_CONFIGURATION_PREFIX = "org.seedstack.jpa";
+    static final String JPA_UNIT_PROPERTY = "jpa-unit";
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaPlugin.class);
-    public static final String JPA_UNIT_PROPERTY = "jpa-unit";
     private final EntityManagerFactoryFactory confResolver = new EntityManagerFactoryFactory();
     private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<String, EntityManagerFactory>();
     private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<String, Class<? extends JpaExceptionHandler>>();

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -11,20 +11,30 @@
 package org.seedstack.jpa.internal;
 
 import org.apache.commons.configuration.Configuration;
+import org.seedstack.jdbc.spi.JdbcRegistry;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
-import org.seedstack.jdbc.spi.JdbcRegistry;
 
-import javax.persistence.*;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
 import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceProviderResolverHolder;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
 
 class EntityManagerFactoryFactory {
 
-	EntityManagerFactory createEntityManagerFactory(String persistenceUnit, Properties properties) {
+    EntityManagerFactory createEntityManagerFactory(String persistenceUnit, Properties properties) {
         return Persistence.createEntityManagerFactory(persistenceUnit, properties);
     }
 

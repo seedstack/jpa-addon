@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- * 
+ *
  */
 package org.seedstack.jpa.fixtures.samples.domain.identity;
 
@@ -16,91 +16,77 @@ import org.seedstack.business.domain.identity.SequenceHandler;
 
 import java.util.Set;
 
-/**
- * 
- * @author redouane.loulou@ext.mpsa.com
- *
- */
 public class MyAggregate extends BaseAggregateRoot<Long> {
+    @Identity(handler = SequenceHandler.class)
+    private Long id;
 
-	@Identity(handler = SequenceHandler.class)
-	private Long id;
-	
-	private String name;
-	
-	private MyEntity mySubAggregate;
-	
-	private Set<MyEntity> mySubAggregates;
-	
-	@Override
-	public Long getEntityId() {
-		return id;
-	}
+    private String name;
 
+    private MyEntity mySubAggregate;
 
-	/**
-	 * Getter name
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    private Set<MyEntity> mySubAggregates;
 
-	/**
-	 * Setter name
-	 * 
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public Long getEntityId() {
+        return id;
+    }
 
 
-	/**
-	 * Getter mySubAggregate
-	 * 
-	 * @return the mySubAggregate
-	 */
-	public MyEntity getMySubAggregate() {
-		return mySubAggregate;
-	}
+    /**
+     * Getter name
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Setter name
+     *
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
-	/**
-	 * Setter mySubAggregate
-	 * 
-	 * @param mySubAggregate the mySubAggregate to set
-	 */
-	public void setMySubAggregate(MyEntity mySubAggregate) {
-		this.mySubAggregate = mySubAggregate;
-	}
+    /**
+     * Getter mySubAggregate
+     *
+     * @return the mySubAggregate
+     */
+    public MyEntity getMySubAggregate() {
+        return mySubAggregate;
+    }
 
 
-	/**
-	 * Getter mySubAggregates
-	 * 
-	 * @return the mySubAggregates
-	 */
-	public Set<MyEntity> getMySubAggregates() {
-		return mySubAggregates;
-	}
+    /**
+     * Setter mySubAggregate
+     *
+     * @param mySubAggregate the mySubAggregate to set
+     */
+    public void setMySubAggregate(MyEntity mySubAggregate) {
+        this.mySubAggregate = mySubAggregate;
+    }
 
 
-	/**
-	 * Setter mySubAggregates
-	 * 
-	 * @param mySubAggregates the mySubAggregates to set
-	 */
-	public void setMySubAggregates(Set<MyEntity> mySubAggregates) {
-		this.mySubAggregates = mySubAggregates;
-	}
+    /**
+     * Getter mySubAggregates
+     *
+     * @return the mySubAggregates
+     */
+    public Set<MyEntity> getMySubAggregates() {
+        return mySubAggregates;
+    }
 
 
-
-
-
-	
-	
-
+    /**
+     * Setter mySubAggregates
+     *
+     * @param mySubAggregates the mySubAggregates to set
+     */
+    public void setMySubAggregates(Set<MyEntity> mySubAggregates) {
+        this.mySubAggregates = mySubAggregates;
+    }
 }

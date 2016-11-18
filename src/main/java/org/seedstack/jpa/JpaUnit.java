@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -16,10 +16,8 @@ import java.lang.annotation.Target;
 /**
  * This annotation accompanies the {@link org.seedstack.seed.transaction.Transactional} annotation to define the
  * transaction as a JPA one and specify the concerned JPA unit.
- *
- * @author adrien.lauer@mpsa.com
  */
-@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface JpaUnit {

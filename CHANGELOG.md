@@ -1,3 +1,7 @@
+# Version 3.0.0 (2016-11-?)
+
+* [brk] Remove deprecated `BaseJpaRangeFinder`
+
 # Version 2.1.3 (2016-04-26)
 
 * [chg] Update for SeedStack 16.4

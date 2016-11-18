@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -13,9 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
-/**
- * @author epo.jemba@ext.mpsa.com
- */
 @Entity
 public class SampleSimpleJpaAggregateRoot extends BaseAggregateRoot<Integer> {
     @Id
@@ -23,11 +20,7 @@ public class SampleSimpleJpaAggregateRoot extends BaseAggregateRoot<Integer> {
     private String field1;
     private String field2;
     private Date field3;
-
     private String field4;
-
-    SampleSimpleJpaAggregateRoot() {
-    }
 
     @Override
     public Integer getEntityId() {

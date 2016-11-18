@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -30,7 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Persistence.class)
@@ -50,7 +52,8 @@ public class JpaPluginTest {
         underTest.init(mockInitContext(applicationPlugin, mockTransactionPlugin(), mockJdbcRegistry()));
 
         Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses")
-                .ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {}).in(underTest).get();
+                .ofType(new TypeRef<Map<String, JpaExceptionHandler>>() {
+                }).in(underTest).get();
 
         Assertions.assertThat(exceptionHandlerClasses).isNotNull();
         Assertions.assertThat(exceptionHandlerClasses).hasSize(1);

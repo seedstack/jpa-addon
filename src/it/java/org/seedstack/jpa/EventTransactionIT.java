@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -16,8 +16,6 @@ import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaFactory;
 import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseRepository;
 import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.jpa.Jpa;
-import org.seedstack.jpa.JpaUnit;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 
@@ -26,30 +24,23 @@ import java.util.UUID;
 
 /**
  * This class tests that events are fired when repository methods are called.
- *
- * @author pierre.thirouin@ext.mpsa.com
  */
 @RunWith(SeedITRunner.class)
 @JpaUnit("seed-biz-support")
 public class EventTransactionIT {
     private static final String ID = "id";
     private static final String FAIL = "fail";
-
+    public static boolean aopWorks = false;
+    public static boolean aopWorksOnDefaultRepo = false;
     @Inject
     private SampleBaseRepository sampleBaseRepository;
-
     @Inject
     private SampleBaseJpaFactory sampleBaseJpaFactory;
-
-    @Inject @Jpa
+    @Inject
+    @Jpa
     private Repository<TinyAggRoot, String> tinyRepo;
-
     @Inject
     private Factory<TinyAggRoot> factory;
-
-    public static boolean aopWorks = false;
-
-    public static boolean aopWorksOnDefaultRepo = false;
 
     @Test
     @Transactional

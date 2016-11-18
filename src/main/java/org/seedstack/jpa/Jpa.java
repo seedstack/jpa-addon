@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -14,9 +14,6 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * This qualifier marks the use of the Jpa persistence.
- *
- * @author pierre.thirouin@ext.mpsa.com
- *         Date: 23/09/2014
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

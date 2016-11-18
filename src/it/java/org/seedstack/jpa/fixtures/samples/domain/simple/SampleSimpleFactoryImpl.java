@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- *
+ * <p>
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -11,14 +11,10 @@ import org.seedstack.business.domain.BaseFactory;
 
 import java.util.Date;
 
-/**
- * @author epo.jemba@ext.mpsa.com
- */
 public class SampleSimpleFactoryImpl extends BaseFactory<SampleSimpleJpaAggregateRoot> implements SampleSimpleFactory {
 
     @Override
     public SampleSimpleJpaAggregateRoot createSampleSimpleJpaAggregateRoot(Integer id, String f1, String f2, Date d3, String f4) {
-
         SampleSimpleJpaAggregateRoot sampleSimpleJpaAggregateRoot = new SampleSimpleJpaAggregateRoot();
         sampleSimpleJpaAggregateRoot.setEntityId(id);
         sampleSimpleJpaAggregateRoot.setField1(f1);
