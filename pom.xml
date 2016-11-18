@@ -13,17 +13,17 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>2.4.0</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
     <artifactId>jpa</artifactId>
-    <version>2.1.4-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <properties>
-        <seed.version>2.3.1</seed.version>
-        <business.version>2.3.4</business.version>
-        <jdbc.version>2.1.3</jdbc.version>
+        <seed.version>3.0.0-SNAPSHOT</seed.version>
+        <business.version>3.0.0-SNAPSHOT</business.version>
+        <jdbc.version>3.0.0-SNAPSHOT</jdbc.version>
         <powermock.version>1.6.3</powermock.version>
 
         <compatibility.version>2.1.0</compatibility.version>
@@ -56,6 +56,8 @@
                             <licenseMerge>Apache 2|Apache License, Version 2.0</licenseMerge>
                             <licenseMerge>Apache 2|The Apache Software License, Version 2.0</licenseMerge>
                             <licenseMerge>Apache 2|Apache License 2.0</licenseMerge>
+                            <licenseMerge>Apache 2|Apache License, version 2.0</licenseMerge>
+                            <licenseMerge>Apache 2|Apache License Version 2.0</licenseMerge>
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser Public License</licenseMerge>
@@ -86,11 +88,6 @@
         <dependency>
             <groupId>org.seedstack.seed</groupId>
             <artifactId>seed-core</artifactId>
-            <version>${seed.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seedstack.seed</groupId>
-            <artifactId>seed-transaction</artifactId>
             <version>${seed.version}</version>
         </dependency>
         <dependency>
@@ -151,6 +148,18 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>${javax.el.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

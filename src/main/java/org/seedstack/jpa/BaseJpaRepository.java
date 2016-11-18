@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- * <p>
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -71,7 +71,7 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<A> criteriaQuery = criteriaBuilder.createQuery(aggregateRootClass);
             Root<A> root = criteriaQuery.from(aggregateRootClass);
-            criteriaQuery.select(root.<A>get(root.getModel().<K>getId(keyClass).getName()));
+            criteriaQuery.select(root.get(root.getModel().getId(keyClass).getName()));
             criteriaQuery.where(criteriaBuilder.equal(root.get(root.getModel().getId(keyClass)), criteriaBuilder.parameter(keyClass, "id")));
 
             return entityManager.createQuery(criteriaQuery).setParameter("id", id).getResultList().size() == 1;

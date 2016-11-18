@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
- * <p>
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,26 +26,17 @@ import java.util.Properties;
 
 class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
     private final String persistenceUnitName;
-
     private String persistenceProviderClassName;
-
     private PersistenceUnitTransactionType persistenceUnitTransactionType = PersistenceUnitTransactionType.RESOURCE_LOCAL;
-
     private DataSource jtaDataSource;
-
     private DataSource nonJtaDataSource;
-
     private List<String> mappingFileNames;
-
     private List<String> managedClassNames;
-
     private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
-
     private ValidationMode validationMode = ValidationMode.AUTO;
-
     private Properties properties;
 
-    public InternalPersistenceUnitInfo(String persistenceUnitName) {
+    InternalPersistenceUnitInfo(String persistenceUnitName) {
         this.persistenceUnitName = persistenceUnitName;
     }
 
@@ -178,5 +169,4 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
             return classLoader;
         }
     }
-
 }

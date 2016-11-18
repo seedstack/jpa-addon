@@ -1,0 +1,78 @@
+#
+# Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+jdbc:
+  datasources:
+    datasource1:
+      url: jdbc:hsqldb:mem:testdb4
+
+jpa:
+  units:
+    unit1:
+      properties:
+        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
+        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb1
+        javax.persistence.jdbc.user: sa
+        javax.persistence.jdbc.password:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+        sql.enforce_strict_size: true
+    unit2:
+      properties:
+        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
+        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb2
+        javax.persistence.jdbc.user: sa
+        javax.persistence.jdbc.password:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+        sql.enforce_strict_size: true
+    unit3:
+      exceptionHandler: org.seedstack.jpa.fixtures.sample.Unit3ExceptionHandler
+      properties:
+        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
+        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb3
+        javax.persistence.jdbc.user: sa
+        javax.persistence.jdbc.password:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+        sql.enforce_strict_size: true
+    unit4:
+      datasource: datasource1
+      mappingFiles: META-INF/otherItem.xml
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    seed-biz-support:
+      properties:
+        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
+        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb
+        javax.persistence.jdbc.user: sa
+        javax.persistence.jdbc.password:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+        sql.enforce_strict_size: true
+
+classes:
+  org:
+    seedstack:
+      jpa:
+        fixtures:
+          sample2:
+            jpaUnit: unit4
+          samples:
+            domain:
+              identity:
+                MyAggregate:
+                  identityHandler: inMemorySequence
+                  sequenceName: SEQTEST
+                MyEntity:
+                  identityHandler: simpleUUID
+
+business:
+  events:
+    publishRepositoryEvents: true
