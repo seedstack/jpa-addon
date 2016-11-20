@@ -51,7 +51,7 @@ public class JpaConfig {
         private List<Class<?>> classes = new ArrayList<>();
         private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
         private ValidationMode validationMode = ValidationMode.AUTO;
-        private Properties properties;
+        private Properties properties = new Properties();
         private Class<? extends JpaExceptionHandler> exceptionHandler;
 
         public String getDatasource() {
@@ -146,7 +146,7 @@ public class JpaConfig {
             return this;
         }
 
-        public PersistenceUnitConfig addProperty(String key, String value) {
+        public PersistenceUnitConfig setProperty(String key, String value) {
             this.properties.setProperty(key, value);
             return this;
         }
