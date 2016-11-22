@@ -1,3 +1,11 @@
+# Version 3.0.0 (2016-11-?)
+
+* [brk] Moved to SeedStack 16.11 new configuration system.
+* [brk] Removed deprecated `BaseJpaRangeFinder`
+* [brk] Removed the possibility of NOT specifying the data source in `@JpaUnit` if only one is present. Use the `defaultUnit` configuration property instead.
+* [brk] Qualifier for Oracle sequence identity handler is renamed from `identity.sequence-name` to `identitySequenceName`.
+* [brk] Class configuration attribute for Oracle sequence name is renamed from `identity.oracle-sequence` to `oracleSequence`.
+
 # Version 2.1.3 (2016-04-26)
 
 * [chg] Update for SeedStack 16.4

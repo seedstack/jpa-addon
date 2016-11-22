@@ -11,8 +11,5 @@ import org.seedstack.jpa.BaseJpaRepository;
 import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseRepository;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 public class SampleBaseJpaRepository extends BaseJpaRepository<SampleBaseJpaAggregateRoot, String> implements SampleBaseRepository {
 }

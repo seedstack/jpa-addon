@@ -11,13 +11,6 @@ import org.seedstack.business.domain.GenericFactory;
 
 import java.util.Date;
 
-/**
- *
- * 
- * @author epo.jemba@ext.mpsa.com
- *
- */
 public interface SampleSimpleFactory extends GenericFactory<SampleSimpleJpaAggregateRoot> {
-	SampleSimpleJpaAggregateRoot createSampleSimpleJpaAggregateRoot(Integer id, String f1, String f2, Date d3, String f4);
-	
+    SampleSimpleJpaAggregateRoot createSampleSimpleJpaAggregateRoot(Integer id, String f1, String f2, Date d3, String f4);
 }

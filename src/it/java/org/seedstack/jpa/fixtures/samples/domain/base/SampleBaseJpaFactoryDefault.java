@@ -9,7 +9,7 @@ package org.seedstack.jpa.fixtures.samples.domain.base;
 
 import org.seedstack.business.domain.BaseFactory;
 
-public class SampleBaseJpaFactoryDefault extends BaseFactory<SampleBaseJpaAggregateRoot> implements SampleBaseJpaFactory{
+public class SampleBaseJpaFactoryDefault extends BaseFactory<SampleBaseJpaAggregateRoot> implements SampleBaseJpaFactory {
     @Override
     public SampleBaseJpaAggregateRoot create(String id) {
         SampleBaseJpaAggregateRoot sampleBaseJpaAggregateRoot = new SampleBaseJpaAggregateRoot();

@@ -11,26 +11,23 @@ import org.seedstack.business.EventHandler;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.domain.events.AggregatePersistedEvent;
 import org.seedstack.jpa.EventTransactionIT;
+import org.seedstack.jpa.Jpa;
 import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.core.utils.SeedCheckUtils;
-import org.seedstack.jpa.Jpa;
 
 import javax.inject.Inject;
 
 /**
  * Sample of EventHandler used for test.
- *
- * @author pierre.thirouin@ext.mpsa.com
  */
 public class AggregateEventHandler implements EventHandler<AggregatePersistedEvent> {
 
-    @Inject @Jpa
-    private Repository<TinyAggRoot, String> repository;
-
     static int counter;
-
     static int autoRepoCounter;
+    @Inject
+    @Jpa
+    private Repository<TinyAggRoot, String> repository;
 
     @Override
     public void handle(AggregatePersistedEvent event) {

@@ -11,31 +11,18 @@ import org.seedstack.business.domain.BaseValueObject;
 
 import javax.persistence.Embeddable;
 
-/**
- *
- * 
- * @author epo.jemba@ext.mpsa.com
- *
- */
-
 @Embeddable
-public class SampleEmbeddedKey extends BaseValueObject {
-	
-	private Long keyValue;
+class SampleEmbeddedKey extends BaseValueObject {
+    private Long keyValue;
 
-	SampleEmbeddedKey() {
-	}
-	
-	public SampleEmbeddedKey(Long keyValue) {
-		this.keyValue = keyValue;
-	}
-	public Long getKeyValue() {
-		return keyValue;
-	}
+    SampleEmbeddedKey() {
+    }
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    public SampleEmbeddedKey(Long keyValue) {
+        this.keyValue = keyValue;
+    }
 
+    public Long getKeyValue() {
+        return keyValue;
+    }
 }

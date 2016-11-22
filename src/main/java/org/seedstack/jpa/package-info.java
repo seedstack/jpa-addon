@@ -7,7 +7,5 @@
  */
 /**
  * Provides classes to use JPA with Seed and the Business Framework.
- *
- * @author pierre.thirouin@ext.mpsa.com (Pierre Thirouin)
  */
 package org.seedstack.jpa;

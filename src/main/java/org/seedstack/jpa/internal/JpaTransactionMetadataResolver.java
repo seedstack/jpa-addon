@@ -8,17 +8,15 @@
 package org.seedstack.jpa.internal;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.jpa.JpaUnit;
 import org.seedstack.seed.core.utils.SeedReflectionUtils;
-import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
 import org.seedstack.seed.transaction.spi.TransactionMetadataResolver;
 
 /**
  * This {@link org.seedstack.seed.transaction.spi.TransactionMetadataResolver} resolves metadata for transactions marked
  * with {@link JpaUnit}.
- *
- * @author adrien.lauer@mpsa.com
  */
 class JpaTransactionMetadataResolver implements TransactionMetadataResolver {
     static String defaultJpaUnit;

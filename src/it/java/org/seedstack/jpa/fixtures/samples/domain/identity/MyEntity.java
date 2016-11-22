@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- * 
+ *
  */
 package org.seedstack.jpa.fixtures.samples.domain.identity;
 
@@ -16,20 +16,14 @@ import org.seedstack.business.domain.identity.UUIDHandler;
 
 import java.util.UUID;
 
-/**
- * 
- * @author redouane.loulou@ext.mpsa.com
- *
- */
 public class MyEntity extends BaseEntity<UUID> {
 
-	@Identity(handler = UUIDHandler.class)
-	private UUID id;
-	
-	@Override
-	public UUID getEntityId() {
-		return id;
-	}
+    @Identity(handler = UUIDHandler.class)
+    private UUID id;
 
-	
+    @Override
+    public UUID getEntityId() {
+        return id;
+    }
+
 }

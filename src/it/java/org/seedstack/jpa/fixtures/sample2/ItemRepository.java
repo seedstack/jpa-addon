@@ -7,10 +7,10 @@
  */
 package org.seedstack.jpa.fixtures.sample2;
 
+import org.seedstack.seed.it.ITBind;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
-import org.seedstack.seed.it.ITBind;
 
 @ITBind
 public class ItemRepository {

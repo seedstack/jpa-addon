@@ -20,9 +20,6 @@ import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 @JpaUnit("seed-biz-support")
 @RunWith(SeedITRunner.class)
 public class BaseJpaRepositoryIT {

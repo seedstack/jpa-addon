@@ -12,12 +12,9 @@ package org.seedstack.jpa.internal;
 
 import org.seedstack.seed.ErrorCode;
 
-/**
- * @author redouane.loulou@ext.mpsa.com
- */
 enum JpaErrorCode implements ErrorCode {
+    ACCESSING_ENTITY_MANAGER_OUTSIDE_TRANSACTION,
     DATA_SOURCE_NOT_FOUND,
-    NO_PERSISTED_CLASSES_IN_UNIT,
     NO_ENTITY_MANAGER_CONFIGURED,
-    ACCESSING_ENTITY_MANAGER_OUTSIDE_TRANSACTION
+    NO_PERSISTED_CLASSES_IN_UNIT
 }

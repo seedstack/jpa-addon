@@ -14,27 +14,23 @@ import org.seedstack.business.domain.Factory;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.jpa.Jpa;
-import org.seedstack.jpa.JpaUnit;
 import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 @Transactional
 @JpaUnit("seed-biz-support")
 @RunWith(SeedITRunner.class)
 public class AutoRepositoriesIT {
-    @Inject @Jpa
+    @Inject
+    @Jpa
     Repository<TinyAggRoot, String> repository;
 
     @Inject
     Factory<TinyAggRoot> factory;
 
     @Test
-    public void retrieve_aggregate_from_repository () {
+    public void retrieve_aggregate_from_repository() {
         repository.save(factory.create("hello"));
         TinyAggRoot tinyAggRoot = repository.load("hello");
         Assertions.assertThat(tinyAggRoot).isNotNull();

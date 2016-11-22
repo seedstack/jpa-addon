@@ -6,22 +6,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- * 
+ *
  */
 package org.seedstack.jpa.fixtures.samples.domain.identity;
 
-import org.seedstack.business.domain.GenericFactory;
 import org.seedstack.business.domain.Create;
+import org.seedstack.business.domain.GenericFactory;
 
-/**
- * 
- * @author redouane.loulou@ext.mpsa.com
- *
- */
 @Create
-public interface MyAggregateFactory  extends GenericFactory<MyAggregate> {
+public interface MyAggregateFactory extends GenericFactory<MyAggregate> {
 
-	
-	MyAggregate createMyAggregate(String name);
+    MyAggregate createMyAggregate(String name);
 
 }

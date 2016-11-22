@@ -14,9 +14,6 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * This qualifier marks the use of the Jpa persistence.
- *
- * @author pierre.thirouin@ext.mpsa.com
- *         Date: 23/09/2014
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

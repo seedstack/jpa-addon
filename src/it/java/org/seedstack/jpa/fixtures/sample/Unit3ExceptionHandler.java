@@ -7,18 +7,17 @@
  */
 package org.seedstack.jpa.fixtures.sample;
 
-import org.seedstack.seed.Logging;
 import org.seedstack.jpa.JpaExceptionHandler;
+import org.seedstack.seed.Logging;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
 import org.slf4j.Logger;
 
 import javax.persistence.EntityTransaction;
 
 public class Unit3ExceptionHandler implements JpaExceptionHandler {
-    private boolean handled = false;
-
     @Logging
     Logger logger;
+    private boolean handled = false;
 
     @Override
     public boolean handleException(Exception exception, TransactionMetadata associatedTransactionMetadata, EntityTransaction associatedTransaction) {

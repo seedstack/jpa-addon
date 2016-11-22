@@ -13,9 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
-/**
- * @author epo.jemba@ext.mpsa.com
- */
 @Entity
 public class SampleSimpleJpaAggregateRoot extends BaseAggregateRoot<Integer> {
     @Id
@@ -23,11 +20,7 @@ public class SampleSimpleJpaAggregateRoot extends BaseAggregateRoot<Integer> {
     private String field1;
     private String field2;
     private Date field3;
-
     private String field4;
-
-    SampleSimpleJpaAggregateRoot() {
-    }
 
     @Override
     public Integer getEntityId() {

@@ -7,40 +7,35 @@
  */
 package org.seedstack.jpa.internal;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import io.nuun.kernel.api.plugin.InitState;
-import io.nuun.kernel.api.plugin.PluginException;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequestBuilder;
-import io.nuun.kernel.core.AbstractPlugin;
-import org.apache.commons.configuration.Configuration;
-import org.seedstack.jdbc.spi.JdbcRegistry;
+import org.seedstack.jdbc.spi.JdbcProvider;
+import org.seedstack.jpa.JpaConfig;
 import org.seedstack.jpa.JpaExceptionHandler;
-import org.seedstack.seed.Application;
-import org.seedstack.seed.core.internal.application.ApplicationPlugin;
-import org.seedstack.seed.transaction.internal.TransactionPlugin;
+import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This plugin enables JPA support by creating an {@link javax.persistence.EntityManagerFactory} per persistence unit configured.
- *
- * @author adrien.lauer@mpsa.com
  */
-public class JpaPlugin extends AbstractPlugin {
-    public static final String JPA_PLUGIN_CONFIGURATION_PREFIX = "org.seedstack.jpa";
-
+public class JpaPlugin extends AbstractSeedPlugin {
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaPlugin.class);
-    public static final String JPA_UNIT_PROPERTY = "jpa-unit";
-    private final EntityManagerFactoryFactory confResolver = new EntityManagerFactoryFactory();
-    private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<String, EntityManagerFactory>();
-    private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<String, Class<? extends JpaExceptionHandler>>();
+    private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<>();
+    private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<>();
 
     @Override
     public String name() {
@@ -48,62 +43,48 @@ public class JpaPlugin extends AbstractPlugin {
     }
 
     @Override
+    public Collection<Class<?>> dependencies() {
+        return Lists.newArrayList(JdbcProvider.class);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-    public InitState init(InitContext initContext) {
-        TransactionPlugin transactionPlugin = initContext.dependency(TransactionPlugin.class);
-        JdbcRegistry jdbcRegistry = initContext.dependency(JdbcRegistry.class);
-        Application application = initContext.dependency(ApplicationPlugin.class).getApplication();
-        Configuration jpaConfiguration = application.getConfiguration().subset(JpaPlugin.JPA_PLUGIN_CONFIGURATION_PREFIX);
+    public InitState initialize(InitContext initContext) {
+        JpaConfig jpaConfig = getConfiguration(JpaConfig.class);
 
-        String[] persistenceUnitNames = jpaConfiguration.getStringArray("units");
-
-        if (persistenceUnitNames == null || persistenceUnitNames.length == 0) {
+        if (jpaConfig.getUnits().isEmpty()) {
             LOGGER.info("No JPA persistence unit configured, JPA support disabled");
             return InitState.INITIALIZED;
         }
 
-        for (String persistenceUnit : persistenceUnitNames) {
-            Configuration persistenceUnitConfiguration = jpaConfiguration.subset("unit." + persistenceUnit);
-            Iterator<String> it = persistenceUnitConfiguration.getKeys("property");
-
-            Properties properties = new Properties();
-            while (it.hasNext()) {
-                String name = it.next();
-                properties.put(name.substring(9), persistenceUnitConfiguration.getString(name));
-            }
+        EntityManagerFactoryFactory entityManagerFactoryFactory = new EntityManagerFactoryFactory(initContext.dependency(JdbcProvider.class), getApplication());
+        for (Map.Entry<String, JpaConfig.PersistenceUnitConfig> entry : jpaConfig.getUnits().entrySet()) {
+            String persistenceUnitName = entry.getKey();
+            JpaConfig.PersistenceUnitConfig persistenceUnitConfig = entry.getValue();
 
             EntityManagerFactory emf;
-            if (persistenceUnitConfiguration.containsKey("datasource")) {
-                Collection<Class<?>> scannedClasses = new ArrayList<Class<?>>();
+            if (persistenceUnitConfig.isUsingDatasource()) {
+                Set<Class<?>> scannedClasses = new HashSet<>();
                 if (initContext.scannedClassesByAnnotationClass().get(Entity.class) != null) {
                     scannedClasses.addAll(initContext.scannedClassesByAnnotationClass().get(Entity.class));
                 }
                 if (initContext.scannedClassesByAnnotationClass().get(Embeddable.class) != null) {
                     scannedClasses.addAll(initContext.scannedClassesByAnnotationClass().get(Embeddable.class));
                 }
-
-                emf = confResolver.createEntityManagerFactory(persistenceUnit, properties, persistenceUnitConfiguration, application, jdbcRegistry, scannedClasses);
+                emf = entityManagerFactoryFactory.createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig, scannedClasses);
             } else {
-                emf = confResolver.createEntityManagerFactory(persistenceUnit, properties);
+                emf = entityManagerFactoryFactory.createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig);
             }
+            entityManagerFactories.put(persistenceUnitName, emf);
 
-            entityManagerFactories.put(persistenceUnit, emf);
-
-            String exceptionHandler = persistenceUnitConfiguration.getString("exception-handler");
-            if (exceptionHandler != null && !exceptionHandler.isEmpty()) {
-                try {
-                    exceptionHandlerClasses.put(persistenceUnit, (Class<? extends JpaExceptionHandler>) Class.forName(exceptionHandler));
-                } catch (Exception e) {
-                    throw new PluginException("Unable to load class " + exceptionHandler, e);
-                }
+            if (persistenceUnitConfig.hasExceptionHandler()) {
+                exceptionHandlerClasses.put(persistenceUnitName, persistenceUnitConfig.getExceptionHandler());
             }
         }
 
-        if (persistenceUnitNames.length == 1) {
-            JpaTransactionMetadataResolver.defaultJpaUnit = persistenceUnitNames[0];
+        if (!Strings.isNullOrEmpty(jpaConfig.getDefaultUnit())) {
+            JpaTransactionMetadataResolver.defaultJpaUnit = jpaConfig.getDefaultUnit();
         }
-
-        transactionPlugin.registerTransactionHandler(JpaTransactionHandler.class);
 
         return InitState.INITIALIZED;
     }
@@ -118,11 +99,6 @@ public class JpaPlugin extends AbstractPlugin {
                 LOGGER.error(String.format("Unable to properly close entity manager factory for persistence unit %s", entityManagerFactory.getKey()), e);
             }
         }
-    }
-
-    @Override
-    public Collection<Class<?>> requiredPlugins() {
-        return Lists.<Class<?>>newArrayList(ApplicationPlugin.class, TransactionPlugin.class, JdbcRegistry.class);
     }
 
     @Override

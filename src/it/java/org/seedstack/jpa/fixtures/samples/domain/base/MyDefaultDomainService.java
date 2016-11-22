@@ -7,8 +7,5 @@
  */
 package org.seedstack.jpa.fixtures.samples.domain.base;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 public class MyDefaultDomainService implements MyDomainService {
 }

@@ -15,44 +15,37 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.Date;
 
-/**
- *
- * 
- * @author epo.jemba@ext.mpsa.com
- *
- */
 public class LoaderImpl implements Loader {
+    @Inject
+    private
+    EntityManager entityManager;
+    @Inject
+    private
+    SampleSimpleFactory sampleSimpleFactory;
 
-	@Inject
-	EntityManager entityManager;
-	
-	@Inject 
-	SampleSimpleFactory sampleSimpleFactory;
+    @Override
+    @Transactional
+    public void init(Scenario scenario) {
+        switch (scenario) {
+            case ONE:
+                for (int i = 0; i < (10000 - 9); i++) {
+                    String f2 = i % 2 == 0 ? "odd" : "even";
+                    String f4 = (f2.equals("odd") ? "" + (i / 2) : "");
+                    SampleSimpleJpaAggregateRoot aRoot = sampleSimpleFactory
+                            .createSampleSimpleJpaAggregateRoot(i, "f1-" + (i % 2 == 0 ? i : i - 1), f2, new Date(), f4);
+                    entityManager.persist(aRoot);
+                }
+                break;
 
-	@Override
-	@Transactional
-	public void init(Scenario scenario) 
-	{
-		switch (scenario) {
-		case ONE:
-			for (int i = 0; i < (10000 - 9); i++) {
-				String f2 =  i % 2 == 0 ? "odd" : "even";
-				String f4= (f2.equals("odd")  ? "" + (i/2) : "");
-				SampleSimpleJpaAggregateRoot aRoot =  sampleSimpleFactory
-						.createSampleSimpleJpaAggregateRoot( i  , "f1-"+(i % 2 == 0 ? i : i - 1), f2, new Date(), f4);
-				entityManager.persist(aRoot);
-			}
-			break;
-			
-		case TWO:
-			
-			break;
+            case TWO:
 
-		default:
-			break;
-		}
-		
-		
-	}
+                break;
+
+            default:
+                break;
+        }
+
+
+    }
 
 }

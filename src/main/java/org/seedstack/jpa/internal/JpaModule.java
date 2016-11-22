@@ -11,7 +11,7 @@ import com.google.inject.PrivateModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 import org.seedstack.jpa.JpaExceptionHandler;
-import org.seedstack.seed.transaction.spi.TransactionalProxy;
+import org.seedstack.seed.core.internal.transaction.TransactionalProxy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -46,7 +46,7 @@ class JpaModule extends PrivateModule {
         if (unitExceptionHandlerClass != null) {
             bind(JpaExceptionHandler.class).annotatedWith(Names.named(name)).to(unitExceptionHandlerClass);
         } else {
-            bind(JpaExceptionHandler.class).annotatedWith(Names.named(name)).toProvider(Providers.<JpaExceptionHandler>of(null));
+            bind(JpaExceptionHandler.class).annotatedWith(Names.named(name)).toProvider(Providers.of(null));
         }
 
         JpaTransactionHandler transactionHandler = new JpaTransactionHandler(entityManagerLink, entityManagerFactory);

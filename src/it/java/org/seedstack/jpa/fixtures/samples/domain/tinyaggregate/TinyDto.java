@@ -10,13 +10,8 @@ package org.seedstack.jpa.fixtures.samples.domain.tinyaggregate;
 import org.seedstack.business.assembler.MatchingEntityId;
 import org.seedstack.business.assembler.MatchingFactoryParameter;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 public class TinyDto {
-
     public String id;
-
     public String name;
 
     public TinyDto() {

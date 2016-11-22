@@ -10,65 +10,68 @@
  */
 package org.seedstack.jpa.internal;
 
-import org.apache.commons.configuration.Configuration;
+import org.seedstack.jdbc.spi.JdbcProvider;
+import org.seedstack.jpa.JpaConfig;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
-import org.seedstack.jdbc.spi.JdbcRegistry;
 
-import javax.persistence.*;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceProviderResolverHolder;
-import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class EntityManagerFactoryFactory {
+    private static final String JPA_UNIT = "jpaUnit";
+    private final JdbcProvider jdbcProvider;
+    private final Application application;
 
-	EntityManagerFactory createEntityManagerFactory(String persistenceUnit, Properties properties) {
-        return Persistence.createEntityManagerFactory(persistenceUnit, properties);
+    EntityManagerFactoryFactory(JdbcProvider jdbcProvider, Application application) {
+        this.jdbcProvider = jdbcProvider;
+        this.application = application;
     }
 
-    EntityManagerFactory createEntityManagerFactory(String persistenceUnit, Properties properties, Configuration unitConfiguration, Application application, JdbcRegistry jdbcRegistry, Collection<Class<?>> scannedClasses) {
-        InternalPersistenceUnitInfo unitInfo = new InternalPersistenceUnitInfo(persistenceUnit);
+    EntityManagerFactory createEntityManagerFactory(String persistenceUnitName, JpaConfig.PersistenceUnitConfig persistenceUnitConfig) {
+        return Persistence.createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig.getProperties());
+    }
 
-        String dataSourceName = unitConfiguration.getString("datasource");
-        DataSource dataSource = jdbcRegistry.getDataSource(dataSourceName);
+    EntityManagerFactory createEntityManagerFactory(String persistenceUnitName, JpaConfig.PersistenceUnitConfig persistenceUnitConfig, Collection<Class<?>> scannedClasses) {
+        InternalPersistenceUnitInfo unitInfo = new InternalPersistenceUnitInfo(persistenceUnitName);
+
+        String dataSourceName = persistenceUnitConfig.getDatasource();
+        DataSource dataSource = jdbcProvider.getDataSource(dataSourceName);
         if (dataSource == null) {
             throw SeedException.createNew(JpaErrorCode.DATA_SOURCE_NOT_FOUND).put("unit", unitInfo.getPersistenceUnitName()).put("datasource", dataSourceName);
         }
 
-        ArrayList<String> classNames = new ArrayList<String>();
-        for (Class<?> scannedClass : scannedClasses) {
-            if (unitInfo.getPersistenceUnitName().equals(application.getConfiguration(scannedClass).getString(JpaPlugin.JPA_UNIT_PROPERTY))) {
-                classNames.add(scannedClass.getName());
-            }
-        }
-        unitInfo.setManagedClassNames(classNames);
+        Set<String> classNames = Stream.concat(scannedClasses.stream(), persistenceUnitConfig.getClasses().stream())
+                .filter(scannedClass -> unitInfo.getPersistenceUnitName().equals(application.getConfiguration(scannedClass).get(JPA_UNIT)))
+                .map(Class::getName)
+                .collect(Collectors.toSet());
+        unitInfo.setManagedClassNames(new ArrayList<>(classNames));
 
-
-        if (unitConfiguration.getString("mapping-files") != null) {
-            unitInfo.setMappingFileNames(Arrays.asList(unitConfiguration.getStringArray("mapping-files")));
+        if (persistenceUnitConfig.hasMappingFiles()) {
+            unitInfo.setMappingFileNames(persistenceUnitConfig.getMappingFiles());
         } else {
-            unitInfo.setMappingFileNames(Collections.<String>emptyList());
+            unitInfo.setMappingFileNames(Collections.emptyList());
         }
 
         if (unitInfo.getManagedClassNames().isEmpty() && unitInfo.getMappingFileNames().isEmpty()) {
             throw SeedException.createNew(JpaErrorCode.NO_PERSISTED_CLASSES_IN_UNIT).put("unit", unitInfo.getPersistenceUnitName());
         }
 
-        unitInfo.setProperties(properties);
-
-        if (unitConfiguration.getString("validation-mode") != null) {
-            unitInfo.setValidationMode(ValidationMode.valueOf(unitConfiguration.getString("validation-mode")));
-        }
-
-        if (unitConfiguration.getString("shared-cache-mode") != null) {
-            unitInfo.setSharedCacheMode(SharedCacheMode.valueOf(unitConfiguration.getString("shared-cache-mode")));
-        }
-
-        if (unitConfiguration.getString("transaction-type") != null) {
-            unitInfo.setPersistenceUnitTransactionType(PersistenceUnitTransactionType.valueOf(unitConfiguration.getString("transaction-type")));
-        }
+        unitInfo.setProperties(persistenceUnitConfig.getProperties());
+        unitInfo.setValidationMode(persistenceUnitConfig.getValidationMode());
+        unitInfo.setSharedCacheMode(persistenceUnitConfig.getSharedCacheMode());
+        unitInfo.setPersistenceUnitTransactionType(persistenceUnitConfig.getTransactionType());
 
         switch (unitInfo.getTransactionType()) {
             case RESOURCE_LOCAL:
@@ -79,34 +82,25 @@ class EntityManagerFactoryFactory {
                 break;
         }
 
-        return createEntityManagerFactory(unitInfo, null);
+        return createEntityManagerFactory(unitInfo);
     }
 
-    // Method inspired by javax.persistence.Persistence.createEntityManagerFactory(String, Map)
-    private EntityManagerFactory createEntityManagerFactory(InternalPersistenceUnitInfo info, Properties properties) {
-        HashMap<String, String> propertiesMap = new HashMap<String, String>();
-        if (properties != null) {
-            for (Object key : properties.keySet()) {
-                propertiesMap.put((String) key, properties.getProperty((String) key));
-            }
-        }
-
+    private EntityManagerFactory createEntityManagerFactory(InternalPersistenceUnitInfo info) {
         EntityManagerFactory fac = null;
         List<PersistenceProvider> persistenceProviders = PersistenceProviderResolverHolder.getPersistenceProviderResolver().getPersistenceProviders();
 
         for (PersistenceProvider persistenceProvider : persistenceProviders) {
             info.setPersistenceProviderClassName(persistenceProvider.getClass().getName());
-            fac = persistenceProvider.createContainerEntityManagerFactory(info, propertiesMap);
+            fac = persistenceProvider.createContainerEntityManagerFactory(info, null);
             if (fac != null) {
                 break;
             }
         }
 
         if (fac == null) {
-            throw new PersistenceException("No Persistence provider for EntityManager named " + info.getPersistenceUnitName());
+            throw new PersistenceException("No Persistence provider for persistence unit " + info.getPersistenceUnitName());
         }
 
         return fac;
     }
-
 }

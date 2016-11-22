@@ -13,56 +13,44 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
-/**
- * 
- * 
- * @author epo.jemba@ext.mpsa.com
- *
- */
 @Entity
-public class SampleSimpleJpaEntity extends BaseEntity<Long>
-{
-	@Id
-	private Long entityId;
-	private String field1;
-	private String field2;
-	private Date  field3;
-	
-	SampleSimpleJpaEntity() {		
-	}
+public class SampleSimpleJpaEntity extends BaseEntity<Long> {
+    @Id
+    private Long entityId;
+    private String field1;
+    private String field2;
+    private Date field3;
 
-	@Override
-	public Long getEntityId() {
-		return entityId;
-	}
+    SampleSimpleJpaEntity() {
+    }
 
-	public String getField1() {
-		return field1;
-	}
+    @Override
+    public Long getEntityId() {
+        return entityId;
+    }
+
+    public String getField1() {
+        return field1;
+    }
 
 
-	public void setField1(String field1) {
-		this.field1 = field1;
-	}
+    public void setField1(String field1) {
+        this.field1 = field1;
+    }
 
-	public String getField2() {
-		return field2;
-	}
+    public String getField2() {
+        return field2;
+    }
 
-	public void setField2(String field2) {
-		this.field2 = field2;
-	}
+    public void setField2(String field2) {
+        this.field2 = field2;
+    }
 
-	public Date getField3() {
-		return field3;
-	}
+    public Date getField3() {
+        return field3;
+    }
 
-	public void setField3(Date field3) {
-		this.field3 = field3;
-	}
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7871458487060592757L;
+    public void setField3(Date field3) {
+        this.field3 = field3;
+    }
 }

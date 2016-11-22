@@ -10,9 +10,6 @@ package org.seedstack.jpa.fixtures.sample;
 
 import org.seedstack.seed.it.ITBind;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
 @ITBind
 public class Item3Repository {
     public Item3Repository() {

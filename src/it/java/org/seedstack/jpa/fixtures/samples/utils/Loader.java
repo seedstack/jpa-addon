@@ -9,16 +9,11 @@ package org.seedstack.jpa.fixtures.samples.utils;
 
 import org.seedstack.business.Service;
 
-/**
- * @author epo.jemba@ext.mpsa.com
- */
 @Service
 public interface Loader {
-	
-	public enum Scenario {
-		ONE , TWO
-	}
-	
-	void init(Scenario scenario);
+    void init(Scenario scenario);
 
+    enum Scenario {
+        ONE, TWO
+    }
 }

@@ -16,10 +16,8 @@ import java.lang.annotation.Target;
 /**
  * This annotation accompanies the {@link org.seedstack.seed.transaction.Transactional} annotation to define the
  * transaction as a JPA one and specify the concerned JPA unit.
- *
- * @author adrien.lauer@mpsa.com
  */
-@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface JpaUnit {

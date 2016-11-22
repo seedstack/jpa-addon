@@ -9,9 +9,6 @@ package org.seedstack.jpa.fixtures.samples.domain.base;
 
 import org.seedstack.business.domain.DomainPolicy;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 @DomainPolicy
 public interface MyDomainPolicy {
 }

@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- * 
+ *
  */
 package org.seedstack.jpa;
 
@@ -18,37 +18,33 @@ import org.seedstack.jpa.fixtures.samples.domain.identity.MyAggregate;
 import org.seedstack.jpa.fixtures.samples.domain.identity.MyAggregateFactory;
 import org.seedstack.jpa.fixtures.samples.domain.identity.MyEntity;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.jpa.JpaUnit;
 import org.seedstack.seed.transaction.Transactional;
 
 /**
  * IdentityHandlerIT
- * 
- * @author redouane.loulou@ext.mpsa.com
- *
  */
 @RunWith(SeedITRunner.class)
 public class IdentityHandlerIT {
 
-	@Inject
-	private MyAggregateFactory myAggregateFactory;
+    @Inject
+    private MyAggregateFactory myAggregateFactory;
 
-	
-	@Test
-	@Transactional
-	@JpaUnit("seed-biz-support")
-	public void test_transactional_identityhandler(){
-		MyAggregate aggregate = myAggregateFactory.createMyAggregate("test");
-		Assertions.assertThat(aggregate.getEntityId()).isNotNull();
-		Assertions.assertThat(aggregate.getMySubAggregate().getEntityId()).isNotNull();
-		for (MyEntity entity : aggregate.getMySubAggregates()) {
-			Assertions.assertThat(entity.getEntityId()).isNotNull();
-		}
-		MyAggregate aggregate2 = myAggregateFactory.createMyAggregate("test2");
-		Assertions.assertThat(aggregate2.getEntityId()).isNotNull();
-		Assertions.assertThat(aggregate2.getMySubAggregate().getEntityId()).isNotNull();
-		for (MyEntity entity : aggregate2.getMySubAggregates()) {
-			Assertions.assertThat(entity.getEntityId()).isNotNull();
-		}
-	}
+
+    @Test
+    @Transactional
+    @JpaUnit("seed-biz-support")
+    public void test_transactional_identityhandler() {
+        MyAggregate aggregate = myAggregateFactory.createMyAggregate("test");
+        Assertions.assertThat(aggregate.getEntityId()).isNotNull();
+        Assertions.assertThat(aggregate.getMySubAggregate().getEntityId()).isNotNull();
+        for (MyEntity entity : aggregate.getMySubAggregates()) {
+            Assertions.assertThat(entity.getEntityId()).isNotNull();
+        }
+        MyAggregate aggregate2 = myAggregateFactory.createMyAggregate("test2");
+        Assertions.assertThat(aggregate2.getEntityId()).isNotNull();
+        Assertions.assertThat(aggregate2.getMySubAggregate().getEntityId()).isNotNull();
+        for (MyEntity entity : aggregate2.getMySubAggregates()) {
+            Assertions.assertThat(entity.getEntityId()).isNotNull();
+        }
+    }
 }

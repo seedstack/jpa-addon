@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- * 
+ *
  */
 package org.seedstack.jpa.fixtures.samples.domain.identity;
 
@@ -15,29 +15,23 @@ import org.seedstack.business.domain.BaseFactory;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * 
- * @author redouane.loulou@ext.mpsa.com
- */
-public class MyAggregateFactoryDefault extends BaseFactory<MyAggregate>
-		implements MyAggregateFactory {
+public class MyAggregateFactoryDefault extends BaseFactory<MyAggregate> implements MyAggregateFactory {
+    @Override
+    public MyAggregate createMyAggregate(String name) {
+        MyAggregate myAggregate = new MyAggregate();
+        myAggregate.setName(name);
+        MyEntity mySubAggregate = createMySubAggregate();
+        myAggregate.setMySubAggregate(mySubAggregate);
+        Set<MyEntity> mySubAggregates = new HashSet<>();
+        mySubAggregates.add(createMySubAggregate());
+        mySubAggregates.add(mySubAggregate);
+        mySubAggregates.add(createMySubAggregate());
+        mySubAggregates.add(createMySubAggregate());
+        myAggregate.setMySubAggregates(mySubAggregates);
+        return myAggregate;
+    }
 
-	@Override
-	public MyAggregate createMyAggregate(String name) {
-		MyAggregate myAggregate = new MyAggregate();
-		myAggregate.setName(name);
-		MyEntity mySubAggregate = createMySubAggregate();
-		myAggregate.setMySubAggregate(mySubAggregate);
-		Set<MyEntity> mySubAggregates = new HashSet<MyEntity>();
-		mySubAggregates.add(createMySubAggregate());
-		mySubAggregates.add(mySubAggregate);
-		mySubAggregates.add(createMySubAggregate());
-		mySubAggregates.add(createMySubAggregate());
-		myAggregate.setMySubAggregates(mySubAggregates);
-		return myAggregate;
-	}
-
-	MyEntity createMySubAggregate() {
-		return new MyEntity();
-	}
+    MyEntity createMySubAggregate() {
+        return new MyEntity();
+    }
 }

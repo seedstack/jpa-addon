@@ -9,8 +9,5 @@ package org.seedstack.jpa.fixtures.samples.domain.base;
 
 import org.seedstack.business.domain.GenericRepository;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 public interface SampleBaseRepository extends GenericRepository<SampleBaseJpaAggregateRoot, String> {
 }

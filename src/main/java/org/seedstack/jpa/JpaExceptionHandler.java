@@ -14,9 +14,6 @@ import javax.persistence.EntityTransaction;
 
 /**
  * Exception handler for JPA transactions.
- *
- * @author epo.jemba@ext.mpsa.com
- * @author adrien.lauer@mpsa.com
  */
 public interface JpaExceptionHandler extends ExceptionHandler<EntityTransaction> {
 

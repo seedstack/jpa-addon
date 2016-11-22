@@ -12,78 +12,36 @@ package org.seedstack.jpa.internal;
 
 import org.seedstack.seed.core.utils.SeedReflectionUtils;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
 import javax.persistence.spi.ClassTransformer;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
     private final String persistenceUnitName;
-
     private String persistenceProviderClassName;
-
     private PersistenceUnitTransactionType persistenceUnitTransactionType = PersistenceUnitTransactionType.RESOURCE_LOCAL;
-
     private DataSource jtaDataSource;
-
     private DataSource nonJtaDataSource;
-
     private List<String> mappingFileNames;
-
     private List<String> managedClassNames;
-
     private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
-
     private ValidationMode validationMode = ValidationMode.AUTO;
-
     private Properties properties;
 
-    public InternalPersistenceUnitInfo(String persistenceUnitName) {
+    InternalPersistenceUnitInfo(String persistenceUnitName) {
         this.persistenceUnitName = persistenceUnitName;
-    }
-
-    void setPersistenceProviderClassName(String persistenceProviderClassName) {
-        this.persistenceProviderClassName = persistenceProviderClassName;
     }
 
     void setPersistenceUnitTransactionType(PersistenceUnitTransactionType persistenceUnitTransactionType) {
         this.persistenceUnitTransactionType = persistenceUnitTransactionType;
-    }
-
-    void setJtaDataSource(DataSource jtaDataSource) {
-        this.jtaDataSource = jtaDataSource;
-    }
-
-    void setNonJtaDataSource(DataSource nonJtaDataSource) {
-        this.nonJtaDataSource = nonJtaDataSource;
-    }
-
-    void setMappingFileNames(List<String> mappingFileNames) {
-        this.mappingFileNames = mappingFileNames;
-    }
-
-    void setManagedClassNames(List<String> managedClassNames) {
-        this.managedClassNames = managedClassNames;
-    }
-
-    void setSharedCacheMode(SharedCacheMode sharedCacheMode) {
-        this.sharedCacheMode = sharedCacheMode;
-    }
-
-    void setValidationMode(ValidationMode validationMode) {
-        this.validationMode = validationMode;
-    }
-
-    void setProperties(Properties properties) {
-        this.properties = properties;
     }
 
     @Override
@@ -96,6 +54,10 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
         return persistenceProviderClassName;
     }
 
+    void setPersistenceProviderClassName(String persistenceProviderClassName) {
+        this.persistenceProviderClassName = persistenceProviderClassName;
+    }
+
     @Override
     public PersistenceUnitTransactionType getTransactionType() {
         return persistenceUnitTransactionType;
@@ -106,14 +68,26 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
         return jtaDataSource;
     }
 
+    void setJtaDataSource(DataSource jtaDataSource) {
+        this.jtaDataSource = jtaDataSource;
+    }
+
     @Override
     public DataSource getNonJtaDataSource() {
         return nonJtaDataSource;
     }
 
+    void setNonJtaDataSource(DataSource nonJtaDataSource) {
+        this.nonJtaDataSource = nonJtaDataSource;
+    }
+
     @Override
     public List<String> getMappingFileNames() {
         return mappingFileNames;
+    }
+
+    void setMappingFileNames(List<String> mappingFileNames) {
+        this.mappingFileNames = mappingFileNames;
     }
 
     @Override
@@ -133,6 +107,10 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
         return managedClassNames;
     }
 
+    void setManagedClassNames(List<String> managedClassNames) {
+        this.managedClassNames = managedClassNames;
+    }
+
     @Override
     public boolean excludeUnlistedClasses() {
         // Not used as Seed will scan the classes
@@ -144,14 +122,26 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
         return sharedCacheMode;
     }
 
+    void setSharedCacheMode(SharedCacheMode sharedCacheMode) {
+        this.sharedCacheMode = sharedCacheMode;
+    }
+
     @Override
     public ValidationMode getValidationMode() {
         return validationMode;
     }
 
+    void setValidationMode(ValidationMode validationMode) {
+        this.validationMode = validationMode;
+    }
+
     @Override
     public Properties getProperties() {
         return properties;
+    }
+
+    void setProperties(Properties properties) {
+        this.properties = properties;
     }
 
     @Override
@@ -174,10 +164,9 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
         ClassLoader classLoader = getClassLoader();
         if (classLoader instanceof URLClassLoader) {
             // this forks the application class loader into a new one with the same scope
-            return new URLClassLoader(((URLClassLoader)classLoader).getURLs(), classLoader.getParent());
+            return new URLClassLoader(((URLClassLoader) classLoader).getURLs(), classLoader.getParent());
         } else {
             return classLoader;
         }
     }
-
 }

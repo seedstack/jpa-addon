@@ -9,11 +9,7 @@ package org.seedstack.jpa.fixtures.samples.domain.tinyaggregate;
 
 import org.seedstack.business.assembler.BaseAssembler;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 public class TinyAssembler extends BaseAssembler<TinyAggRoot, TinyDto> {
-
     @Override
     protected void doAssembleDtoFromAggregate(TinyDto targetDto, TinyAggRoot sourceAggregate) {
         targetDto.setId(sourceAggregate.getEntityId());

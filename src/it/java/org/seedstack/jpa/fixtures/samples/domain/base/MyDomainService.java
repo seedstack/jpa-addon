@@ -9,9 +9,6 @@ package org.seedstack.jpa.fixtures.samples.domain.base;
 
 import org.seedstack.business.Service;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 @Service
 public interface MyDomainService {
 }

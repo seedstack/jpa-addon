@@ -12,12 +12,8 @@ import org.seedstack.business.domain.BaseAggregateRoot;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- */
 @Entity
 public class TinyAggRoot extends BaseAggregateRoot<String> {
-
     @Id
     private String id;
 

@@ -25,8 +25,6 @@ import javax.persistence.criteria.Root;
  *
  * @param <A> Aggregate root class
  * @param <K> Key class
- * @author epo.jemba@ext.mpsa.com
- * @author pierre.thirouin@ext.mpsa.com
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends BaseRepository<A, K> {
     @Inject
@@ -73,7 +71,7 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<A> criteriaQuery = criteriaBuilder.createQuery(aggregateRootClass);
             Root<A> root = criteriaQuery.from(aggregateRootClass);
-            criteriaQuery.select(root.<A>get(root.getModel().<K>getId(keyClass).getName()));
+            criteriaQuery.select(root.get(root.getModel().getId(keyClass).getName()));
             criteriaQuery.where(criteriaBuilder.equal(root.get(root.getModel().getId(keyClass)), criteriaBuilder.parameter(keyClass, "id")));
 
             return entityManager.createQuery(criteriaQuery).setParameter("id", id).getResultList().size() == 1;

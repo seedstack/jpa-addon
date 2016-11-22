@@ -11,14 +11,10 @@ import org.seedstack.business.domain.BaseFactory;
 
 import java.util.Date;
 
-/**
- * @author epo.jemba@ext.mpsa.com
- */
 public class SampleSimpleFactoryImpl extends BaseFactory<SampleSimpleJpaAggregateRoot> implements SampleSimpleFactory {
 
     @Override
     public SampleSimpleJpaAggregateRoot createSampleSimpleJpaAggregateRoot(Integer id, String f1, String f2, Date d3, String f4) {
-
         SampleSimpleJpaAggregateRoot sampleSimpleJpaAggregateRoot = new SampleSimpleJpaAggregateRoot();
         sampleSimpleJpaAggregateRoot.setEntityId(id);
         sampleSimpleJpaAggregateRoot.setField1(f1);

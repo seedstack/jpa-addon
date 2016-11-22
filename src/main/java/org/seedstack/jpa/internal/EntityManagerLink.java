@@ -19,7 +19,7 @@ class EntityManagerLink implements TransactionalLink<EntityManager> {
     private final ThreadLocal<Deque<EntityManager>> perThreadObjectContainer = new ThreadLocal<Deque<EntityManager>>() {
         @Override
         protected Deque<EntityManager> initialValue() {
-            return new ArrayDeque<EntityManager>();
+            return new ArrayDeque<>();
         }
     };
 
