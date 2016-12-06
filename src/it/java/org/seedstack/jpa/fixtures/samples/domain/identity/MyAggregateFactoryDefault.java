@@ -11,6 +11,7 @@
 package org.seedstack.jpa.fixtures.samples.domain.identity;
 
 import org.seedstack.business.domain.BaseFactory;
+import org.seedstack.business.domain.Create;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +32,7 @@ public class MyAggregateFactoryDefault extends BaseFactory<MyAggregate> implemen
         return myAggregate;
     }
 
+    @Create
     MyEntity createMySubAggregate() {
         return new MyEntity();
     }

@@ -10,7 +10,7 @@
  */
 package org.seedstack.jpa.internal;
 
-import org.seedstack.seed.core.utils.SeedReflectionUtils;
+import org.seedstack.shed.ClassLoaders;
 
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
@@ -151,7 +151,7 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
 
     @Override
     public ClassLoader getClassLoader() {
-        return SeedReflectionUtils.findMostCompleteClassLoader(InternalPersistenceUnitInfo.class);
+        return ClassLoaders.findMostCompleteClassLoader(InternalPersistenceUnitInfo.class);
     }
 
     @Override

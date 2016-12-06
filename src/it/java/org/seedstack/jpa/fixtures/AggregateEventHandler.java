@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.jpa.events;
+package org.seedstack.jpa.fixtures;
 
 import org.seedstack.business.EventHandler;
 import org.seedstack.business.domain.Repository;
@@ -14,25 +14,19 @@ import org.seedstack.jpa.EventTransactionIT;
 import org.seedstack.jpa.Jpa;
 import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
-import org.seedstack.seed.core.utils.SeedCheckUtils;
 
 import javax.inject.Inject;
 
-/**
- * Sample of EventHandler used for test.
- */
-public class AggregateEventHandler implements EventHandler<AggregatePersistedEvent> {
+import static com.google.common.base.Preconditions.checkNotNull;
 
-    static int counter;
-    static int autoRepoCounter;
+public class AggregateEventHandler implements EventHandler<AggregatePersistedEvent> {
     @Inject
     @Jpa
     private Repository<TinyAggRoot, String> repository;
 
     @Override
     public void handle(AggregatePersistedEvent event) {
-        // Event handler should be able to inject domain elements
-        SeedCheckUtils.checkIfNotNull(repository);
+        checkNotNull(repository);
 
         if (SampleBaseJpaAggregateRoot.class.equals(event.getAggregateRoot())) {
             if ("fail".equals(event.getContext().getArgs()[0])) {

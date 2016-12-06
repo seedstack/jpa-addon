@@ -10,9 +10,10 @@ package org.seedstack.jpa.internal;
 import org.aopalliance.intercept.MethodInvocation;
 import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.jpa.JpaUnit;
-import org.seedstack.seed.core.utils.SeedReflectionUtils;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
 import org.seedstack.seed.transaction.spi.TransactionMetadataResolver;
+
+import java.util.Optional;
 
 /**
  * This {@link org.seedstack.seed.transaction.spi.TransactionMetadataResolver} resolves metadata for transactions marked
@@ -23,16 +24,25 @@ class JpaTransactionMetadataResolver implements TransactionMetadataResolver {
 
     @Override
     public TransactionMetadata resolve(MethodInvocation methodInvocation, TransactionMetadata defaults) {
-        JpaUnit jpaUnit = SeedReflectionUtils.getMethodOrAncestorMetaAnnotatedWith(methodInvocation.getMethod(), JpaUnit.class);
+        Optional<JpaUnit> jpaUnit = JpaUnitResolver.INSTANCE.apply(methodInvocation.getMethod());
 
-        if (jpaUnit != null || JpaTransactionHandler.class.equals(defaults.getHandler())) {
+        if (jpaUnit.isPresent() || JpaTransactionHandler.class.equals(defaults.getHandler())) {
             TransactionMetadata result = new TransactionMetadata();
             result.setHandler(JpaTransactionHandler.class);
             result.setExceptionHandler(JpaExceptionHandler.class);
-            result.setResource(jpaUnit == null ? defaultJpaUnit : jpaUnit.value());
+            result.setResource(jpaUnit.isPresent() ? resolveUnit(jpaUnit.get()) : defaultJpaUnit);
             return result;
         }
 
         return null;
+    }
+
+    private String resolveUnit(JpaUnit jpaUnit) {
+        String value = jpaUnit.value();
+        if (value.isEmpty()) {
+            return defaultJpaUnit;
+        } else {
+            return value;
+        }
     }
 }

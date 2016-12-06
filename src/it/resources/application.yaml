@@ -10,7 +10,6 @@ jdbc:
   datasources:
     datasource1:
       url: jdbc:hsqldb:mem:testdb4
-
 jpa:
   units:
     unit1:

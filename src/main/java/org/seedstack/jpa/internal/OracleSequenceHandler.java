@@ -10,7 +10,6 @@ package org.seedstack.jpa.internal;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.seedstack.business.domain.Entity;
-import org.seedstack.business.domain.identity.IdentityErrorCodes;
 import org.seedstack.business.domain.identity.SequenceHandler;
 import org.seedstack.seed.ClassConfiguration;
 import org.seedstack.seed.SeedException;
@@ -32,13 +31,11 @@ class OracleSequenceHandler implements SequenceHandler<Entity<Long>, Long> {
     public Long handle(Entity<Long> entity, ClassConfiguration<Entity<Long>> entityConfiguration) {
         String sequence = entityConfiguration.get(SEQUENCE_NAME);
         if (StringUtils.isBlank(sequence)) {
-            throw SeedException.createNew(IdentityErrorCodes.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY).put("entityClass", entity.getClass());
+            throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY).put("entityClass", entity.getClass());
         }
 
         if (entityManager == null) {
-            throw SeedException
-                    .createNew(JpaErrorCode.NO_ENTITY_MANAGER_CONFIGURED)
-                    .put("reason", "incrementing Oracle sequence " + sequence);
+            throw SeedException.createNew(JpaErrorCode.MISSING_ENTITY_MANAGER);
         }
 
         return ((Number) entityManager.createNativeQuery("SELECT " + sequence + ".NEXTVAL FROM DUAL").getSingleResult()).longValue();

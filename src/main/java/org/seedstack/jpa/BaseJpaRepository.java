@@ -9,7 +9,7 @@ package org.seedstack.jpa;
 
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
-import org.seedstack.seed.core.utils.SeedReflectionUtils;
+import org.seedstack.shed.reflect.Classes;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -27,6 +27,7 @@ import javax.persistence.criteria.Root;
  * @param <K> Key class
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends BaseRepository<A, K> {
+    private static boolean criteriaBuilderPresent = Classes.optional("javax.persistence.criteria.CriteriaBuilder").isPresent();
     @Inject
     protected EntityManager entityManager;
 
@@ -64,7 +65,7 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<K>, K> extends B
 
     @Override
     public boolean exists(K id) {
-        if (SeedReflectionUtils.isClassPresent("javax.persistence.criteria.CriteriaBuilder")) {
+        if (criteriaBuilderPresent) {
             Class<K> keyClass = getKeyClass();
             Class<A> aggregateRootClass = getAggregateRootClass();
 
