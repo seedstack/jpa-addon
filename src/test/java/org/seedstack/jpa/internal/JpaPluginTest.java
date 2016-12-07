@@ -22,7 +22,7 @@ import org.seedstack.jdbc.spi.JdbcProvider;
 import org.seedstack.jpa.JpaConfig;
 import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.Application;
-import org.seedstack.seed.spi.config.ApplicationProvider;
+import org.seedstack.seed.spi.ApplicationProvider;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
