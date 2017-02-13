@@ -1,14 +1,8 @@
 ---
-title: "Basics"
-name: "JPA"
+title: "JPA"
 repo: "https://github.com/seedstack/jpa-addon"
-date: 2016-01-21
 author: Adrien LAUER
 description: "Provides configuration, injection and transactions for Java Persistence API 1.0, 2.0 and 2.1."
-backend: true
-aliases:
-    - /docs/seed/manual/persistence/jpa
-weight: -1
 tags:
     - "jpa"
     - "persistence"
