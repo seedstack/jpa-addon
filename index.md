@@ -6,8 +6,6 @@ date: 2016-01-21
 author: Adrien LAUER
 description: "Provides configuration, injection and transactions for Java Persistence API 1.0, 2.0 and 2.1."
 backend: true
-aliases:
-    - /docs/seed/manual/persistence/jpa
 weight: -1
 tags:
     - "jpa"
@@ -66,7 +64,7 @@ units = my-jpa-unit, ...
 ```
     
 The you must reference a JDBC datasource for each JPA unit. To do so, please refer to the [JDBC add-on configuration]
-(../jdbc):
+({{< ref "addons/jdbc/index.md" >}}):
 
 ```ini
 [org.seedstack.jpa.unit.my-jpa-unit]
@@ -144,7 +142,7 @@ public class MyRepository {
 ```
 
 All JPA interactions have to be realized inside a transaction. Refer to the [transaction support 
-documentation](/docs/seed/manual/transactions) for more detail. Below is an example using the annotation-based transaction 
+documentation]({{< ref "docs/seed/manual/transactions.md" >}}) for more detail. Below is an example using the annotation-based transaction 
 demarcation (notice the `persistence.xml` unit name in {{< java "org.seedstack.jpa.JpaUnit" "@" >}} annotation)
 
 ```java

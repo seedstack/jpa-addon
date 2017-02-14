@@ -17,7 +17,7 @@ menu:
         weight: 20
 ---
 
-As an alternative to the [automatic configuration](../#configuration) you can let JPA manage its own datasource instead of referencing
+As an alternative to the [automatic configuration]({{< ref "addons/jpa/index.md#configuration" >}}) you can let JPA manage its own datasource instead of referencing
 one defined in the JDBC add-on. In this case you must provide a `persistence.xml` file. This file has to be placed under
 the `META-INF` directory of your classpath (for instance in `src/main/resources/META-INF`):
 
