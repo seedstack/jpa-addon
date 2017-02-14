@@ -35,9 +35,12 @@ If you need to have the JPA API without implementation in some project modules, 
  
 # Configuration
 
+## JPA units
+
 By default, SeedStack is able to automatically detect the JPA classes in your project. No `persistence.xml` must be present
 in this mode. You just have to declare the JPA units:
 
+{{% config p="jpa" %}}
 ```yaml
 jpa:
   # Configured JPA units with the name of the JPA unit as key
@@ -74,6 +77,9 @@ jpa:
   # The name of the configured unit to use if nothing is specified in the '@JpaUnit' annotation    
   defaultUnit: (String)
 ```
+{{% /config %}}   
+ 
+## Class configuration
 
 To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a [class configuration]({{< ref "docs/seed/configuration.md#class-configuration" >}}) 
 property:
@@ -91,7 +97,7 @@ classes:
 This configuration will assign every class in the `org.myorg.myapp.domain.model` package and its sub-packages to the 
 JPA unit `unit1`.
 
-# Example
+## Example
 
 Assuming we are using Hibernate, the following configuration defines a unit named `unit1` using the data-source 
 `datasource1` defined in the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}):
