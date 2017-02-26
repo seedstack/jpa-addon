@@ -19,15 +19,15 @@
 
     <groupId>org.seedstack.addons.jpa</groupId>
     <artifactId>jpa</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
 
     <properties>
-        <seed.version>3.0.0</seed.version>
-        <business.version>3.0.0</business.version>
-        <jdbc.version>3.0.0</jdbc.version>
+        <seed.version>3.1.0</seed.version>
+        <business.version>3.0.2-SNAPSHOT</business.version>
+        <jdbc.version>3.0.1-SNAPSHOT</jdbc.version>
         <powermock.version>1.6.3</powermock.version>
 
-        <compatibility.skip>true</compatibility.skip>
+        <compatibility.version>3.0.0</compatibility.version>
 
         <bintray.package>jpa-addon</bintray.package>
     </properties>

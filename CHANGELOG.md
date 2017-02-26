@@ -1,3 +1,7 @@
+# Version 3.0.1 (2017-02-26)
+
+* [fix] Fix transitive dependency to poms SNAPSHOT.
+
 # Version 3.0.0 (2016-12-13)
 
 * [brk] Update to SeedStack 16.11 new configuration system.
