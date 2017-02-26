@@ -23,8 +23,8 @@
 
     <properties>
         <seed.version>3.1.0</seed.version>
-        <business.version>3.0.2-SNAPSHOT</business.version>
-        <jdbc.version>3.0.1-SNAPSHOT</jdbc.version>
+        <business.version>3.0.2</business.version>
+        <jdbc.version>3.0.1</jdbc.version>
         <powermock.version>1.6.3</powermock.version>
 
         <compatibility.version>3.0.0</compatibility.version>
