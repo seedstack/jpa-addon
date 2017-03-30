@@ -7,7 +7,6 @@
  */
 package org.seedstack.jpa;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.jpa.fixtures.sample.Item1;
@@ -20,21 +19,20 @@ import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(SeedITRunner.class)
 public class NestedTransactionsIT {
-
     @Inject
-    Item1Repository item1Repository;
-
+    private Item1Repository item1Repository;
     @Inject
-    Item2Repository item2Repository;
+    private Item2Repository item2Repository;
 
     @Test(expected = IllegalArgumentException.class)
     @Transactional
     @JpaUnit("unit1")
-    public void access_to_unit2_with_unit1_transaction_should_fail() throws Exception {
+    public void accessToWrongUnit() throws Exception {
         Item2 item2 = new Item2();
         item2.setID(10L);
         item2.setName("item2Name");
@@ -45,12 +43,12 @@ public class NestedTransactionsIT {
     @Test
     @Transactional
     @JpaUnit("unit1")
-    public void access_to_unit2_with_new_transaction_should_succeed() throws Exception {
+    public void accessToOtherUnitWithNestedTransaction() throws Exception {
         Item1 item1 = new Item1();
         item1.setID(20L);
         item1.setName("item1Name");
         item1Repository.save(item1);
-        Assertions.assertThat(item1.getID()).isEqualTo(20L);
+        assertThat(item1.getID()).isEqualTo(20L);
 
         access_to_unit2_with_new_transaction();
 
@@ -64,7 +62,7 @@ public class NestedTransactionsIT {
         item2.setID(30L);
         item2.setName("item2Name");
         item2Repository.save(item2);
-        Assertions.assertThat(item2.getID()).isEqualTo(30L);
+        assertThat(item2.getID()).isEqualTo(30L);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -74,6 +72,40 @@ public class NestedTransactionsIT {
         item1.setID(40L);
         item1.setName("item1Name");
         item1Repository.save(item1);
-        Assertions.assertThat(item1.getID()).isEqualTo(40L);
+        assertThat(item1.getID()).isEqualTo(40L);
+    }
+
+    @Test
+    @Transactional
+    @JpaUnit("unit1")
+    public void nestedRollback() throws Exception {
+        outer_successful_transaction();
+        assertThat(item1Repository.load(50L).getName()).isEqualTo("OuterItem");
+        assertThat(item1Repository.load(60L)).isNull();
+    }
+
+    @Transactional
+    @JpaUnit("unit1")
+    protected void outer_successful_transaction() {
+        Item1 item1 = new Item1();
+        item1.setID(50L);
+        item1.setName("OuterItem");
+        item1Repository.save(item1);
+
+        try {
+            inner_failing_transaction();
+        } catch(Exception e) {
+            // ignore
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @JpaUnit("unit1")
+    protected void inner_failing_transaction() {
+        Item1 item1 = new Item1();
+        item1.setID(60L);
+        item1.setName("InnerItem");
+        item1Repository.save(item1);
+        throw new IllegalStateException("Some exception");
     }
 }

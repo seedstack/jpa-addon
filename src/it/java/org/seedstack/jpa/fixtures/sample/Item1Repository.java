@@ -25,4 +25,8 @@ public class Item1Repository {
     public void save(Item1 item) {
         entityManager.persist(item);
     }
+
+    public Item1 load(long key) {
+        return entityManager.find(Item1.class, key);
+    }
 }
