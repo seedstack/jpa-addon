@@ -11,10 +11,10 @@
 package org.seedstack.jpa.fixtures.samples.domain.identity;
 
 import org.seedstack.business.domain.Create;
-import org.seedstack.business.domain.GenericFactory;
+import org.seedstack.business.domain.Factory;
 
 @Create
-public interface MyAggregateFactory extends GenericFactory<MyAggregate> {
+public interface MyAggregateFactory extends Factory<MyAggregate> {
 
     MyAggregate createMyAggregate(String name);
 

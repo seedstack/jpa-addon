@@ -1,3 +1,7 @@
+# Version 4.0.0 (2017-11-30)
+
+* [new] Implements automatic translation of business specifications to JPA criteria. 
+
 # Version 3.0.2 (2017-08-01)
 
 * [new] If [Flyway add-on](http://seedstack.org/addons/flyway) is available, make sure that JPA is initialized after it had the opportunity to migrate the database(s).

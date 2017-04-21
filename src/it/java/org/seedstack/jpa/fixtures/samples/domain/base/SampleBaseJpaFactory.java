@@ -7,8 +7,8 @@
  */
 package org.seedstack.jpa.fixtures.samples.domain.base;
 
-import org.seedstack.business.domain.GenericFactory;
+import org.seedstack.business.domain.Factory;
 
-public interface SampleBaseJpaFactory extends GenericFactory<SampleBaseJpaAggregateRoot> {
+public interface SampleBaseJpaFactory extends Factory<SampleBaseJpaAggregateRoot> {
     SampleBaseJpaAggregateRoot create(String id);
 }

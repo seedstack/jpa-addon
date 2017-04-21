@@ -45,14 +45,14 @@ public class EventTransactionIT {
     @Test
     @Transactional
     public void aop_on_repo_should_works() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create(UUID.randomUUID().toString()));
+        sampleBaseRepository.add(sampleBaseJpaFactory.create(UUID.randomUUID().toString()));
         Assertions.assertThat(aopWorks).isTrue();
     }
 
     @Test
     @Transactional
     public void aop_on_generic_repo_should_work() {
-        tinyRepo.persist(factory.create(UUID.randomUUID().toString()));
+        tinyRepo.add(factory.create(UUID.randomUUID().toString()));
         Assertions.assertThat(aopWorksOnDefaultRepo).isTrue();
     }
 
@@ -73,23 +73,23 @@ public class EventTransactionIT {
 
     @Transactional
     public void check_data_was_inserted() {
-        Assertions.assertThat(sampleBaseRepository.load(ID)).isNotNull();
+        Assertions.assertThat(sampleBaseRepository.get(ID)).isNotEmpty();
     }
 
     @Transactional
     public void check_data_was_not_inserted() {
-        Assertions.assertThat(sampleBaseRepository.load(FAIL)).isNull();
+        Assertions.assertThat(sampleBaseRepository.get(FAIL)).isEmpty();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void persist_failed() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create(FAIL));
+        sampleBaseRepository.add(sampleBaseJpaFactory.create(FAIL));
         throw new RuntimeException();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void persist_succeeded() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create(ID));
+        sampleBaseRepository.add(sampleBaseJpaFactory.create(ID));
     }
 
 }

@@ -16,7 +16,6 @@ import javax.persistence.Id;
 public class TinyAggRoot extends BaseAggregateRoot<String> {
     @Id
     private String id;
-
     private String name;
 
     public TinyAggRoot() {

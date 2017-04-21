@@ -6,7 +6,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-logging: WARN
+logging:
+  level: WARN
 
 jdbc:
   datasources:
@@ -56,6 +57,7 @@ jpa:
         javax.persistence.jdbc.password: ""
         hibernate.dialect: org.hibernate.dialect.HSQLDialect
         hibernate.hbm2ddl.auto: create
+        hibernate.show_sql: true
         sql.enforce_strict_size: true
 
 classes:
@@ -63,6 +65,8 @@ classes:
     seedstack:
       jpa:
         fixtures:
+          product:
+            jpaUnit: seed-biz-support
           sample2:
             jpaUnit: unit4
           samples:

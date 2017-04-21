@@ -7,9 +7,9 @@
  */
 package org.seedstack.jpa.fixtures;
 
-import org.seedstack.business.EventHandler;
+import org.seedstack.business.domain.DomainEventHandler;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.business.domain.events.AggregatePersistedEvent;
+import org.seedstack.business.domain.event.AggregatePersistedEvent;
 import org.seedstack.business.event.BaseEventHandler;
 import org.seedstack.jpa.EventTransactionIT;
 import org.seedstack.jpa.Jpa;
@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AggregateEventHandler extends BaseEventHandler<AggregatePersistedEvent> {
+public class AggregateEventHandler implements DomainEventHandler<AggregatePersistedEvent> {
     @Inject
     @Jpa
     private Repository<TinyAggRoot, String> repository;
@@ -39,5 +39,10 @@ public class AggregateEventHandler extends BaseEventHandler<AggregatePersistedEv
         } else if (TinyAggRoot.class.equals(event.getAggregateRoot())) {
             EventTransactionIT.aopWorksOnDefaultRepo = true; // listen persist event on default repo
         }
+    }
+
+    @Override
+    public Class<AggregatePersistedEvent> getEventClass() {
+        return AggregatePersistedEvent.class;
     }
 }

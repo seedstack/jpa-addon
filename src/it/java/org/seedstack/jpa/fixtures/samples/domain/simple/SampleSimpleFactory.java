@@ -7,10 +7,10 @@
  */
 package org.seedstack.jpa.fixtures.samples.domain.simple;
 
-import org.seedstack.business.domain.GenericFactory;
+import org.seedstack.business.domain.Factory;
 
 import java.util.Date;
 
-public interface SampleSimpleFactory extends GenericFactory<SampleSimpleJpaAggregateRoot> {
+public interface SampleSimpleFactory extends Factory<SampleSimpleJpaAggregateRoot> {
     SampleSimpleJpaAggregateRoot createSampleSimpleJpaAggregateRoot(Integer id, String f1, String f2, Date d3, String f4);
 }

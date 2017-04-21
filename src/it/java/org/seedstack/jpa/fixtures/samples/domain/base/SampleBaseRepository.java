@@ -7,7 +7,7 @@
  */
 package org.seedstack.jpa.fixtures.samples.domain.base;
 
-import org.seedstack.business.domain.GenericRepository;
+import org.seedstack.business.domain.Repository;
 
-public interface SampleBaseRepository extends GenericRepository<SampleBaseJpaAggregateRoot, String> {
+public interface SampleBaseRepository extends Repository<SampleBaseJpaAggregateRoot, String> {
 }

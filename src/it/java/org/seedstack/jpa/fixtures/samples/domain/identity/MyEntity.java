@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class MyEntity extends BaseEntity<UUID> {
 
-    @Identity(handler = UUIDHandler.class)
+    @Identity(UUIDHandler.class)
     private UUID id;
 
     @Override

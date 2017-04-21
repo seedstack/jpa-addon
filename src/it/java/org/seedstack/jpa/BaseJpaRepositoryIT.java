@@ -31,26 +31,26 @@ public class BaseJpaRepositoryIT {
     @Test
     @Transactional
     public void persist() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create("test1"));
-        assertThat(sampleBaseRepository.load("test1")).isNotNull();
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test1"));
+        assertThat(sampleBaseRepository.get("test1")).isNotEmpty();
     }
 
     @Test
     @Transactional
-    public void load() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create("test2"));
-        assertThat(sampleBaseRepository.load("test2")).isNotNull();
+    public void get() {
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test2"));
+        assertThat(sampleBaseRepository.get("test2")).isNotEmpty();
     }
 
     @Test
     @Transactional
     public void save() {
         SampleBaseJpaAggregateRoot test3 = sampleBaseJpaFactory.create("test3");
-        sampleBaseRepository.persist(test3);
-        assertThat(sampleBaseRepository.load("test3").getField1()).isNull();
+        sampleBaseRepository.add(test3);
+        assertThat(sampleBaseRepository.get("test3").get().getField1()).isNull();
         test3.setField1("modified");
-        sampleBaseRepository.save(test3);
-        assertThat(sampleBaseRepository.load("test3").getField1()).isEqualTo("modified");
+        sampleBaseRepository.update(test3);
+        assertThat(sampleBaseRepository.get("test3").get().getField1()).isEqualTo("modified");
     }
 
     @Test
@@ -61,26 +61,26 @@ public class BaseJpaRepositoryIT {
 
     @Transactional
     protected void doClear() {
-        sampleBaseRepository.persist(sampleBaseJpaFactory.create("test4"));
-        assertThat(sampleBaseRepository.load("test4")).isNotNull();
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test4"));
+        assertThat(sampleBaseRepository.get("test4")).isNotEmpty();
         sampleBaseRepository.clear();
     }
 
     @Transactional()
     protected void checkClearResult() {
-        assertThat(sampleBaseRepository.load("test4")).isNull();
+        assertThat(sampleBaseRepository.get("test4")).isEmpty();
     }
 
     @Test
     @Transactional
     public void delete() {
         SampleBaseJpaAggregateRoot test5 = sampleBaseJpaFactory.create("test5");
-        sampleBaseRepository.persist(test5);
-        assertThat(sampleBaseRepository.load("test5")).isNotNull();
-        sampleBaseRepository.delete(test5);
-        assertThat(sampleBaseRepository.load("test5")).isNull();
+        sampleBaseRepository.add(test5);
+        assertThat(sampleBaseRepository.get("test5")).isNotEmpty();
+        sampleBaseRepository.remove(test5);
+        assertThat(sampleBaseRepository.get("test5")).isEmpty();
         try {
-            sampleBaseRepository.delete("test6");
+            sampleBaseRepository.remove("test6");
         } catch (Exception e) {
             assertThat(e).isInstanceOf(EntityNotFoundException.class);
         }
@@ -90,8 +90,8 @@ public class BaseJpaRepositoryIT {
     @Transactional
     public void exists() {
         SampleBaseJpaAggregateRoot test7 = sampleBaseJpaFactory.create("test7");
-        sampleBaseRepository.persist(test7);
-        assertThat(sampleBaseRepository.exists("test7")).isTrue();
-        assertThat(sampleBaseRepository.exists("test8")).isFalse();
+        sampleBaseRepository.add(test7);
+        assertThat(sampleBaseRepository.contains("test7")).isTrue();
+        assertThat(sampleBaseRepository.contains("test8")).isFalse();
     }
 }

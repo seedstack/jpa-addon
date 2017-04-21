@@ -8,15 +8,19 @@
 package org.seedstack.jpa;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Factory;
 import org.seedstack.business.domain.Repository;
+import org.seedstack.business.domain.specification.EqualSpecification;
+import org.seedstack.business.domain.specification.OrSpecification;
 import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
+import java.util.stream.Collectors;
 
 @Transactional
 @JpaUnit("seed-biz-support")
@@ -24,15 +28,33 @@ import javax.inject.Inject;
 public class AutoRepositoriesIT {
     @Inject
     @Jpa
-    Repository<TinyAggRoot, String> repository;
+    private Repository<TinyAggRoot, String> repository;
 
     @Inject
-    Factory<TinyAggRoot> factory;
+    private Factory<TinyAggRoot> factory;
+
+    @Before
+    public void setUp() throws Exception {
+        repository.clear();
+    }
 
     @Test
-    public void retrieve_aggregate_from_repository() {
-        repository.save(factory.create("hello"));
-        TinyAggRoot tinyAggRoot = repository.load("hello");
+    public void retrieveAggregateFromRepository() {
+        repository.add(factory.create("hello"));
+        TinyAggRoot tinyAggRoot = repository.get("hello").get();
         Assertions.assertThat(tinyAggRoot).isNotNull();
+    }
+
+    @Test
+    public void retrieveAggregatesBySpecification() throws Exception {
+        repository.add(factory.create("hello"));
+        repository.add(factory.create("bonjour"));
+        repository.add(factory.create("guten tag"));
+        System.out.println(repository.get(
+                new OrSpecification<>(
+                        new EqualSpecification<>("id", "hello"),
+                        new EqualSpecification<>("id", "bonjour")
+                )).collect(Collectors.toList())
+        );
     }
 }

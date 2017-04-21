@@ -12,11 +12,11 @@ package org.seedstack.jpa.internal;
 
 import org.seedstack.shed.exception.ErrorCode;
 
-enum JpaErrorCode implements ErrorCode {
+public enum JpaErrorCode implements ErrorCode {
     ACCESSING_ENTITY_MANAGER_OUTSIDE_TRANSACTION,
     DATA_SOURCE_NOT_FOUND,
     MISSING_ENTITY_MANAGER,
     NO_JPA_UNIT_SPECIFIED_FOR_TRANSACTION,
     NO_PERSISTED_CLASSES_IN_UNIT,
-    NO_SEQUENCE_NAME_FOUND_FOR_ENTITY
+    UNABLE_TO_CREATE_JPA_JOIN_FOR_SPECIFICATION, NO_SEQUENCE_NAME_FOUND_FOR_ENTITY
 }

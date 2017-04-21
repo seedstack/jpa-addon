@@ -17,7 +17,7 @@ import org.seedstack.business.domain.identity.SequenceHandler;
 import java.util.Set;
 
 public class MyAggregate extends BaseAggregateRoot<Long> {
-    @Identity(handler = SequenceHandler.class)
+    @Identity(SequenceHandler.class)
     private Long id;
 
     private String name;
