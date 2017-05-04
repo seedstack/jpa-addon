@@ -2,7 +2,7 @@
 title: "JPA"
 repo: "https://github.com/seedstack/jpa-addon"
 author: Adrien LAUER
-description: "Provides configuration, injection and transactions for Java Persistence API 1.0, 2.0 and 2.1."
+description: "Provides configuration, injection and transactions for Java Persistence API."
 tags:
     - persistence
     - transactions
@@ -14,7 +14,7 @@ menu:
 ---
 
 SeedStack JPA add-on supports any JPA-compliant [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) to allow 
-your application to interface with relational databases. JPA versions 1.0, 2.0 and 2.1 are supported.
+your application to interface with relational databases.<!--more--> 
 
 # Dependencies
 
