@@ -12,64 +12,64 @@ logging:
 jdbc:
   datasources:
     datasource1:
+      url: jdbc:hsqldb:mem:testdb1
+    datasource2:
+      url: jdbc:hsqldb:mem:testdb2
+    datasource3:
+      url: jdbc:hsqldb:mem:testdb3
+    datasource4:
       url: jdbc:hsqldb:mem:testdb4
+    business:
+      url: jdbc:hsqldb:mem:testdbbiz
+      properties:
+        sql.pad_space: false
 jpa:
   units:
     unit1:
-      properties:
-        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
-        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb1
-        javax.persistence.jdbc.user: sa
-        javax.persistence.jdbc.password: ""
-        hibernate.dialect: org.hibernate.dialect.HSQLDialect
-        hibernate.hbm2ddl.auto: create
-        sql.enforce_strict_size: true
-    unit2:
-      properties:
-        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
-        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb2
-        javax.persistence.jdbc.user: sa
-        javax.persistence.jdbc.password: ""
-        hibernate.dialect: org.hibernate.dialect.HSQLDialect
-        hibernate.hbm2ddl.auto: create
-        sql.enforce_strict_size: true
-    unit3:
-      exceptionHandler: org.seedstack.jpa.fixtures.sample.Unit3ExceptionHandler
-      properties:
-        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
-        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb3
-        javax.persistence.jdbc.user: sa
-        javax.persistence.jdbc.password: ""
-        hibernate.dialect: org.hibernate.dialect.HSQLDialect
-        hibernate.hbm2ddl.auto: create
-        sql.enforce_strict_size: true
-    unit4:
       datasource: datasource1
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    unit2:
+      datasource: datasource1
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    unit3:
+      datasource: datasource3
+      exceptionHandler: org.seedstack.jpa.fixtures.simple.Unit3ExceptionHandler
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    unit4:
+      datasource: datasource4
       mappingFiles: META-INF/otherItem.xml
       properties:
         hibernate.dialect: org.hibernate.dialect.HSQLDialect
         hibernate.hbm2ddl.auto: create
-    seed-biz-support:
+    business:
+      datasource: business
       properties:
-        javax.persistence.jdbc.driver: org.hsqldb.jdbcDriver
-        javax.persistence.jdbc.url: jdbc:hsqldb:mem:testdb
-        javax.persistence.jdbc.user: sa
-        javax.persistence.jdbc.password: ""
         hibernate.dialect: org.hibernate.dialect.HSQLDialect
         hibernate.hbm2ddl.auto: create
-        hibernate.show_sql: true
-        sql.enforce_strict_size: true
+#        hibernate.show_sql: true
 
 classes:
   org:
     seedstack:
       jpa:
         fixtures:
-          product:
-            jpaUnit: seed-biz-support
-          sample2:
-            jpaUnit: unit4
-          samples:
+          simple:
+            Item1:
+              jpaUnit: unit1
+            Item2:
+              jpaUnit: unit2
+            Item3:
+              jpaUnit: unit3
+            Item4:
+              jpaUnit: unit4
+          business:
+            jpaUnit: business
             domain:
               identity:
                 MyAggregate:

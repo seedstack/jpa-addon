@@ -14,37 +14,32 @@ import com.google.inject.Inject;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.jpa.fixtures.samples.domain.identity.MyAggregate;
-import org.seedstack.jpa.fixtures.samples.domain.identity.MyAggregateFactory;
-import org.seedstack.jpa.fixtures.samples.domain.identity.MyEntity;
+import org.seedstack.jpa.fixtures.business.domain.identity.MyAggregate;
+import org.seedstack.jpa.fixtures.business.domain.identity.MyAggregateFactory;
+import org.seedstack.jpa.fixtures.business.domain.identity.MyEntity;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
-/**
- * IdentityHandlerIT
- */
 @RunWith(SeedITRunner.class)
 public class IdentityHandlerIT {
-
     @Inject
     private MyAggregateFactory myAggregateFactory;
 
-
     @Test
     @Transactional
-    @JpaUnit("seed-biz-support")
+    @JpaUnit("business")
     public void test_transactional_identityhandler() {
         MyAggregate aggregate = myAggregateFactory.createMyAggregate("test");
-        Assertions.assertThat(aggregate.getEntityId()).isNotNull();
-        Assertions.assertThat(aggregate.getMySubAggregate().getEntityId()).isNotNull();
+        Assertions.assertThat(aggregate.getId()).isNotNull();
+        Assertions.assertThat(aggregate.getMySubAggregate().getId()).isNotNull();
         for (MyEntity entity : aggregate.getMySubAggregates()) {
-            Assertions.assertThat(entity.getEntityId()).isNotNull();
+            Assertions.assertThat(entity.getId()).isNotNull();
         }
         MyAggregate aggregate2 = myAggregateFactory.createMyAggregate("test2");
-        Assertions.assertThat(aggregate2.getEntityId()).isNotNull();
-        Assertions.assertThat(aggregate2.getMySubAggregate().getEntityId()).isNotNull();
+        Assertions.assertThat(aggregate2.getId()).isNotNull();
+        Assertions.assertThat(aggregate2.getMySubAggregate().getId()).isNotNull();
         for (MyEntity entity : aggregate2.getMySubAggregates()) {
-            Assertions.assertThat(entity.getEntityId()).isNotNull();
+            Assertions.assertThat(entity.getId()).isNotNull();
         }
     }
 }

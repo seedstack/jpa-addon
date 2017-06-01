@@ -13,8 +13,8 @@ import org.seedstack.business.domain.event.AggregatePersistedEvent;
 import org.seedstack.business.event.BaseEventHandler;
 import org.seedstack.jpa.EventTransactionIT;
 import org.seedstack.jpa.Jpa;
-import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
-import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
+import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
+import org.seedstack.jpa.fixtures.business.domain.tinyaggregate.TinyAggRoot;
 
 import javax.inject.Inject;
 

@@ -7,18 +7,15 @@
  */
 package org.seedstack.jpa.internal.specification;
 
-import org.seedstack.business.domain.AggregateRoot;
-import org.seedstack.business.domain.specification.FalseSpecification;
-import org.seedstack.business.spi.domain.specification.SpecificationConverter;
-import org.seedstack.business.spi.domain.specification.SpecificationTranslator;
-import org.seedstack.jpa.Jpa;
+import org.seedstack.business.specification.FalseSpecification;
+import org.seedstack.business.spi.specification.SpecificationConverter;
+import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-@Jpa
-public class JpaFalseConverter<A extends AggregateRoot<?>> implements SpecificationConverter<A, FalseSpecification<A>, JpaCriteriaBuilder<A>, Predicate> {
+public class JpaFalseConverter<T> implements SpecificationConverter<FalseSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
     @Override
-    public Predicate convert(FalseSpecification<A> specification, JpaCriteriaBuilder<A> builder, SpecificationTranslator<A, JpaCriteriaBuilder<A>, Predicate> translator) {
+    public Predicate convert(FalseSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         // this is always false
         return builder.getCriteriaBuilder().and().not();
     }

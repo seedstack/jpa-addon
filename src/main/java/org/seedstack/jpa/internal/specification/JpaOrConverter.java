@@ -7,18 +7,15 @@
  */
 package org.seedstack.jpa.internal.specification;
 
-import org.seedstack.business.domain.AggregateRoot;
-import org.seedstack.business.domain.specification.OrSpecification;
-import org.seedstack.business.spi.domain.specification.SpecificationConverter;
-import org.seedstack.business.spi.domain.specification.SpecificationTranslator;
-import org.seedstack.jpa.Jpa;
+import org.seedstack.business.specification.OrSpecification;
+import org.seedstack.business.spi.specification.SpecificationConverter;
+import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-@Jpa
-public class JpaOrConverter<A extends AggregateRoot<?>> implements SpecificationConverter<A, OrSpecification<A>, JpaCriteriaBuilder<A>, Predicate> {
+public class JpaOrConverter<T> implements SpecificationConverter<OrSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
     @Override
-    public Predicate convert(OrSpecification<A> specification, JpaCriteriaBuilder<A> builder, SpecificationTranslator<A, JpaCriteriaBuilder<A>, Predicate> translator) {
+    public Predicate convert(OrSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         return builder.getCriteriaBuilder().or(
                 translator.translate(specification.getLhs(), builder),
                 translator.translate(specification.getRhs(), builder)

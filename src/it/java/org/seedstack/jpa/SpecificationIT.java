@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.business.domain.specification.builder.SpecificationBuilder;
-import org.seedstack.jpa.fixtures.product.Product;
+import org.seedstack.business.specification.builder.SpecificationBuilder;
+import org.seedstack.jpa.fixtures.business.domain.product.Product;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
@@ -20,40 +20,65 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.seedstack.business.specification.Specification.any;
 
 @Transactional
-@JpaUnit("seed-biz-support")
+@JpaUnit("business")
 @RunWith(SeedITRunner.class)
 public class SpecificationIT {
     @Inject
     @Jpa
     private Repository<Product, Long> repository;
-
     @Inject
     private SpecificationBuilder specificationBuilder;
+    private final Product product1 = createProduct(1L, "product1", "picture1");
+    private final Product product2 = createProduct(2L, "product2", "picture2");
+    private final Product product3 = createProduct(3L, "product3", "picture3");
+    private final Product product4 = createProduct(4L, "product4", "   picture4");
+    private final Product product5 = createProduct(5L, "product5", "picture4   ");
 
     @Before
     public void setUp() throws Exception {
-        repository.clear();
-        repository.add(createProduct());
+        repository.remove(any());
+        repository.add(product1);
+        repository.add(product2);
+        repository.add(product3);
+        repository.add(product4);
+        repository.add(product5);
     }
 
     @Test
-    public void retrieveAggregatesBySpecification() throws Exception {
-        System.out.println(repository.get(
-                specificationBuilder.of(Product.class)
-                        .property("pictures.name").equalTo("picture1")
-                        .or()
-                        .property("pictures.name").equalTo("picture2")
-                        .build())
-                .collect(toList()));
+    public void testStringEquality() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture1")
+                .build())
+        ).containsExactly(product1);
     }
 
-    public Product createProduct() {
+    @Test
+    public void testStringEqualityWithTrim() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture4")
+                .build())
+        ).isEmpty();
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture4").leftTrimmed()
+                .build())
+        ).containsExactly(product4);
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture4").rightTrimmed()
+                .build())
+        ).containsExactly(product5);
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture4").trimmed()
+                .build())
+        ).containsExactly(product4, product5);
+    }
+
+    public Product createProduct(long id, String designation, String pictureUrl) {
         List<String> pictures = new ArrayList<>();
-        pictures.add("picture1");
-        pictures.add("picture2");
-        return new Product(1L, "designation", "summary", "details", pictures, 2d);
+        pictures.add(pictureUrl);
+        return new Product(id, designation, "summary", "details", pictures, 2d);
     }
 }

@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Factory;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaFactory;
-import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseRepository;
-import org.seedstack.jpa.fixtures.samples.domain.tinyaggregate.TinyAggRoot;
+import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaFactory;
+import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
+import org.seedstack.jpa.fixtures.business.domain.tinyaggregate.TinyAggRoot;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
@@ -26,7 +26,7 @@ import java.util.UUID;
  * This class tests that events are fired when repository methods are called.
  */
 @RunWith(SeedITRunner.class)
-@JpaUnit("seed-biz-support")
+@JpaUnit("business")
 public class EventTransactionIT {
     private static final String ID = "id";
     private static final String FAIL = "fail";

@@ -7,25 +7,19 @@
  */
 package org.seedstack.jpa.internal.specification;
 
-import org.seedstack.business.domain.AggregateRoot;
-import org.seedstack.business.domain.specification.EqualSpecification;
-import org.seedstack.business.spi.domain.specification.SpecificationTranslator;
-import org.seedstack.jpa.Jpa;
+import org.seedstack.business.specification.EqualSpecification;
+import org.seedstack.business.spi.specification.SpecificationConverter;
+import org.seedstack.business.spi.specification.SpecificationTranslator;
 
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
-@Jpa
-public class JpaEqualConverter<A extends AggregateRoot<?>> extends AbstractJpaConverter<A, EqualSpecification<A>> {
+public class JpaEqualConverter<T> implements SpecificationConverter<EqualSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
     @Override
-    public Predicate convert(EqualSpecification<A> specification, JpaCriteriaBuilder<A> builder, SpecificationTranslator<A, JpaCriteriaBuilder<A>, Predicate> translator) {
-        Expression<A> expression = join(specification, builder.getRoot());
-        Predicate predicate;
+    public Predicate convert(EqualSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         if (specification.getExpectedValue() == null) {
-            predicate = builder.getCriteriaBuilder().isNull(expression);
+            return builder.getCriteriaBuilder().isNull(builder.pickExpression());
         } else {
-            predicate = builder.getCriteriaBuilder().equal(expression, specification.getExpectedValue());
+            return builder.getCriteriaBuilder().equal(builder.pickExpression(), specification.getExpectedValue());
         }
-        return predicate;
     }
 }

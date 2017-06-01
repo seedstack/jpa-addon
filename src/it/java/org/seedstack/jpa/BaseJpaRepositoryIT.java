@@ -9,9 +9,9 @@ package org.seedstack.jpa;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
-import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaFactory;
-import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseRepository;
+import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
+import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaFactory;
+import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
@@ -20,13 +20,13 @@ import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@JpaUnit("seed-biz-support")
+@JpaUnit("business")
 @RunWith(SeedITRunner.class)
 public class BaseJpaRepositoryIT {
     @Inject
-    SampleBaseRepository sampleBaseRepository;
+    private SampleBaseRepository sampleBaseRepository;
     @Inject
-    SampleBaseJpaFactory sampleBaseJpaFactory;
+    private SampleBaseJpaFactory sampleBaseJpaFactory;
 
     @Test
     @Transactional

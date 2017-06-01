@@ -7,19 +7,20 @@
  */
 package org.seedstack.jpa.internal.specification;
 
+import com.google.common.base.Preconditions;
+
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 public class JpaCriteriaBuilder<T> {
     private final CriteriaBuilder criteriaBuilder;
     private final Root<T> root;
-    private final CriteriaQuery<T> criteriaQuery;
+    private Expression<?> expression;
 
-    public JpaCriteriaBuilder(CriteriaBuilder criteriaBuilder, Root<T> root, CriteriaQuery<T> criteriaQuery) {
+    public JpaCriteriaBuilder(CriteriaBuilder criteriaBuilder, Root<T> root) {
         this.criteriaBuilder = criteriaBuilder;
         this.root = root;
-        this.criteriaQuery = criteriaQuery;
     }
 
     public CriteriaBuilder getCriteriaBuilder() {
@@ -30,7 +31,16 @@ public class JpaCriteriaBuilder<T> {
         return root;
     }
 
-    public CriteriaQuery<T> getCriteriaQuery() {
-        return criteriaQuery;
+    @SuppressWarnings("unchecked")
+    public <E> Expression<E> pickExpression() {
+        Preconditions.checkState(this.expression != null, "No expression has been set");
+        Expression<E> result = (Expression<E>) this.expression;
+        expression = null;
+        return result;
+    }
+
+    public <E> void setExpression(Expression<E> expression) {
+        Preconditions.checkState(this.expression == null, "An expression is already set");
+        this.expression = expression;
     }
 }
