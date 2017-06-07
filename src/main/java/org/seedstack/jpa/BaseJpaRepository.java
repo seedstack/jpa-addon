@@ -11,20 +11,26 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.util.Types;
+import org.hibernate.query.internal.AbstractProducedQuery;
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.specification.Specification;
 import org.seedstack.business.spi.specification.SpecificationTranslator;
 import org.seedstack.jpa.internal.specification.JpaCriteriaBuilder;
+import org.seedstack.seed.Logging;
+import org.seedstack.shed.reflect.Classes;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -36,6 +42,10 @@ import java.util.stream.Stream;
  * @param <ID> Identifier class
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends BaseRepository<A, ID> {
+    private static final String ORG_HIBERNATE_QUERY_QUERY = "org.hibernate.query.Query";
+    private static final boolean hibernateStreamingAvailable = isHibernateStreamingAvailable();
+    @Logging
+    private Logger logger;
     @Inject
     private EntityManager entityManager;
     @Inject
@@ -80,15 +90,26 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
         CriteriaQuery<A> cq = cb.createQuery(entityClass);
         Root<A> root = cq.from(entityClass);
 
-        // Apply specification as where clause
         cq.where(getSpecificationTranslator().translate(specification, new JpaCriteriaBuilder<>(cb, root)));
         if (!root.getJoins().isEmpty()) {
             // When we have joins, we need to deduplicate the results
             cq.distinct(true);
         }
 
-        // Execute query
-        return entityManager.createQuery(cq).getResultList().stream();
+        TypedQuery<A> query = entityManager.createQuery(cq);
+        if (hibernateStreamingAvailable) {
+            try {
+                return streamWithHibernate(query);
+            } catch (Exception e) {
+                // ignore, fallback to classic JPA
+            }
+        }
+        return query.getResultList().stream();
+    }
+
+    @Override
+    public Optional<A> get(ID id) {
+        return Optional.ofNullable(entityManager.find(getAggregateRootClass(), id));
     }
 
     @Override
@@ -97,11 +118,42 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
         Class<A> entityClass = getAggregateRootClass();
         CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
 
-        // Apply specification as where clause
         cd.where(getSpecificationTranslator().translate(specification, new JpaCriteriaBuilder<>(cb, cd.from(entityClass))));
 
-        // Execute query
         return entityManager.createQuery(cd).executeUpdate();
+    }
+
+
+    @Override
+    public boolean remove(ID id) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        Class<A> entityClass = getAggregateRootClass();
+        CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
+
+        Root<A> root = cd.from(entityClass);
+        cd.where(cb.equal(root.get(root.getModel().getId(getIdentifierClass())), id));
+
+        int deletedCount = entityManager.createQuery(cd).executeUpdate();
+        if (deletedCount > 1) {
+            throw new IllegalStateException("More than one aggregate has been removed");
+        }
+        return deletedCount == 1;
+    }
+
+    @Override
+    public boolean remove(A aggregate) {
+        try {
+            entityManager.remove(aggregate);
+            return true;
+        } catch (IllegalArgumentException e) {
+            logger.debug("Aggregate " + String.valueOf(aggregate) + " could not be removed by JPA", e);
+            return false;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Stream<A> streamWithHibernate(TypedQuery<A> query) {
+        return ((AbstractProducedQuery<A>) query.unwrap(AbstractProducedQuery.class)).stream();
     }
 
     @SuppressWarnings("unchecked")
@@ -113,5 +165,19 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
                         Predicate.class)
                 )
         ));
+    }
+
+    private static boolean isHibernateStreamingAvailable() {
+        Optional<Class<Object>> hibernateQueryClass = Classes.optional(ORG_HIBERNATE_QUERY_QUERY);
+        if (hibernateQueryClass.isPresent()) {
+            try {
+                hibernateQueryClass.get().getMethod("stream");
+                return true;
+            } catch (NoSuchMethodException e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
