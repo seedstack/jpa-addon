@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.seedstack.business.specification.Specification.any;
 
 @Transactional
 @JpaUnit("business")
@@ -40,7 +39,7 @@ public class SpecificationIT {
 
     @Before
     public void setUp() throws Exception {
-        repository.remove(any());
+        repository.clear();
         repository.add(product1);
         repository.add(product2);
         repository.add(product3);
@@ -74,6 +73,26 @@ public class SpecificationIT {
                 .property("pictures.name").equalTo("picture4").trimmed()
                 .build())
         ).containsExactly(product4, product5);
+    }
+
+    @Test
+    public void testOr() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture2")
+                .or()
+                .property("pictures.name").equalTo("picture3")
+                .build())
+        ).containsExactly(product2, product3);
+    }
+
+    @Test
+    public void testAnd() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture4").trimmed()
+                .and()
+                .property("designation").equalTo("product5")
+                .build())
+        ).containsExactly(product5);
     }
 
     public Product createProduct(long id, String designation, String pictureUrl) {
