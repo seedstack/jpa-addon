@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 @Transactional
-@JpaUnit("unit1")
 @RunWith(SeedITRunner.class)
 public class JpaIT {
     @Inject
@@ -41,9 +40,8 @@ public class JpaIT {
     private JpaExceptionHandler jpaExceptionHandler;
 
     @Test
+    @JpaUnit("unit1")
     public void basicJpa() throws Exception {
-        Assertions.assertThat(item1Repository).isNotNull();
-
         Item1 item1 = new Item1();
         item1.setId(1L);
         item1.setName("item1Name");
@@ -140,11 +138,19 @@ public class JpaIT {
     }
 
     @Test
+    @JpaUnit
+    public void defaultUnit() throws Exception {
+        Item1 item1 = new Item1();
+        item1.setId(70L);
+        item1.setName("defaultItem");
+        item1Repository.save(item1);
+        Assertions.assertThat(item1.getId()).isEqualTo(70L);
+    }
+
+    @Test
     @Transactional
     @JpaUnit("unit3")
     public void errorHandler() {
-        Assertions.assertThat(item3Repository).isNotNull();
-
         Assertions.assertThat(((Unit3ExceptionHandler) jpaExceptionHandler).hasHandled()).isFalse();
         item3Repository.saveWithException();
         assertThat(((Unit3ExceptionHandler) jpaExceptionHandler).hasHandled()).isTrue();

@@ -7,30 +7,22 @@
  */
 package org.seedstack.jpa;
 
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-import com.google.inject.util.Types;
-import org.hibernate.query.internal.AbstractProducedQuery;
+import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.specification.Specification;
-import org.seedstack.business.spi.specification.SpecificationTranslator;
-import org.seedstack.jpa.internal.specification.JpaCriteriaBuilder;
-import org.seedstack.seed.Logging;
-import org.seedstack.shed.reflect.Classes;
-import org.slf4j.Logger;
+import org.seedstack.jpa.spi.JpaRepositoryFactory;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -42,14 +34,9 @@ import java.util.stream.Stream;
  * @param <ID> Identifier class
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends BaseRepository<A, ID> {
-    private static final String ORG_HIBERNATE_QUERY_QUERY = "org.hibernate.query.Query";
-    private static final boolean hibernateStreamingAvailable = isHibernateStreamingAvailable();
-    @Logging
-    private Logger logger;
     @Inject
     private EntityManager entityManager;
-    @Inject
-    private Injector injector;
+    private List<JpaRepositoryFactory> jpaRepositoryFactories;
 
     /**
      * Default constructor.
@@ -80,104 +67,93 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
 
     @Override
     public void add(A aggregate) {
-        entityManager.persist(aggregate);
+        resolveImplementation().add(aggregate);
     }
 
     @Override
-    public Stream<A> get(Specification<A> specification, Repository.Options... options) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        Class<A> entityClass = getAggregateRootClass();
-        CriteriaQuery<A> cq = cb.createQuery(entityClass);
-        Root<A> root = cq.from(entityClass);
-
-        cq.where(getSpecificationTranslator().translate(specification, new JpaCriteriaBuilder<>(cb, root)));
-        if (!root.getJoins().isEmpty()) {
-            // When we have joins, we need to deduplicate the results
-            cq.distinct(true);
-        }
-
-        TypedQuery<A> query = entityManager.createQuery(cq);
-        if (hibernateStreamingAvailable) {
-            try {
-                return streamWithHibernate(query);
-            } catch (Exception e) {
-                // ignore, fallback to classic JPA
-            }
-        }
-        return query.getResultList().stream();
+    public Stream<A> get(Specification<A> specification, Options... options) {
+        return resolveImplementation().get(specification, options);
     }
 
     @Override
     public Optional<A> get(ID id) {
-        return Optional.ofNullable(entityManager.find(getAggregateRootClass(), id));
+        return resolveImplementation().get(id);
+    }
+
+    @Override
+    public boolean contains(Specification<A> specification) {
+        return resolveImplementation().contains(specification);
+    }
+
+    @Override
+    public boolean contains(ID id) {
+        return resolveImplementation().contains(id);
+    }
+
+    @Override
+    public boolean contains(A aggregate) {
+        return resolveImplementation().contains(aggregate);
+    }
+
+    @Override
+    public long count(Specification<A> specification) {
+        return resolveImplementation().count(specification);
+    }
+
+    @Override
+    public long size() {
+        return resolveImplementation().size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return resolveImplementation().isEmpty();
     }
 
     @Override
     public long remove(Specification<A> specification) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        Class<A> entityClass = getAggregateRootClass();
-        CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
-
-        cd.where(getSpecificationTranslator().translate(specification, new JpaCriteriaBuilder<>(cb, cd.from(entityClass))));
-
-        return entityManager.createQuery(cd).executeUpdate();
-    }
-
-
-    @Override
-    public boolean remove(ID id) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        Class<A> entityClass = getAggregateRootClass();
-        CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
-
-        Root<A> root = cd.from(entityClass);
-        cd.where(cb.equal(root.get(root.getModel().getId(getIdentifierClass())), id));
-
-        int deletedCount = entityManager.createQuery(cd).executeUpdate();
-        if (deletedCount > 1) {
-            throw new IllegalStateException("More than one aggregate has been removed");
-        }
-        return deletedCount == 1;
+        return resolveImplementation().remove(specification);
     }
 
     @Override
-    public boolean remove(A aggregate) {
-        try {
-            entityManager.remove(aggregate);
-            return true;
-        } catch (IllegalArgumentException e) {
-            logger.debug("Aggregate " + String.valueOf(aggregate) + " could not be removed by JPA", e);
-            return false;
-        }
+    public void remove(ID id) {
+        resolveImplementation().remove(id);
+    }
+
+    @Override
+    public void remove(A aggregate) {
+        resolveImplementation().remove(aggregate);
+    }
+
+    @Override
+    public void update(A aggregate) {
+        resolveImplementation().update(aggregate);
+    }
+
+    @Override
+    public void clear() {
+        resolveImplementation().clear();
+    }
+
+    @Inject
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Method called by Guice")
+    private void buildFactoryList(Set<JpaRepositoryFactory> jpaRepositoryFactories) {
+        this.jpaRepositoryFactories = Lists.newArrayList(jpaRepositoryFactories);
+        this.jpaRepositoryFactories.sort(Collections.reverseOrder(Comparator.comparingInt(this::getPriority)));
+    }
+
+    private int getPriority(JpaRepositoryFactory jpaRepositoryFactory) {
+        Priority annotation = jpaRepositoryFactory.getClass().getAnnotation(Priority.class);
+        return annotation != null ? annotation.value() : 0;
     }
 
     @SuppressWarnings("unchecked")
-    private Stream<A> streamWithHibernate(TypedQuery<A> query) {
-        return ((AbstractProducedQuery<A>) query.unwrap(AbstractProducedQuery.class)).stream();
-    }
-
-    @SuppressWarnings("unchecked")
-    private SpecificationTranslator<JpaCriteriaBuilder, Predicate> getSpecificationTranslator() {
-        return injector.getInstance(Key.get(
-                (TypeLiteral<SpecificationTranslator<JpaCriteriaBuilder, Predicate>>) TypeLiteral.get(Types.newParameterizedType(
-                        SpecificationTranslator.class,
-                        JpaCriteriaBuilder.class,
-                        Predicate.class)
-                )
-        ));
-    }
-
-    private static boolean isHibernateStreamingAvailable() {
-        Optional<Class<Object>> hibernateQueryClass = Classes.optional(ORG_HIBERNATE_QUERY_QUERY);
-        if (hibernateQueryClass.isPresent()) {
-            try {
-                hibernateQueryClass.get().getMethod("stream");
-                return true;
-            } catch (NoSuchMethodException e) {
-                return false;
+    private Repository<A, ID> resolveImplementation() {
+        for (JpaRepositoryFactory jpaRepositoryFactory : jpaRepositoryFactories) {
+            if (jpaRepositoryFactory.isSupporting(entityManager)) {
+                return jpaRepositoryFactory.createRepository(aggregateRootClass, keyClass);
             }
-        } else {
-            return false;
         }
+        throw new IllegalStateException("Unable to find a suitable implementation of JPA repository");
     }
 }

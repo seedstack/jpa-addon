@@ -8,35 +8,48 @@
 package org.seedstack.jpa.internal;
 
 import com.google.inject.PrivateModule;
+import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 import org.seedstack.jpa.JpaExceptionHandler;
+import org.seedstack.jpa.spi.JpaRepositoryFactory;
 import org.seedstack.seed.core.internal.transaction.TransactionalProxy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.Map;
+import java.util.Set;
 
 class JpaModule extends PrivateModule {
     private final Map<String, EntityManagerFactory> entityManagerFactories;
     private final Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses;
+    private final Set<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories;
 
-    JpaModule(Map<String, EntityManagerFactory> entityManagerFactories, Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses) {
+    JpaModule(Map<String, EntityManagerFactory> entityManagerFactories, Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses, Set<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories) {
         this.entityManagerFactories = entityManagerFactories;
         this.jpaExceptionHandlerClasses = jpaExceptionHandlerClasses;
+        this.jpaRepositoryFactories = jpaRepositoryFactories;
     }
 
     @Override
     protected void configure() {
         if (entityManagerFactories != null && !entityManagerFactories.isEmpty()) {
             EntityManagerLink entityManagerLink = new EntityManagerLink();
+
             bind(EntityManager.class).toInstance(TransactionalProxy.create(EntityManager.class, entityManagerLink));
+            expose(EntityManager.class);
 
             for (Map.Entry<String, EntityManagerFactory> entry : entityManagerFactories.entrySet()) {
                 bindUnit(entry.getKey(), entry.getValue(), entityManagerLink);
             }
 
-            expose(EntityManager.class);
+            Multibinder<JpaRepositoryFactory> jpaRepositoryFactoryMultibinder = Multibinder.newSetBinder(binder(), JpaRepositoryFactory.class);
+            for (Class<? extends JpaRepositoryFactory> jpaRepositoryFactory : jpaRepositoryFactories) {
+                jpaRepositoryFactoryMultibinder.addBinding().to(jpaRepositoryFactory);
+            }
+
+            expose(new JpaRepositoryFactoriesTypeLiteral());
         }
     }
 
@@ -54,5 +67,8 @@ class JpaModule extends PrivateModule {
 
         expose(JpaExceptionHandler.class).annotatedWith(Names.named(name));
         expose(JpaTransactionHandler.class).annotatedWith(Names.named(name));
+    }
+
+    private static class JpaRepositoryFactoriesTypeLiteral extends TypeLiteral<Set<JpaRepositoryFactory>> {
     }
 }

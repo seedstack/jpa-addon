@@ -8,6 +8,7 @@
 package org.seedstack.jpa;
 
 import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,11 @@ public class AutoRepositoriesIT {
 
     @Before
     public void setUp() throws Exception {
+        repository.clear();
+    }
+
+    @After
+    public void tearDown() throws Exception {
         repository.clear();
     }
 

@@ -7,19 +7,24 @@
  */
 package org.seedstack.jpa;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.seedstack.business.domain.AggregateExistsException;
+import org.seedstack.business.domain.AggregateNotFoundException;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaFactory;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
 import org.seedstack.seed.it.SeedITRunner;
+import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
-import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @JpaUnit("business")
 @RunWith(SeedITRunner.class)
 public class BaseJpaRepositoryIT {
@@ -28,70 +33,107 @@ public class BaseJpaRepositoryIT {
     @Inject
     private SampleBaseJpaFactory sampleBaseJpaFactory;
 
-    @Test
-    @Transactional
-    public void persist() {
-        sampleBaseRepository.add(sampleBaseJpaFactory.create("test1"));
-        assertThat(sampleBaseRepository.get("test1")).isNotEmpty();
+    @Before
+    public void setUp() throws Exception {
+        sampleBaseRepository.clear();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        sampleBaseRepository.clear();
     }
 
     @Test
-    @Transactional
-    public void get() {
-        sampleBaseRepository.add(sampleBaseJpaFactory.create("test2"));
-        assertThat(sampleBaseRepository.get("test2")).isNotEmpty();
+    public void addAggregate() {
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test"));
+        assertThat(sampleBaseRepository.get("test")).isNotEmpty();
+    }
+
+    @Test(expected = AggregateExistsException.class)
+    public void addDuplicateAggregate() {
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test"));
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test"));
     }
 
     @Test
-    @Transactional
-    public void save() {
-        SampleBaseJpaAggregateRoot test3 = sampleBaseJpaFactory.create("test3");
-        sampleBaseRepository.add(test3);
-        assertThat(sampleBaseRepository.get("test3").get().getField1()).isNull();
-        test3.setField1("modified");
-        sampleBaseRepository.update(test3);
-        assertThat(sampleBaseRepository.get("test3").get().getField1()).isEqualTo("modified");
+    public void getAggregate() {
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test"));
+        assertThat(sampleBaseRepository.get("test")).isNotEmpty();
+        assertThat(sampleBaseRepository.get("unknownTest")).isEmpty();
     }
 
     @Test
+    public void updateAggregate() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        sampleBaseRepository.add(test);
+        assertThat(sampleBaseRepository.get("test").get().getField1()).isNull();
+        test.setField1("modified");
+        sampleBaseRepository.update(test);
+        assertThat(sampleBaseRepository.get("test").get().getField1()).isEqualTo("modified");
+    }
+
+    @Test(expected = AggregateNotFoundException.class)
+    public void updateUnknownAggregate() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        test.setField1("modified");
+        sampleBaseRepository.update(test);
+    }
+
+    @Test
+    public void removeAggregate() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        sampleBaseRepository.add(test);
+        assertThat(sampleBaseRepository.get("test")).isNotEmpty();
+        sampleBaseRepository.remove(test);
+        assertThat(sampleBaseRepository.get("test")).isEmpty();
+    }
+
+    @Test
+    public void removeById() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        sampleBaseRepository.add(test);
+        assertThat(sampleBaseRepository.get("test")).isNotEmpty();
+        sampleBaseRepository.remove("test");
+        assertThat(sampleBaseRepository.get("test")).isEmpty();
+    }
+
+    @Test
+    public void containsAggregate() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        SampleBaseJpaAggregateRoot unknownTest = sampleBaseJpaFactory.create("unknownTest");
+
+        sampleBaseRepository.add(test);
+        assertThat(sampleBaseRepository.contains(test)).isTrue();
+        assertThat(sampleBaseRepository.contains(unknownTest)).isFalse();
+    }
+
+    @Test
+    public void containsId() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        sampleBaseRepository.add(test);
+        assertThat(sampleBaseRepository.contains("test")).isTrue();
+        assertThat(sampleBaseRepository.contains("unknownTest")).isFalse();
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void clear() {
+        prepareClear();
         doClear();
         checkClearResult();
     }
 
-    @Transactional
-    protected void doClear() {
+    void prepareClear() {
         sampleBaseRepository.add(sampleBaseJpaFactory.create("test4"));
         assertThat(sampleBaseRepository.get("test4")).isNotEmpty();
+    }
+
+    void doClear() {
         sampleBaseRepository.clear();
     }
 
-    @Transactional()
-    protected void checkClearResult() {
+    void checkClearResult() {
         assertThat(sampleBaseRepository.get("test4")).isEmpty();
-    }
-
-    @Test
-    @Transactional
-    public void delete() {
-        SampleBaseJpaAggregateRoot test5 = sampleBaseJpaFactory.create("test5");
-        sampleBaseRepository.add(test5);
-        assertThat(sampleBaseRepository.get("test5")).isNotEmpty();
-        sampleBaseRepository.remove(test5);
-        assertThat(sampleBaseRepository.get("test5")).isEmpty();
-        try {
-            sampleBaseRepository.remove("test6");
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(EntityNotFoundException.class);
-        }
-    }
-
-    @Test
-    @Transactional
-    public void exists() {
-        SampleBaseJpaAggregateRoot test7 = sampleBaseJpaFactory.create("test7");
-        sampleBaseRepository.add(test7);
-        assertThat(sampleBaseRepository.contains("test7")).isTrue();
-        assertThat(sampleBaseRepository.contains("test8")).isFalse();
+        assertThat(sampleBaseRepository.isEmpty()).isTrue();
     }
 }

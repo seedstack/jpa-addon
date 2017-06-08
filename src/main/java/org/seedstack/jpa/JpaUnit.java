@@ -24,5 +24,5 @@ public @interface JpaUnit {
     /**
      * @return the configured jpa unit name.
      */
-    String value();
+    String value() default "";
 }

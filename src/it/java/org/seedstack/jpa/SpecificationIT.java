@@ -7,6 +7,7 @@
  */
 package org.seedstack.jpa;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +46,11 @@ public class SpecificationIT {
         repository.add(product3);
         repository.add(product4);
         repository.add(product5);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        repository.clear();
     }
 
     @Test

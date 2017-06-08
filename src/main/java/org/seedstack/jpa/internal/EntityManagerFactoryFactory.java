@@ -80,6 +80,8 @@ class EntityManagerFactoryFactory {
             case JTA:
                 unitInfo.setJtaDataSource(dataSource);
                 break;
+            default:
+                throw new IllegalArgumentException("Unknown transaction type " + unitInfo.getTransactionType());
         }
 
         return createEntityManagerFactory(unitInfo);

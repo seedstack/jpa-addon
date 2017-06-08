@@ -7,6 +7,7 @@
  */
 package org.seedstack.jpa.internal.specification;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.seedstack.business.specification.StringEqualSpecification;
 import org.seedstack.business.specification.StringSpecification;
 import org.seedstack.business.spi.specification.SpecificationConverter;
@@ -15,9 +16,11 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
+import java.util.Locale;
 
 public class JpaStringEqualConverter<T> implements SpecificationConverter<StringEqualSpecification, JpaCriteriaBuilder<T>, Predicate> {
     @Override
+    @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default locale than force an english locale")
     public Predicate convert(StringEqualSpecification specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         String expectedValue = specification.getExpectedString();
         CriteriaBuilder criteriaBuilder = builder.getCriteriaBuilder();

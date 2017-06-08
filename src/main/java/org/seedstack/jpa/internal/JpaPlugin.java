@@ -16,6 +16,7 @@ import org.seedstack.flyway.spi.FlywayProvider;
 import org.seedstack.jdbc.spi.JdbcProvider;
 import org.seedstack.jpa.JpaConfig;
 import org.seedstack.jpa.JpaExceptionHandler;
+import org.seedstack.jpa.spi.JpaRepositoryFactory;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 import org.seedstack.shed.reflect.Classes;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ public class JpaPlugin extends AbstractSeedPlugin {
     private static final boolean flywayAvailable = Classes.optional("org.seedstack.flyway.spi.FlywayProvider").isPresent();
     private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<>();
     private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<>();
+    private final Set<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories = new HashSet<>();
 
     @Override
     public String name() {
@@ -53,6 +55,15 @@ public class JpaPlugin extends AbstractSeedPlugin {
             dependencies.add(FlywayProvider.class);
         }
         return dependencies;
+    }
+
+    @Override
+    public Collection<ClasspathScanRequest> classpathScanRequests() {
+        return new ClasspathScanRequestBuilder()
+                .annotationType(Entity.class)
+                .annotationType(Embeddable.class)
+                .specification(JpaRepositoryFactorySpecification.INSTANCE)
+                .build();
     }
 
     @Override
@@ -79,9 +90,11 @@ public class JpaPlugin extends AbstractSeedPlugin {
                 if (initContext.scannedClassesByAnnotationClass().get(Embeddable.class) != null) {
                     scannedClasses.addAll(initContext.scannedClassesByAnnotationClass().get(Embeddable.class));
                 }
+                LOGGER.info("Creating JPA unit {} with {} scanned classes", persistenceUnitName, scannedClasses.size());
                 emf = entityManagerFactoryFactory.createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig, scannedClasses);
             } else {
                 emf = entityManagerFactoryFactory.createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig);
+                LOGGER.info("Creating JPA unit {} with explicit persistence.xml", persistenceUnitName);
             }
             entityManagerFactories.put(persistenceUnitName, emf);
 
@@ -89,6 +102,15 @@ public class JpaPlugin extends AbstractSeedPlugin {
                 exceptionHandlerClasses.put(persistenceUnitName, persistenceUnitConfig.getExceptionHandler());
             }
         }
+
+        Collection<Class<?>> jpaRepositoryFactoryCandidates = initContext.scannedTypesBySpecification().get(JpaRepositoryFactorySpecification.INSTANCE);
+        for (Class<?> candidate : jpaRepositoryFactoryCandidates) {
+            if (JpaRepositoryFactory.class.isAssignableFrom(candidate)) {
+                jpaRepositoryFactories.add(candidate.asSubclass(JpaRepositoryFactory.class));
+                LOGGER.trace("Detected JPA repository implementation {}", candidate.getName());
+            }
+        }
+        LOGGER.debug("Detected {} JPA repository implementation(s)", jpaRepositoryFactories.size());
 
         return InitState.INITIALIZED;
     }
@@ -107,12 +129,11 @@ public class JpaPlugin extends AbstractSeedPlugin {
 
     @Override
     public Object nativeUnitModule() {
-        return new JpaModule(entityManagerFactories, exceptionHandlerClasses);
-    }
-
-    @Override
-    public Collection<ClasspathScanRequest> classpathScanRequests() {
-        return new ClasspathScanRequestBuilder().annotationType(Entity.class).annotationType(Embeddable.class).build();
+        return new JpaModule(
+                entityManagerFactories,
+                exceptionHandlerClasses,
+                jpaRepositoryFactories
+        );
     }
 
 }

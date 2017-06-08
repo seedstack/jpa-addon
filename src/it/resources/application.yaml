@@ -8,6 +8,8 @@
 
 logging:
   level: WARN
+  loggers:
+    org.hibernate.tool.schema.spi.CommandAcceptanceException: ERROR
 
 jdbc:
   datasources:
@@ -24,6 +26,7 @@ jdbc:
       properties:
         sql.pad_space: false
 jpa:
+  defaultUnit: unit1
   units:
     unit1:
       datasource: datasource1

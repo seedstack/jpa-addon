@@ -16,12 +16,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 class EntityManagerLink implements TransactionalLink<EntityManager> {
-    private final ThreadLocal<Deque<EntityManager>> perThreadObjectContainer = new ThreadLocal<Deque<EntityManager>>() {
-        @Override
-        protected Deque<EntityManager> initialValue() {
-            return new ArrayDeque<>();
-        }
-    };
+    private final ThreadLocal<Deque<EntityManager>> perThreadObjectContainer = ThreadLocal.withInitial(ArrayDeque::new);
 
     @Override
     public EntityManager get() {
