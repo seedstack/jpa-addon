@@ -28,7 +28,7 @@
         <flyway.version>1.0.0</flyway.version>
         <powermock.version>1.6.3</powermock.version>
 
-        <compatibility.version>3.0.0</compatibility.version>
+        <compatibility.skip>true</compatibility.skip>
 
         <bintray.package>jpa-addon</bintray.package>
         <hibernate.version>5.2.10.Final</hibernate.version>
