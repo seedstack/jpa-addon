@@ -21,6 +21,7 @@ import org.seedstack.coffig.Coffig;
 import org.seedstack.jdbc.spi.JdbcProvider;
 import org.seedstack.jpa.JpaConfig;
 import org.seedstack.jpa.JpaExceptionHandler;
+import org.seedstack.jpa.fixtures.simple.Unit3ExceptionHandler;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.spi.ApplicationProvider;
 
@@ -47,7 +48,7 @@ public class JpaPluginTest {
     @Test
     public void initTest() throws Exception {
         mockPersistenceCreateEntityManagerFactory();
-        ApplicationProvider applicationProvider = mockApplicationProvider(mockConfiguration("org.seedstack.jpa.fixtures.sample.Unit3ExceptionHandler"));
+        ApplicationProvider applicationProvider = mockApplicationProvider(mockConfiguration(Unit3ExceptionHandler.class.getName()));
         underTest.init(mockInitContext(applicationProvider, mockJdbcRegistry()));
 
         Map<String, JpaExceptionHandler> exceptionHandlerClasses = Reflection.field("exceptionHandlerClasses")

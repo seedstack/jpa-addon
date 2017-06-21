@@ -13,7 +13,9 @@ import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.specification.Specification;
+import org.seedstack.jpa.internal.JpaErrorCode;
 import org.seedstack.jpa.spi.JpaRepositoryFactory;
+import org.seedstack.seed.SeedException;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -154,6 +156,6 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
                 return jpaRepositoryFactory.createRepository(aggregateRootClass, keyClass);
             }
         }
-        throw new IllegalStateException("Unable to find a suitable implementation of JPA repository");
+        throw SeedException.createNew(JpaErrorCode.UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION);
     }
 }

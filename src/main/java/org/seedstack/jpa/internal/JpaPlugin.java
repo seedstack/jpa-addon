@@ -104,10 +104,12 @@ public class JpaPlugin extends AbstractSeedPlugin {
         }
 
         Collection<Class<?>> jpaRepositoryFactoryCandidates = initContext.scannedTypesBySpecification().get(JpaRepositoryFactorySpecification.INSTANCE);
-        for (Class<?> candidate : jpaRepositoryFactoryCandidates) {
-            if (JpaRepositoryFactory.class.isAssignableFrom(candidate)) {
-                jpaRepositoryFactories.add(candidate.asSubclass(JpaRepositoryFactory.class));
-                LOGGER.trace("Detected JPA repository implementation {}", candidate.getName());
+        if (jpaRepositoryFactoryCandidates != null) {
+            for (Class<?> candidate : jpaRepositoryFactoryCandidates) {
+                if (JpaRepositoryFactory.class.isAssignableFrom(candidate)) {
+                    jpaRepositoryFactories.add(candidate.asSubclass(JpaRepositoryFactory.class));
+                    LOGGER.trace("Detected JPA repository implementation {}", candidate.getName());
+                }
             }
         }
         LOGGER.debug("Detected {} JPA repository implementation(s)", jpaRepositoryFactories.size());
