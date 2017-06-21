@@ -13,9 +13,9 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaEqualConverter<T> implements SpecificationConverter<EqualSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
+public class JpaEqualConverter<T, V> implements SpecificationConverter<EqualSpecification<V>, JpaCriteriaBuilder<T>, Predicate> {
     @Override
-    public Predicate convert(EqualSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
+    public Predicate convert(EqualSpecification<V> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         if (specification.getExpectedValue() == null) {
             return builder.getCriteriaBuilder().isNull(builder.pickExpression());
         } else {

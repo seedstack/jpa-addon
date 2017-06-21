@@ -16,7 +16,6 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
-import java.util.Locale;
 
 public class JpaStringEqualConverter<T> implements SpecificationConverter<StringEqualSpecification, JpaCriteriaBuilder<T>, Predicate> {
     @Override

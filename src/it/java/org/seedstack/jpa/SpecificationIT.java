@@ -54,6 +54,22 @@ public class SpecificationIT {
     }
 
     @Test
+    public void testGreaterThan() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("id").greaterThan("3")
+                .build())
+        ).containsExactly(product4, product5);
+    }
+
+    @Test
+    public void testLessThan() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("id").lessThan("3")
+                .build())
+        ).containsExactly(product1, product2);
+    }
+
+    @Test
     public void testStringEquality() throws Exception {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.name").equalTo("picture1")
