@@ -14,17 +14,17 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
     <artifactId>jpa</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.2-SNAPSHOT</version>
 
     <properties>
-        <seed.version>3.1.0</seed.version>
-        <business.version>3.0.2</business.version>
-        <jdbc.version>3.0.1</jdbc.version>
+        <seed.version>3.3.0-SNAPSHOT</seed.version>
+        <business.version>3.1.0</business.version>
+        <jdbc.version>3.0.2-SNAPSHOT</jdbc.version>
         <powermock.version>1.6.3</powermock.version>
 
         <compatibility.version>3.0.0</compatibility.version>

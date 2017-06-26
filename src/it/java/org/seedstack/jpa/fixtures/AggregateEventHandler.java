@@ -10,6 +10,7 @@ package org.seedstack.jpa.fixtures;
 import org.seedstack.business.EventHandler;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.domain.events.AggregatePersistedEvent;
+import org.seedstack.business.event.BaseEventHandler;
 import org.seedstack.jpa.EventTransactionIT;
 import org.seedstack.jpa.Jpa;
 import org.seedstack.jpa.fixtures.samples.domain.base.SampleBaseJpaAggregateRoot;
@@ -19,7 +20,7 @@ import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AggregateEventHandler implements EventHandler<AggregatePersistedEvent> {
+public class AggregateEventHandler extends BaseEventHandler<AggregatePersistedEvent> {
     @Inject
     @Jpa
     private Repository<TinyAggRoot, String> repository;

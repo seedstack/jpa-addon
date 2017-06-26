@@ -7,7 +7,6 @@
  */
 package org.seedstack.jpa.internal;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.context.InitContext;
@@ -80,10 +79,6 @@ public class JpaPlugin extends AbstractSeedPlugin {
             if (persistenceUnitConfig.hasExceptionHandler()) {
                 exceptionHandlerClasses.put(persistenceUnitName, persistenceUnitConfig.getExceptionHandler());
             }
-        }
-
-        if (!Strings.isNullOrEmpty(jpaConfig.getDefaultUnit())) {
-            JpaTransactionMetadataResolver.defaultJpaUnit = jpaConfig.getDefaultUnit();
         }
 
         return InitState.INITIALIZED;

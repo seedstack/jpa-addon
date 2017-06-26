@@ -20,6 +20,8 @@ import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -163,8 +165,10 @@ class InternalPersistenceUnitInfo implements PersistenceUnitInfo {
     public ClassLoader getNewTempClassLoader() {
         ClassLoader classLoader = getClassLoader();
         if (classLoader instanceof URLClassLoader) {
-            // this forks the application class loader into a new one with the same scope
-            return new URLClassLoader(((URLClassLoader) classLoader).getURLs(), classLoader.getParent());
+            return AccessController.doPrivileged((PrivilegedAction<URLClassLoader>) () -> {
+                // this forks the application class loader into a new one with the same scope
+                return new URLClassLoader(((URLClassLoader) classLoader).getURLs(), classLoader.getParent());
+            });
         } else {
             return classLoader;
         }

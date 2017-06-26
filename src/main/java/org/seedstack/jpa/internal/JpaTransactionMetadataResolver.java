@@ -7,12 +7,17 @@
  */
 package org.seedstack.jpa.internal;
 
+import com.google.common.base.Strings;
 import org.aopalliance.intercept.MethodInvocation;
+import org.seedstack.jpa.JpaConfig;
 import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.jpa.JpaUnit;
+import org.seedstack.seed.Application;
+import org.seedstack.seed.SeedException;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
 import org.seedstack.seed.transaction.spi.TransactionMetadataResolver;
 
+import javax.inject.Inject;
 import java.util.Optional;
 
 /**
@@ -20,29 +25,30 @@ import java.util.Optional;
  * with {@link JpaUnit}.
  */
 class JpaTransactionMetadataResolver implements TransactionMetadataResolver {
-    static String defaultJpaUnit;
+    @Inject
+    private Application application;
 
     @Override
     public TransactionMetadata resolve(MethodInvocation methodInvocation, TransactionMetadata defaults) {
-        Optional<JpaUnit> jpaUnit = JpaUnitResolver.INSTANCE.apply(methodInvocation.getMethod());
+        Optional<JpaUnit> jpaUnitOptional = JpaUnitResolver.INSTANCE.apply(methodInvocation.getMethod());
 
-        if (jpaUnit.isPresent() || JpaTransactionHandler.class.equals(defaults.getHandler())) {
+        if (jpaUnitOptional.isPresent() || JpaTransactionHandler.class.equals(defaults.getHandler())) {
             TransactionMetadata result = new TransactionMetadata();
             result.setHandler(JpaTransactionHandler.class);
             result.setExceptionHandler(JpaExceptionHandler.class);
-            result.setResource(jpaUnit.isPresent() ? resolveUnit(jpaUnit.get()) : defaultJpaUnit);
+            if (jpaUnitOptional.isPresent() && !Strings.isNullOrEmpty(jpaUnitOptional.get().value())) {
+                result.setResource(jpaUnitOptional.get().value());
+            } else {
+                String defaultUnit = application.getConfiguration().get(JpaConfig.class).getDefaultUnit();
+                if (!Strings.isNullOrEmpty(defaultUnit)) {
+                    result.setResource(defaultUnit);
+                } else {
+                    throw SeedException.createNew(JpaErrorCode.NO_JPA_UNIT_SPECIFIED_FOR_TRANSACTION)
+                            .put("method", methodInvocation.getMethod().toString());
+                }
+            }
             return result;
         }
-
         return null;
-    }
-
-    private String resolveUnit(JpaUnit jpaUnit) {
-        String value = jpaUnit.value();
-        if (value.isEmpty()) {
-            return defaultJpaUnit;
-        } else {
-            return value;
-        }
     }
 }
