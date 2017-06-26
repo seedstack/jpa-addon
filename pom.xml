@@ -25,6 +25,7 @@
         <seed.version>3.3.0-SNAPSHOT</seed.version>
         <business.version>3.1.0</business.version>
         <jdbc.version>3.0.2-SNAPSHOT</jdbc.version>
+        <flyway.version>1.0.0-SNAPSHOT</flyway.version>
         <powermock.version>1.6.3</powermock.version>
 
         <compatibility.version>3.0.0</compatibility.version>
@@ -87,6 +88,12 @@
             <groupId>org.seedstack.business</groupId>
             <artifactId>business-core</artifactId>
             <version>${business.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.seedstack.addons.flyway</groupId>
+            <artifactId>flyway</artifactId>
+            <version>${flyway.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>

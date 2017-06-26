@@ -12,10 +12,12 @@ import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequestBuilder;
+import org.seedstack.flyway.spi.FlywayProvider;
 import org.seedstack.jdbc.spi.JdbcProvider;
 import org.seedstack.jpa.JpaConfig;
 import org.seedstack.jpa.JpaExceptionHandler;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
+import org.seedstack.shed.reflect.Classes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +36,7 @@ import java.util.Set;
  */
 public class JpaPlugin extends AbstractSeedPlugin {
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaPlugin.class);
+    private static final boolean flywayAvailable = Classes.optional("org.seedstack.flyway.spi.FlywayProvider").isPresent();
     private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<>();
     private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<>();
 
@@ -43,7 +47,12 @@ public class JpaPlugin extends AbstractSeedPlugin {
 
     @Override
     public Collection<Class<?>> dependencies() {
-        return Lists.newArrayList(JdbcProvider.class);
+        List<Class<?>> dependencies = Lists.newArrayList(JdbcProvider.class);
+        if (flywayAvailable) {
+            // ensures that flyway has initialized before JPA
+            dependencies.add(FlywayProvider.class);
+        }
+        return dependencies;
     }
 
     @Override
