@@ -7,8 +7,8 @@
  */
 package org.seedstack.jpa.internal.specification;
 
-import org.seedstack.business.specification.BaseSpecificationTranslator;
 import org.seedstack.business.specification.Specification;
+import org.seedstack.business.spi.specification.BaseSpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 

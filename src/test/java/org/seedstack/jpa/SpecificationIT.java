@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Repository;
-import org.seedstack.business.specification.builder.SpecificationBuilder;
+import org.seedstack.business.specification.dsl.SpecificationBuilder;
 import org.seedstack.jpa.fixtures.business.domain.product.Product;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;

@@ -12,8 +12,6 @@ import org.seedstack.business.domain.BaseFactory;
 public class SampleBaseJpaFactoryDefault extends BaseFactory<SampleBaseJpaAggregateRoot> implements SampleBaseJpaFactory {
     @Override
     public SampleBaseJpaAggregateRoot create(String id) {
-        SampleBaseJpaAggregateRoot sampleBaseJpaAggregateRoot = new SampleBaseJpaAggregateRoot();
-        sampleBaseJpaAggregateRoot.setEntityId(id);
-        return sampleBaseJpaAggregateRoot;
+        return new SampleBaseJpaAggregateRoot(id);
     }
 }

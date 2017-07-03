@@ -11,7 +11,10 @@ import org.seedstack.business.domain.AggregateExistsException;
 import org.seedstack.business.domain.AggregateNotFoundException;
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
+import org.seedstack.business.domain.LimitOption;
+import org.seedstack.business.domain.OffsetOption;
 import org.seedstack.business.domain.Repository;
+import org.seedstack.business.domain.SortOption;
 import org.seedstack.business.specification.FalseSpecification;
 import org.seedstack.business.specification.IdentitySpecification;
 import org.seedstack.business.specification.Specification;
@@ -24,8 +27,11 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 @Priority(JpaRepositoryFactoryPriority.JPA_10_PRIORITY)
 public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
@@ -55,9 +61,9 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
         }
 
         @Override
-        public Stream<A> get(Specification<A> specification, Options... options) {
+        public Stream<A> get(Specification<A> specification, Option... options) {
             if (specification instanceof TrueSpecification) {
-                return buildStream(entityManager.createQuery(String.format("select e from %s e", getAggregateRootClass().getCanonicalName())));
+                return buildStream(applyOffsetAndLimit(entityManager.createQuery(applySort(String.format("select e from %s e", getAggregateRootClass().getCanonicalName()), options)), options));
             } else if (specification instanceof FalseSpecification) {
                 return Stream.empty();
             } else if (specification instanceof IdentitySpecification) {
@@ -142,6 +148,49 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
             } catch (EntityNotFoundException e) {
                 throw new AggregateNotFoundException("Aggregate " + getAggregateRootClass() + " identified with " + id + " cannot be updated", e);
             }
+        }
+
+        protected Query applyOffsetAndLimit(Query query, Option... options) {
+            for (Option option : options) {
+                if (option instanceof OffsetOption) {
+                    applyOffset(query, (OffsetOption) option);
+                } else if (option instanceof LimitOption) {
+                    applyLimit(query, (LimitOption) option);
+                }
+            }
+            return query;
+        }
+
+        private void applyOffset(Query query, OffsetOption offsetOption) {
+            long offset = offsetOption.getOffset();
+            checkArgument(offset > Integer.MAX_VALUE, "JPA only supports offsetting results up to " + Integer.MAX_VALUE);
+            query.setFirstResult((int) offset);
+        }
+
+        private void applyLimit(Query query, LimitOption limitOption) {
+            long limit = limitOption.getLimit();
+            checkArgument(limit > Integer.MAX_VALUE, "JPA only supports result limiting up to " + Integer.MAX_VALUE);
+            query.setMaxResults((int) limit);
+        }
+
+        private String applySort(String jpql, Option... options) {
+            for (Option option : options) {
+                if (option instanceof SortOption) {
+                    StringBuilder sb = new StringBuilder(jpql);
+                    List<SortOption.SortedAttribute> sortedAttributes = ((SortOption) option).getSortedAttributes();
+                    if (!sortedAttributes.isEmpty()) {
+                        sb.append(" order by ");
+                        for (int i = 0; i < sortedAttributes.size(); i++) {
+                            if (i > 0) {
+                                sb.append(", ");
+                            }
+                            sb.append(String.format("e.%s", sortedAttributes.get(i).getAttribute()));
+                        }
+                    }
+                    return sb.toString();
+                }
+            }
+            return jpql;
         }
     }
 

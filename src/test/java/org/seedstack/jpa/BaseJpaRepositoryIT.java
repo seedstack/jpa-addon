@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.AggregateExistsException;
 import org.seedstack.business.domain.AggregateNotFoundException;
+import org.seedstack.business.domain.SortOption;
+import org.seedstack.business.specification.Specification;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaFactory;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
@@ -21,6 +23,8 @@ import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -121,6 +125,32 @@ public class BaseJpaRepositoryIT {
         prepareClear();
         doClear();
         checkClearResult();
+    }
+
+    @Test
+    public void sortOption() {
+        SampleBaseJpaAggregateRoot test4 = sampleBaseJpaFactory.create("test4");
+        test4.setField1("a");
+        sampleBaseRepository.add(test4);
+        SampleBaseJpaAggregateRoot test2 = sampleBaseJpaFactory.create("test2");
+        test2.setField1("b");
+        sampleBaseRepository.add(test2);
+        SampleBaseJpaAggregateRoot test9 = sampleBaseJpaFactory.create("test9");
+        test9.setField1("a");
+        sampleBaseRepository.add(test9);
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test1"));
+        sampleBaseRepository.add(sampleBaseJpaFactory.create("test6"));
+        List<String> ascending = sampleBaseRepository
+                .get(Specification.any(), new SortOption().add("id"))
+                .map(SampleBaseJpaAggregateRoot::getId)
+                .collect(Collectors.toList());
+        assertThat(ascending).containsExactly("test1", "test2", "test4", "test6", "test9");
+
+        List<String> descending = sampleBaseRepository
+                .get(Specification.any(), new SortOption(SortOption.Direction.DESCENDING).add("id"))
+                .map(SampleBaseJpaAggregateRoot::getId)
+                .collect(Collectors.toList());
+        assertThat(descending).containsExactly("test9", "test6", "test4", "test2", "test1");
     }
 
     void prepareClear() {

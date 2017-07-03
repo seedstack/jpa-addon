@@ -73,7 +73,7 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
     }
 
     @Override
-    public Stream<A> get(Specification<A> specification, Options... options) {
+    public Stream<A> get(Specification<A> specification, Option... options) {
         return resolveImplementation().get(specification, options);
     }
 
@@ -153,7 +153,7 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
     private Repository<A, ID> resolveImplementation() {
         for (JpaRepositoryFactory jpaRepositoryFactory : jpaRepositoryFactories) {
             if (jpaRepositoryFactory.isSupporting(entityManager)) {
-                return jpaRepositoryFactory.createRepository(aggregateRootClass, keyClass);
+                return jpaRepositoryFactory.createRepository(getAggregateRootClass(), getIdentifierClass());
             }
         }
         throw SeedException.createNew(JpaErrorCode.UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION);

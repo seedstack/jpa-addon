@@ -9,6 +9,7 @@ package org.seedstack.jpa.internal.orm;
 
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.Repository;
+import org.seedstack.business.domain.SortOption;
 import org.seedstack.business.specification.FalseSpecification;
 import org.seedstack.business.specification.IdentitySpecification;
 import org.seedstack.business.specification.Specification;
@@ -35,7 +36,7 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
     /**
      * <p>
      * Extending {@link Jpa10RepositoryFactory.Jpa10Repository}, this implementation of business framework repository
-     * takes advantage of JPA 2.0 features. Specifications are fully supported on {@link #get(Specification, Options...)}
+     * takes advantage of JPA 2.0 features. Specifications are fully supported on {@link #get(Specification, Option...)}
      * and {@link #count(Specification)} methods.
      * </p>
      *
@@ -56,7 +57,7 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
         }
 
         @Override
-        public Stream<A> get(Specification<A> specification, Options... options) {
+        public Stream<A> get(Specification<A> specification, Option... options) {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             Class<A> entityClass = getAggregateRootClass();
             CriteriaQuery<A> cq = cb.createQuery(entityClass);
@@ -68,7 +69,13 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
                 cq.distinct(true);
             }
 
-            return buildStream(entityManager.createQuery(cq));
+            for (Option option : options) {
+                if (option instanceof SortOption) {
+                    applySort(cb, root, cq, (SortOption) option);
+                }
+            }
+
+            return buildStream(applyOffsetAndLimit(entityManager.createQuery(cq), options));
         }
 
         @Override
@@ -86,6 +93,21 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
             }
 
             return entityManager.createQuery(cq).getSingleResult();
+        }
+
+        private void applySort(CriteriaBuilder cb, Root<A> root, CriteriaQuery<A> cq, SortOption sortOption) {
+            for (SortOption.SortedAttribute sortedAttribute : sortOption.getSortedAttributes()) {
+                switch (sortedAttribute.getDirection()) {
+                    case ASCENDING:
+                        cq.orderBy(cb.asc(root.get(sortedAttribute.getAttribute())));
+                        break;
+                    case DESCENDING:
+                        cq.orderBy(cb.desc(root.get(sortedAttribute.getAttribute())));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unsupported sort direction " + sortedAttribute.getDirection());
+                }
+            }
         }
     }
 

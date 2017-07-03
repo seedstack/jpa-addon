@@ -21,44 +21,31 @@ public class SampleBaseJpaAggregateRoot extends BaseAggregateRoot<String> {
     @Transient
     @Logging
     public Logger logger;
-
+    @Id
+    private String id;
     private String field1;
     private String field2;
     private Date field3;
 
-    @Id
-    private String entityId;
-
-    protected SampleBaseJpaAggregateRoot() {
+    SampleBaseJpaAggregateRoot() {
+        // required for JPA
     }
 
-    SampleBaseJpaAggregateRoot(String entityId) {
-        this.entityId = entityId;
-    }
-
-    @Override
-    public String getId() {
-        return entityId;
-    }
-
-    public void setEntityId(String id) {
-        entityId = id;
+    SampleBaseJpaAggregateRoot(String id) {
+        this.id = id;
     }
 
     public String getField1() {
         return field1;
     }
 
-
     public void setField1(String field1) {
         this.field1 = field1;
     }
 
-
     public String getField2() {
         return field2;
     }
-
 
     public void setField2(String field2) {
         this.field2 = field2;

@@ -26,7 +26,7 @@ public class Jpa21RepositoryFactory extends BaseJpaRepositoryFactory {
 
     /**
      * Extending {@link Jpa20RepositoryFactory.Jpa20Repository}, this implementation of business framework repository
-     * takes advantage of JPA 2.1 features. Specifications are fully supported on {@link #get(Specification, Options...)},
+     * takes advantage of JPA 2.1 features. Specifications are fully supported on {@link #get(Specification, Option...)},
      * {@link #count(Specification)} and {@link #remove(Specification)} methods.
      *
      * @param <A>  the aggregate root class.
