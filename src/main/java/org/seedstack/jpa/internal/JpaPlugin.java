@@ -25,12 +25,15 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.seedstack.shed.PriorityUtils.sortByPriority;
 
 /**
  * This plugin enables JPA support by creating an {@link javax.persistence.EntityManagerFactory} per persistence unit configured.
@@ -40,7 +43,7 @@ public class JpaPlugin extends AbstractSeedPlugin {
     private static final boolean flywayAvailable = Classes.optional("org.seedstack.flyway.spi.FlywayProvider").isPresent();
     private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<>();
     private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new HashMap<>();
-    private final Set<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories = new HashSet<>();
+    private final List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories = new ArrayList<>();
 
     @Override
     public String name() {
@@ -112,6 +115,7 @@ public class JpaPlugin extends AbstractSeedPlugin {
                 }
             }
         }
+        sortByPriority(jpaRepositoryFactories);
         LOGGER.debug("Detected {} JPA repository implementation(s)", jpaRepositoryFactories.size());
 
         return InitState.INITIALIZED;

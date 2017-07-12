@@ -18,15 +18,16 @@ import org.seedstack.seed.core.internal.transaction.TransactionalProxy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 class JpaModule extends PrivateModule {
     private final Map<String, EntityManagerFactory> entityManagerFactories;
     private final Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses;
-    private final Set<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories;
+    private final List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories;
 
-    JpaModule(Map<String, EntityManagerFactory> entityManagerFactories, Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses, Set<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories) {
+    JpaModule(Map<String, EntityManagerFactory> entityManagerFactories, Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses, List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories) {
         this.entityManagerFactories = entityManagerFactories;
         this.jpaExceptionHandlerClasses = jpaExceptionHandlerClasses;
         this.jpaRepositoryFactories = jpaRepositoryFactories;

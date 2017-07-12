@@ -7,8 +7,6 @@
  */
 package org.seedstack.jpa;
 
-import com.google.common.collect.Lists;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
 import org.seedstack.business.domain.Repository;
@@ -17,12 +15,8 @@ import org.seedstack.jpa.internal.JpaErrorCode;
 import org.seedstack.jpa.spi.JpaRepositoryFactory;
 import org.seedstack.seed.SeedException;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -38,7 +32,8 @@ import java.util.stream.Stream;
 public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends BaseRepository<A, ID> {
     @Inject
     private EntityManager entityManager;
-    private List<JpaRepositoryFactory> jpaRepositoryFactories;
+    @Inject
+    private Set<JpaRepositoryFactory> jpaRepositoryFactories;
 
     /**
      * Default constructor.
@@ -135,18 +130,6 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
     @Override
     public void clear() {
         resolveImplementation().clear();
-    }
-
-    @Inject
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Method called by Guice")
-    private void buildFactoryList(Set<JpaRepositoryFactory> jpaRepositoryFactories) {
-        this.jpaRepositoryFactories = Lists.newArrayList(jpaRepositoryFactories);
-        this.jpaRepositoryFactories.sort(Collections.reverseOrder(Comparator.comparingInt(this::getPriority)));
-    }
-
-    private int getPriority(JpaRepositoryFactory jpaRepositoryFactory) {
-        Priority annotation = jpaRepositoryFactory.getClass().getAnnotation(Priority.class);
-        return annotation != null ? annotation.value() : 0;
     }
 
     @SuppressWarnings("unchecked")
