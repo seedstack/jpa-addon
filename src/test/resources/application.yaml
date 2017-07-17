@@ -76,10 +76,10 @@ classes:
             domain:
               identity:
                 MyAggregate:
-                  identityHandler: inMemorySequence
+                  identityGenerator: inMemorySequence
                   sequenceName: SEQTEST
                 MyEntity:
-                  identityHandler: simpleUUID
+                  identityGenerator: simpleUUID
 
 business:
   events:

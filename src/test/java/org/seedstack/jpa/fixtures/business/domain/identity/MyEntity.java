@@ -12,13 +12,13 @@ package org.seedstack.jpa.fixtures.business.domain.identity;
 
 import org.seedstack.business.domain.BaseEntity;
 import org.seedstack.business.domain.Identity;
-import org.seedstack.business.domain.identity.UUIDHandler;
+import org.seedstack.business.domain.UUIDGenerator;
 
 import java.util.UUID;
 
 public class MyEntity extends BaseEntity<UUID> {
 
-    @Identity(UUIDHandler.class)
+    @Identity(generator = UUIDGenerator.class)
     private UUID id;
 
     @Override

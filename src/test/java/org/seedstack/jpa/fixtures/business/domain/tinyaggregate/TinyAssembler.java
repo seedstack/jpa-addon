@@ -11,13 +11,13 @@ import org.seedstack.business.assembler.BaseAssembler;
 
 public class TinyAssembler extends BaseAssembler<TinyAggRoot, TinyDto> {
     @Override
-    protected void doAssembleDtoFromAggregate(TinyDto targetDto, TinyAggRoot sourceAggregate) {
+    public void mergeAggregateIntoDto(TinyAggRoot sourceAggregate, TinyDto targetDto) {
         targetDto.setId(sourceAggregate.getId());
         targetDto.setName(sourceAggregate.getName());
     }
 
     @Override
-    protected void doMergeAggregateWithDto(TinyAggRoot targetAggregate, TinyDto sourceDto) {
+    public void mergeDtoIntoAggregate(TinyDto sourceDto, TinyAggRoot targetAggregate) {
         targetAggregate.setName(sourceDto.getName());
     }
 }

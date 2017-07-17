@@ -7,8 +7,8 @@
  */
 package org.seedstack.jpa.fixtures.business.domain.tinyaggregate;
 
-import org.seedstack.business.assembler.MatchingEntityId;
-import org.seedstack.business.assembler.MatchingFactoryParameter;
+import org.seedstack.business.assembler.AggregateId;
+import org.seedstack.business.assembler.FactoryArgument;
 
 public class TinyDto {
     public String id;
@@ -22,8 +22,8 @@ public class TinyDto {
         this.name = name;
     }
 
-    @MatchingEntityId
-    @MatchingFactoryParameter
+    @AggregateId
+    @FactoryArgument
     public String getId() {
         return id;
     }

@@ -10,7 +10,7 @@ package org.seedstack.jpa.internal;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.seedstack.business.domain.Entity;
-import org.seedstack.business.domain.identity.SequenceHandler;
+import org.seedstack.business.domain.SequenceGenerator;
 import org.seedstack.seed.ClassConfiguration;
 import org.seedstack.seed.SeedException;
 
@@ -22,7 +22,7 @@ import javax.persistence.EntityManager;
  * sequence name specified in class configuration in the 'identitySequenceName' property.
  */
 @Named("oracleSequence")
-class OracleSequenceHandler implements SequenceHandler<Entity<Long>, Long> {
+class OracleSequenceHandler implements SequenceGenerator<Long> {
     private static final String SEQUENCE_NAME = "identitySequenceName";
     @Inject(optional = true)
     private EntityManager entityManager;

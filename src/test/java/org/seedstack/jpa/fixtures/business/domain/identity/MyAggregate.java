@@ -12,12 +12,12 @@ package org.seedstack.jpa.fixtures.business.domain.identity;
 
 import org.seedstack.business.domain.BaseAggregateRoot;
 import org.seedstack.business.domain.Identity;
-import org.seedstack.business.domain.identity.SequenceHandler;
+import org.seedstack.business.domain.SequenceGenerator;
 
 import java.util.Set;
 
 public class MyAggregate extends BaseAggregateRoot<Long> {
-    @Identity(SequenceHandler.class)
+    @Identity(generator = SequenceGenerator.class)
     private Long id;
 
     private String name;
