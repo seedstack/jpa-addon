@@ -22,16 +22,17 @@ import javax.persistence.EntityManager;
  * sequence name specified in class configuration in the 'identitySequenceName' property.
  */
 @Named("oracleSequence")
-class OracleSequenceHandler implements SequenceGenerator<Long> {
+class OracleSequenceGenerator implements SequenceGenerator<Long> {
     private static final String SEQUENCE_NAME = "identitySequenceName";
     @Inject(optional = true)
     private EntityManager entityManager;
 
     @Override
-    public Long handle(Entity<Long> entity, ClassConfiguration<Entity<Long>> entityConfiguration) {
+    public <E extends Entity<Long>> Long generate(Class<E> entityClass, ClassConfiguration<E> entityConfiguration) {
         String sequence = entityConfiguration.get(SEQUENCE_NAME);
         if (StringUtils.isBlank(sequence)) {
-            throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY).put("entityClass", entity.getClass());
+            throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)
+                    .put("entityClass", entityClass);
         }
 
         if (entityManager == null) {
