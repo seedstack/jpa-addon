@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
+        <version>3.1.0</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
@@ -22,10 +22,10 @@
     <version>3.0.2-SNAPSHOT</version>
 
     <properties>
-        <seed.version>3.3.0-SNAPSHOT</seed.version>
+        <seed.version>3.3.0</seed.version>
         <business.version>3.1.0</business.version>
-        <jdbc.version>3.0.2-SNAPSHOT</jdbc.version>
-        <flyway.version>1.0.0-SNAPSHOT</flyway.version>
+        <jdbc.version>3.0.2</jdbc.version>
+        <flyway.version>1.0.0</flyway.version>
         <powermock.version>1.6.3</powermock.version>
 
         <compatibility.version>3.0.0</compatibility.version>
@@ -108,6 +108,12 @@
             <artifactId>powermock-module-junit4</artifactId>
             <version>${powermock.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>

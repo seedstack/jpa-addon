@@ -1,5 +1,6 @@
-# Version 3.0.2 (2017-07-31)
+# Version 3.0.2 (2017-08-01)
 
+* [new] If [Flyway add-on](http://seedstack.org/addons/flyway) is available, make sure that JPA is initialized after it had the opportunity to migrate the database(s).
 * [chg] Improved error message when no JPA unit is specified.
 
 # Version 3.0.1 (2017-02-26)
