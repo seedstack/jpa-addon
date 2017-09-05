@@ -8,17 +8,17 @@
 package org.seedstack.jpa.internal.specification;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.seedstack.business.specification.StringEqualSpecification;
+import org.seedstack.business.specification.StringMatchingSpecification;
 import org.seedstack.business.specification.StringSpecification;
 import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 
-public class JpaStringEqualConverter<T> extends JpaStringConverter<T, StringEqualSpecification> {
+public class JpaStringMatchingConverter<T> extends JpaStringConverter<T, StringMatchingSpecification> {
     @Override
     @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default locale than force an english locale")
-    public Predicate convert(StringEqualSpecification specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
+    public Predicate convert(StringMatchingSpecification specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         String expectedValue = specification.getExpectedString();
         CriteriaBuilder criteriaBuilder = builder.getCriteriaBuilder();
         StringSpecification.Options options = specification.getOptions();
@@ -29,10 +29,14 @@ public class JpaStringEqualConverter<T> extends JpaStringConverter<T, StringEqua
                     criteriaBuilder, builder.pickExpression())
             );
         } else {
-            return criteriaBuilder.equal(
+            return criteriaBuilder.like(
                     applyOptions(options, criteriaBuilder, builder.pickExpression()),
-                    options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue
+                    convertPattern(options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue)
             );
         }
+    }
+
+    private String convertPattern(String pattern) {
+        return pattern.replace(StringMatchingSpecification.MULTI_CHARACTER_WILDCARD, "%").replace(StringMatchingSpecification.SINGLE_CHARACTER_WILDCARD, "_");
     }
 }

@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.seedstack.shed.PriorityUtils.sortByPriority;
+import static org.seedstack.shed.misc.PriorityUtils.sortByPriority;
 
 /**
  * This plugin enables JPA support by creating an {@link javax.persistence.EntityManagerFactory} per persistence unit configured.
