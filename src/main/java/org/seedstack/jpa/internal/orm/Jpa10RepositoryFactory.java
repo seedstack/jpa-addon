@@ -44,6 +44,10 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
      * @param <ID> the aggregate root identifier class.
      */
     public static class Jpa10Repository<A extends AggregateRoot<ID>, ID> extends BaseRepository<A, ID> {
+        private static final String SELECT_QUERY = "select e from %s e";
+        private static final String COUNT_QUERY = "select count(e) from %s e";
+        private static final String DELETE_QUERY = "delete from %s";
+
         @Inject
         protected EntityManager entityManager;
 
@@ -52,7 +56,7 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
         }
 
         @Override
-        public void add(A aggregate) {
+        public void add(A aggregate) throws AggregateExistsException {
             try {
                 entityManager.persist(aggregate);
             } catch (EntityExistsException e) {
@@ -63,7 +67,7 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
         @Override
         public Stream<A> get(Specification<A> specification, Option... options) {
             if (specification instanceof TrueSpecification) {
-                return buildStream(applyOffsetAndLimit(entityManager.createQuery(applySort(String.format("select e from %s e", getAggregateRootClass().getCanonicalName()), options)), options));
+                return buildStream(applyOffsetAndLimit(entityManager.createQuery(applySort(String.format(SELECT_QUERY, getAggregateRootClass().getCanonicalName()), options)), options));
             } else if (specification instanceof FalseSpecification) {
                 return Stream.empty();
             } else if (specification instanceof IdentitySpecification) {
@@ -74,7 +78,7 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
                     return Stream.empty();
                 }
             } else {
-                throw new UnsupportedOperationException("Only TrueSpecification (get all entities), FalseSpecification (get no entity) or IdentitySpecification (get one entity) is supported with JPA 1.0");
+                throw new UnsupportedOperationException("Only TrueSpecification (get all), FalseSpecification (get none) or IdentitySpecification (get one) is supported with JPA 1.0");
             }
         }
 
@@ -91,10 +95,11 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
         @Override
         public long count(Specification<A> specification) {
             if (specification instanceof TrueSpecification) {
-                return (Long) entityManager.createQuery(String.format("select count(e) from %s e", getAggregateRootClass().getCanonicalName())).getSingleResult();
+                return (Long) entityManager.createQuery(String.format(COUNT_QUERY, getAggregateRootClass().getCanonicalName())).getSingleResult();
             } else if (specification instanceof FalseSpecification) {
                 return 0L;
             } else if (specification instanceof IdentitySpecification) {
+                // With JPA 1.0 a load is required to check for entity existence without knowing its model
                 A found = entityManager.find(getAggregateRootClass(), ((IdentitySpecification) specification).getExpectedIdentifier());
                 if (found != null) {
                     return 1L;
@@ -102,52 +107,52 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
                     return 0L;
                 }
             } else {
-                throw new UnsupportedOperationException("Only TrueSpecification (count all entities), FalseSpecification (count no entity) or IdentitySpecification (count one entity) is supported with JPA 1.0");
+                throw new UnsupportedOperationException("Only TrueSpecification (count all), FalseSpecification (count none) or IdentitySpecification (count one) is supported with JPA 1.0");
             }
         }
 
         @Override
         public long remove(Specification<A> specification) {
             if (specification instanceof TrueSpecification) {
-                return entityManager.createQuery(String.format("delete from %s", getAggregateRootClass().getCanonicalName())).executeUpdate();
+                return entityManager.createQuery(String.format(DELETE_QUERY, getAggregateRootClass().getCanonicalName())).executeUpdate();
             } else if (specification instanceof FalseSpecification) {
                 return 0L;
             } else if (specification instanceof IdentitySpecification) {
-                A found = entityManager.find(getAggregateRootClass(), ((IdentitySpecification) specification).getExpectedIdentifier());
-                if (found != null) {
-                    entityManager.remove(found);
+                try {
+                    entityManager.remove(entityManager.getReference(getAggregateRootClass(), ((IdentitySpecification) specification).getExpectedIdentifier()));
                     return 1L;
-                } else {
+                } catch (EntityNotFoundException e) {
                     return 0L;
                 }
             } else {
-                throw new UnsupportedOperationException("Only TrueSpecification (remove all entities), FalseSpecification (remove no entity) or IdentitySpecification (remove one entity) is supported with JPA 1.0");
+                throw new UnsupportedOperationException("Only TrueSpecification (remove all), FalseSpecification (remove none) or IdentitySpecification (remove one) is supported with JPA 1.0");
             }
         }
 
         @Override
-        public void remove(ID id) {
+        public void remove(ID id) throws AggregateNotFoundException {
             try {
                 entityManager.remove(entityManager.getReference(getAggregateRootClass(), id));
             } catch (EntityNotFoundException e) {
-                throw new AggregateNotFoundException("Aggregate " + getAggregateRootClass() + " identified with " + id + " cannot be removed", e);
+                throw new AggregateNotFoundException("Non-existent aggregate " + getAggregateRootClass() + " identified with " + id + " cannot be removed", e);
             }
         }
 
         @Override
-        public void remove(A aggregate) {
-            entityManager.remove(aggregate);
-        }
-
-        @Override
-        public void update(A aggregate) {
-            ID id = aggregate.getId();
+        public void remove(A aggregate) throws AggregateNotFoundException {
             try {
-                entityManager.getReference(getAggregateRootClass(), id);
-                entityManager.merge(aggregate);
+                entityManager.remove(aggregate);
             } catch (EntityNotFoundException e) {
-                throw new AggregateNotFoundException("Aggregate " + getAggregateRootClass() + " identified with " + id + " cannot be updated", e);
+                throw new AggregateNotFoundException("Non-existent aggregate " + getAggregateRootClass() + " identified with " + aggregate.getId() + " cannot be removed", e);
             }
+        }
+
+        @Override
+        public void update(A aggregate) throws AggregateNotFoundException {
+            if (!contains(aggregate)) {
+                throw new AggregateNotFoundException("Non-existent aggregate " + getAggregateRootClass() + " identified with " + aggregate.getId() + " cannot be updated");
+            }
+            entityManager.merge(aggregate);
         }
 
         protected Query applyOffsetAndLimit(Query query, Option... options) {

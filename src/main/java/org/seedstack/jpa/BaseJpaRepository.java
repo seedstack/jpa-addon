@@ -7,6 +7,8 @@
  */
 package org.seedstack.jpa;
 
+import org.seedstack.business.domain.AggregateExistsException;
+import org.seedstack.business.domain.AggregateNotFoundException;
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.BaseRepository;
 import org.seedstack.business.domain.Repository;
@@ -63,7 +65,7 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
     }
 
     @Override
-    public void add(A aggregate) {
+    public void add(A aggregate) throws AggregateExistsException {
         resolveImplementation().add(aggregate);
     }
 
@@ -113,17 +115,17 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<ID>, ID> extends
     }
 
     @Override
-    public void remove(ID id) {
+    public void remove(ID id) throws AggregateNotFoundException {
         resolveImplementation().remove(id);
     }
 
     @Override
-    public void remove(A aggregate) {
+    public void remove(A aggregate) throws AggregateNotFoundException {
         resolveImplementation().remove(aggregate);
     }
 
     @Override
-    public void update(A aggregate) {
+    public void update(A aggregate) throws AggregateNotFoundException {
         resolveImplementation().update(aggregate);
     }
 
