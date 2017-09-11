@@ -196,19 +196,29 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.name").equalTo("picture2")
                 .or()
-                .property("pictures.name").equalTo("picture3")
+                .property("designation").equalTo("product3")
+                .or()
+                .property("designation").equalTo("product4")
                 .build())
-        ).containsExactly(product2, product3);
+        ).containsExactly(product2, product3, product4);
     }
 
     @Test
     public void testAnd() throws Exception {
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").equalTo("picture4").trimmed()
+                .property("pictures.name").equalTo("picture2")
                 .and()
-                .property("designation").equalTo("product5")
+                .property("designation").equalTo("product2")
+                .and()
+                .property("price").equalTo(2d)
                 .build())
-        ).containsExactly(product5);
+        ).containsExactly(product2);
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("pictures.name").equalTo("picture3")
+                .and()
+                .property("designation").equalTo("product2")
+                .build())
+        ).isEmpty();
     }
 
     public Product createProduct(long id, String designation, String pictureUrl, double price) {

@@ -12,13 +12,15 @@ import org.seedstack.business.spi.specification.SpecificationConverter;
 import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
+import java.util.Arrays;
 
 public class JpaOrConverter<T> implements SpecificationConverter<OrSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
     @Override
     public Predicate convert(OrSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
         return builder.getCriteriaBuilder().or(
-                translator.translate(specification.getLhs(), builder),
-                translator.translate(specification.getRhs(), builder)
+                Arrays.stream(specification.getSpecifications())
+                        .map(spec -> translator.translate(spec, builder))
+                        .toArray(Predicate[]::new)
         );
     }
 }
