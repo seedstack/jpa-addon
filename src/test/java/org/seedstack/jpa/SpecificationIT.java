@@ -56,9 +56,37 @@ public class SpecificationIT {
     }
 
     @Test
+    public void testTrue() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .all()
+                .build())
+        ).containsExactly(product1, product2, product3, product4, product5, product6);
+    }
+
+    @Test
+    public void testFalse() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .none()
+                .build())
+        ).isEmpty();
+    }
+
+    @Test
+    public void testIdentity() throws Exception {
+        assertThat(repository.get(specificationBuilder.ofAggregate(Product.class)
+                .identity().is(3L)
+                .build())
+        ).containsExactly(product3);
+        assertThat(repository.get(specificationBuilder.ofAggregate(Product.class)
+                .identity().isNot(3L)
+                .build())
+        ).containsExactly(product1, product2, product4, product5, product6);
+    }
+
+    @Test
     public void testGreaterThan() throws Exception {
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("id").greaterThan("3")
+                .property("id").greaterThan(3)
                 .build())
         ).containsExactly(product4, product5, product6);
     }
@@ -66,7 +94,7 @@ public class SpecificationIT {
     @Test
     public void testLessThan() throws Exception {
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("id").lessThan("3")
+                .property("id").lessThan(3)
                 .build())
         ).containsExactly(product1, product2);
     }
