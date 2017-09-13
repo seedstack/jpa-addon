@@ -15,13 +15,13 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JpaIdentityConverter<A extends AggregateRoot<ID>, ID> implements SpecificationConverter<IdentitySpecification<A, ID>, JpaCriteriaBuilder<A>, Predicate> {
+public class JpaIdentityConverter<A extends AggregateRoot<ID>, ID> implements SpecificationConverter<IdentitySpecification<A, ID>, JpaTranslationContext<A>, Predicate> {
     @Override
     @SuppressWarnings("unchecked")
-    public Predicate convert(IdentitySpecification<A, ID> specification, JpaCriteriaBuilder<A> builder, SpecificationTranslator<JpaCriteriaBuilder<A>, Predicate> translator) {
+    public Predicate convert(IdentitySpecification<A, ID> specification, JpaTranslationContext<A> context, SpecificationTranslator<JpaTranslationContext<A>, Predicate> translator) {
         ID expectedIdentifier = specification.getExpectedIdentifier();
-        Root<A> root = builder.getRoot();
-        return builder.getCriteriaBuilder().equal(
+        Root<A> root = context.getRoot();
+        return context.getCriteriaBuilder().equal(
                 root.get(root.getModel().getId((Class<ID>) expectedIdentifier.getClass())),
                 expectedIdentifier
         );

@@ -14,12 +14,12 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 import javax.persistence.criteria.Predicate;
 import java.util.Arrays;
 
-public class JpaOrConverter<T> implements SpecificationConverter<OrSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
+public class JpaOrConverter implements SpecificationConverter<OrSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
-    public Predicate convert(OrSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
-        return builder.getCriteriaBuilder().or(
+    public Predicate convert(OrSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        return context.getCriteriaBuilder().or(
                 Arrays.stream(specification.getSpecifications())
-                        .map(spec -> translator.translate(spec, builder))
+                        .map(spec -> translator.translate(spec, context))
                         .toArray(Predicate[]::new)
         );
     }

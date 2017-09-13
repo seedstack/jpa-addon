@@ -12,9 +12,9 @@ import org.seedstack.business.spi.specification.BaseSpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaSpecificationTranslator extends BaseSpecificationTranslator<JpaCriteriaBuilder<?>, Predicate> {
+public class JpaSpecificationTranslator extends BaseSpecificationTranslator<JpaTranslationContext<?>, Predicate> {
     @Override
-    public <T> Predicate translate(Specification<T> specification, JpaCriteriaBuilder<?> criteriaBuilder) {
-        return convert(specification, criteriaBuilder);
+    public <S extends Specification<?>> Predicate translate(S specification, JpaTranslationContext<?> context) {
+        return convert(specification, context);
     }
 }

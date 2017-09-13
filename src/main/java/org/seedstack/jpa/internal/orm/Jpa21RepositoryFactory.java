@@ -10,7 +10,7 @@ package org.seedstack.jpa.internal.orm;
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.specification.Specification;
-import org.seedstack.jpa.internal.specification.JpaCriteriaBuilder;
+import org.seedstack.jpa.internal.specification.JpaTranslationContext;
 import org.seedstack.jpa.spi.JpaRepositoryFactoryPriority;
 import org.seedstack.shed.reflect.Classes;
 
@@ -44,7 +44,7 @@ public class Jpa21RepositoryFactory extends BaseJpaRepositoryFactory {
             Class<A> entityClass = getAggregateRootClass();
             CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
 
-            cd.where(specificationTranslator.translate(specification, new JpaCriteriaBuilder<>(cb, cd.from(entityClass))));
+            cd.where(specificationTranslator.translate(specification, new JpaTranslationContext<>(cb, cd.from(entityClass))));
 
             return entityManager.createQuery(cd).executeUpdate();
         }

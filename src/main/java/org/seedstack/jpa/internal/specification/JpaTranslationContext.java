@@ -13,12 +13,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
-public class JpaCriteriaBuilder<T> {
+public class JpaTranslationContext<T> {
     private final CriteriaBuilder criteriaBuilder;
     private final Root<T> root;
     private Expression<?> expression;
 
-    public JpaCriteriaBuilder(CriteriaBuilder criteriaBuilder, Root<T> root) {
+    public JpaTranslationContext(CriteriaBuilder criteriaBuilder, Root<T> root) {
         this.criteriaBuilder = criteriaBuilder;
         this.root = root;
     }

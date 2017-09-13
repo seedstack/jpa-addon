@@ -13,10 +13,10 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaFalseConverter<T> implements SpecificationConverter<FalseSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
+public class JpaFalseConverter implements SpecificationConverter<FalseSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
-    public Predicate convert(FalseSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
+    public Predicate convert(FalseSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         // this is always false
-        return builder.getCriteriaBuilder().and().not();
+        return context.getCriteriaBuilder().and().not();
     }
 }

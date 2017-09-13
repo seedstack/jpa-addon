@@ -13,10 +13,10 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaTrueConverter<T> implements SpecificationConverter<TrueSpecification<T>, JpaCriteriaBuilder<T>, Predicate> {
+public class JpaTrueConverter implements SpecificationConverter<TrueSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
-    public Predicate convert(TrueSpecification<T> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
+    public Predicate convert(TrueSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         // this is always true
-        return builder.getCriteriaBuilder().and();
+        return context.getCriteriaBuilder().and();
     }
 }

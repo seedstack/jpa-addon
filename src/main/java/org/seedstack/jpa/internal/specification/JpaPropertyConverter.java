@@ -18,15 +18,15 @@ import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
-public class JpaPropertyConverter<T> implements SpecificationConverter<PropertySpecification<T, ?>, JpaCriteriaBuilder<T>, Predicate> {
+public class JpaPropertyConverter implements SpecificationConverter<PropertySpecification<?, ?>, JpaTranslationContext<?>, Predicate> {
     @Override
-    public Predicate convert(PropertySpecification<T, ?> specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
-        builder.setExpression(join(specification, builder.getRoot()));
-        return translator.translate(specification.getValueSpecification(), builder);
+    public Predicate convert(PropertySpecification<?, ?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        context.setExpression(join(specification, context.getRoot()));
+        return translator.translate(specification.getValueSpecification(), context);
     }
 
-    private <PS extends PropertySpecification<T, ?>> Expression<T> join(PS specification, From<?, ?> from) {
-        Expression<T> path;
+    private <PS extends PropertySpecification<?, ?>> Expression<?> join(PS specification, From<?, ?> from) {
+        Expression<?> path;
         try {
             String[] properties = specification.getPath().split("\\.");
             if (properties.length > 1) {

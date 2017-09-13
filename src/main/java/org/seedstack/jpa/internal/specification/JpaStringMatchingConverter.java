@@ -15,22 +15,22 @@ import org.seedstack.business.spi.specification.SpecificationTranslator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 
-public class JpaStringMatchingConverter<T> extends JpaStringConverter<T, StringMatchingSpecification> {
+public class JpaStringMatchingConverter extends JpaStringConverter<StringMatchingSpecification> {
     @Override
     @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default locale than force an english locale")
-    public Predicate convert(StringMatchingSpecification specification, JpaCriteriaBuilder<T> builder, SpecificationTranslator<JpaCriteriaBuilder<T>, Predicate> translator) {
+    public Predicate convert(StringMatchingSpecification specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         String expectedValue = specification.getExpectedString();
-        CriteriaBuilder criteriaBuilder = builder.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = context.getCriteriaBuilder();
         StringSpecification.Options options = specification.getOptions();
 
         if (expectedValue == null) {
             return criteriaBuilder.isNull(applyOptions(
                     options,
-                    criteriaBuilder, builder.pickExpression())
+                    criteriaBuilder, context.pickExpression())
             );
         } else {
             return criteriaBuilder.like(
-                    applyOptions(options, criteriaBuilder, builder.pickExpression()),
+                    applyOptions(options, criteriaBuilder, context.pickExpression()),
                     convertPattern(options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue)
             );
         }

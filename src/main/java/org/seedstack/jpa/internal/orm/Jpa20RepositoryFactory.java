@@ -15,7 +15,7 @@ import org.seedstack.business.specification.IdentitySpecification;
 import org.seedstack.business.specification.Specification;
 import org.seedstack.business.specification.TrueSpecification;
 import org.seedstack.business.spi.specification.SpecificationTranslator;
-import org.seedstack.jpa.internal.specification.JpaCriteriaBuilder;
+import org.seedstack.jpa.internal.specification.JpaTranslationContext;
 import org.seedstack.jpa.spi.JpaRepositoryFactoryPriority;
 import org.seedstack.shed.reflect.Classes;
 
@@ -50,7 +50,7 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
      */
     public static class Jpa20Repository<A extends AggregateRoot<ID>, ID> extends Jpa10RepositoryFactory.Jpa10Repository<A, ID> {
         @Inject
-        protected SpecificationTranslator<JpaCriteriaBuilder, Predicate> specificationTranslator;
+        protected SpecificationTranslator<JpaTranslationContext, Predicate> specificationTranslator;
 
         protected Jpa20Repository(Class<A> aggregateRootClass, Class<ID> idClass) {
             super(aggregateRootClass, idClass);
@@ -63,7 +63,7 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
             CriteriaQuery<A> cq = cb.createQuery(entityClass);
             Root<A> root = cq.from(entityClass);
 
-            cq.where(specificationTranslator.translate(specification, new JpaCriteriaBuilder<>(cb, root)));
+            cq.where(specificationTranslator.translate(specification, new JpaTranslationContext<>(cb, root)));
             if (!root.getJoins().isEmpty()) {
                 // When we have joins, we need to deduplicate the results
                 cq.distinct(true);
@@ -86,7 +86,7 @@ public class Jpa20RepositoryFactory extends BaseJpaRepositoryFactory {
             Root<A> root = cq.from(entityClass);
 
             cq.select(cb.count(root));
-            cq.where(specificationTranslator.translate(specification, new JpaCriteriaBuilder<>(cb, root)));
+            cq.where(specificationTranslator.translate(specification, new JpaTranslationContext<>(cb, root)));
             if (!root.getJoins().isEmpty()) {
                 // When we have joins, we need to deduplicate the results
                 cq.distinct(true);
