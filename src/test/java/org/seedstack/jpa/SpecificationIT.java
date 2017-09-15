@@ -126,15 +126,15 @@ public class SpecificationIT {
                 .build())
         ).isEmpty();
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").equalTo("picture4").leftTrimmed()
+                .property("pictures.name").equalTo("picture4").trimmingLead()
                 .build())
         ).containsExactly(product4);
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").equalTo("picture4").rightTrimmed()
+                .property("pictures.name").equalTo("picture4").trimmingTail()
                 .build())
         ).containsExactly(product5);
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").equalTo("picture4").trimmed()
+                .property("pictures.name").equalTo("picture4").trimming()
                 .build())
         ).containsExactly(product4, product5);
     }
@@ -186,15 +186,15 @@ public class SpecificationIT {
                 .build())
         ).isEmpty();
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").matching("pict?re4").leftTrimmed()
+                .property("pictures.name").matching("pict?re4").trimmingLead()
                 .build())
         ).containsExactly(product4);
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").matching("pict?re4").rightTrimmed()
+                .property("pictures.name").matching("pict?re4").trimmingTail()
                 .build())
         ).containsExactly(product5);
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.name").matching("pict?re4").trimmed()
+                .property("pictures.name").matching("pict?re4").trimming()
                 .build())
         ).containsExactly(product4, product5);
     }
