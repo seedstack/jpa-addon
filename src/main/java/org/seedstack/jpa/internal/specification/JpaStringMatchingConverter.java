@@ -10,7 +10,7 @@ package org.seedstack.jpa.internal.specification;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.seedstack.business.specification.StringMatchingSpecification;
 import org.seedstack.business.specification.StringSpecification;
-import org.seedstack.business.spi.specification.SpecificationTranslator;
+import org.seedstack.business.spi.SpecificationTranslator;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;

@@ -8,7 +8,7 @@
 package org.seedstack.jpa.internal.specification;
 
 import org.seedstack.business.specification.StringSpecification;
-import org.seedstack.business.spi.specification.SpecificationConverter;
+import org.seedstack.business.spi.SpecificationConverter;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;

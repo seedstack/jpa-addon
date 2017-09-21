@@ -14,7 +14,7 @@ import org.seedstack.business.specification.FalseSpecification;
 import org.seedstack.business.specification.IdentitySpecification;
 import org.seedstack.business.specification.Specification;
 import org.seedstack.business.specification.TrueSpecification;
-import org.seedstack.business.spi.specification.SpecificationTranslator;
+import org.seedstack.business.spi.SpecificationTranslator;
 import org.seedstack.jpa.internal.specification.JpaTranslationContext;
 import org.seedstack.jpa.spi.JpaRepositoryFactoryPriority;
 import org.seedstack.shed.reflect.Classes;

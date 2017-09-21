@@ -8,8 +8,8 @@
 package org.seedstack.jpa.internal.specification;
 
 import org.seedstack.business.specification.AttributeSpecification;
-import org.seedstack.business.spi.specification.SpecificationConverter;
-import org.seedstack.business.spi.specification.SpecificationTranslator;
+import org.seedstack.business.spi.SpecificationConverter;
+import org.seedstack.business.spi.SpecificationTranslator;
 import org.seedstack.jpa.internal.JpaErrorCode;
 import org.seedstack.seed.SeedException;
 

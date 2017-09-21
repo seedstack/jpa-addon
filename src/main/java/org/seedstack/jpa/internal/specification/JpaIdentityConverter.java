@@ -9,8 +9,8 @@ package org.seedstack.jpa.internal.specification;
 
 import org.seedstack.business.domain.AggregateRoot;
 import org.seedstack.business.specification.IdentitySpecification;
-import org.seedstack.business.spi.specification.SpecificationConverter;
-import org.seedstack.business.spi.specification.SpecificationTranslator;
+import org.seedstack.business.spi.SpecificationConverter;
+import org.seedstack.business.spi.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
