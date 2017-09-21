@@ -13,7 +13,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaFalseConverter implements SpecificationConverter<FalseSpecification<?>, JpaTranslationContext<?>, Predicate> {
+class JpaFalseConverter implements SpecificationConverter<FalseSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
     public Predicate convert(FalseSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         // this is always false

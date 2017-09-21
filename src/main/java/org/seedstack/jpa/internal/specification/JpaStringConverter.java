@@ -14,8 +14,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
-public abstract class JpaStringConverter<S extends StringSpecification> implements SpecificationConverter<S, JpaTranslationContext<?>, Predicate> {
-    protected Expression<String> applyOptions(StringSpecification.Options options, CriteriaBuilder criteriaBuilder, Expression<String> expression) {
+abstract class JpaStringConverter<S extends StringSpecification> implements SpecificationConverter<S, JpaTranslationContext<?>, Predicate> {
+    Expression<String> applyOptions(StringSpecification.Options options, CriteriaBuilder criteriaBuilder, Expression<String> expression) {
         if (options.isTrimmed()) {
             expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.BOTH, expression);
         } else {

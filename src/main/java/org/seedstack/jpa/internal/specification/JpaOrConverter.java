@@ -14,7 +14,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 import javax.persistence.criteria.Predicate;
 import java.util.Arrays;
 
-public class JpaOrConverter implements SpecificationConverter<OrSpecification<?>, JpaTranslationContext<?>, Predicate> {
+class JpaOrConverter implements SpecificationConverter<OrSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
     public Predicate convert(OrSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         return context.getCriteriaBuilder().or(

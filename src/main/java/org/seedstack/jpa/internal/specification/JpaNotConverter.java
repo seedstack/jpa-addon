@@ -13,7 +13,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaNotConverter implements SpecificationConverter<NotSpecification<?>, JpaTranslationContext<?>, Predicate> {
+class JpaNotConverter implements SpecificationConverter<NotSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
     public Predicate convert(NotSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         return context.getCriteriaBuilder().not(translator.translate(specification.getSpecification(), context));

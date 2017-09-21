@@ -12,7 +12,7 @@ import org.seedstack.business.spi.BaseSpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaSpecificationTranslator extends BaseSpecificationTranslator<JpaTranslationContext<?>, Predicate> {
+class JpaSpecificationTranslator extends BaseSpecificationTranslator<JpaTranslationContext<?>, Predicate> {
     @Override
     public <S extends Specification<?>> Predicate translate(S specification, JpaTranslationContext<?> context) {
         return convert(specification, context);

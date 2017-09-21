@@ -15,7 +15,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JpaIdentityConverter<A extends AggregateRoot<ID>, ID> implements SpecificationConverter<IdentitySpecification<A, ID>, JpaTranslationContext<A>, Predicate> {
+class JpaIdentityConverter<A extends AggregateRoot<ID>, ID> implements SpecificationConverter<IdentitySpecification<A, ID>, JpaTranslationContext<A>, Predicate> {
     @Override
     @SuppressWarnings("unchecked")
     public Predicate convert(IdentitySpecification<A, ID> specification, JpaTranslationContext<A> context, SpecificationTranslator<JpaTranslationContext<A>, Predicate> translator) {

@@ -15,7 +15,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 
-public class JpaStringMatchingConverter extends JpaStringConverter<StringMatchingSpecification> {
+class JpaStringMatchingConverter extends JpaStringConverter<StringMatchingSpecification> {
     @Override
     @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default locale than force an english locale")
     public Predicate convert(StringMatchingSpecification specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {

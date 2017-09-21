@@ -14,7 +14,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 import javax.persistence.criteria.Predicate;
 import java.util.Arrays;
 
-public class JpaAndConverter implements SpecificationConverter<AndSpecification<?>, JpaTranslationContext<?>, Predicate> {
+class JpaAndConverter implements SpecificationConverter<AndSpecification<?>, JpaTranslationContext<?>, Predicate> {
     @Override
     public Predicate convert(AndSpecification<?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         return context.getCriteriaBuilder().and(

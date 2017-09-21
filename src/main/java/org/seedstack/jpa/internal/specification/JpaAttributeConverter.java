@@ -18,7 +18,7 @@ import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
-public class JpaAttributeConverter implements SpecificationConverter<AttributeSpecification<?, ?>, JpaTranslationContext<?>, Predicate> {
+class JpaAttributeConverter implements SpecificationConverter<AttributeSpecification<?, ?>, JpaTranslationContext<?>, Predicate> {
     @Override
     public Predicate convert(AttributeSpecification<?, ?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         context.setExpression(join(specification, context.getRoot()));

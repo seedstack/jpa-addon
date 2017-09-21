@@ -13,7 +13,7 @@ import org.seedstack.business.spi.SpecificationTranslator;
 
 import javax.persistence.criteria.Predicate;
 
-public class JpaLessThanConverter<V extends Comparable<? super V>> implements SpecificationConverter<LessThanSpecification<V>, JpaTranslationContext<?>, Predicate> {
+class JpaLessThanConverter<V extends Comparable<? super V>> implements SpecificationConverter<LessThanSpecification<V>, JpaTranslationContext<?>, Predicate> {
     @Override
     public Predicate convert(LessThanSpecification<V> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         return context.getCriteriaBuilder().lessThan(context.pickExpression(), specification.getExpectedValue());
