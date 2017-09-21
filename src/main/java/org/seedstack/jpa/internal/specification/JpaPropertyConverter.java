@@ -7,7 +7,7 @@
  */
 package org.seedstack.jpa.internal.specification;
 
-import org.seedstack.business.specification.PropertySpecification;
+import org.seedstack.business.specification.AttributeSpecification;
 import org.seedstack.business.spi.specification.SpecificationConverter;
 import org.seedstack.business.spi.specification.SpecificationTranslator;
 import org.seedstack.jpa.internal.JpaErrorCode;
@@ -18,14 +18,14 @@ import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
-public class JpaPropertyConverter implements SpecificationConverter<PropertySpecification<?, ?>, JpaTranslationContext<?>, Predicate> {
+public class JpaPropertyConverter implements SpecificationConverter<AttributeSpecification<?, ?>, JpaTranslationContext<?>, Predicate> {
     @Override
-    public Predicate convert(PropertySpecification<?, ?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+    public Predicate convert(AttributeSpecification<?, ?> specification, JpaTranslationContext<?> context, SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         context.setExpression(join(specification, context.getRoot()));
         return translator.translate(specification.getValueSpecification(), context);
     }
 
-    private <PS extends PropertySpecification<?, ?>> Expression<?> join(PS specification, From<?, ?> from) {
+    private <PS extends AttributeSpecification<?, ?>> Expression<?> join(PS specification, From<?, ?> from) {
         Expression<?> path;
         try {
             String[] properties = specification.getPath().split("\\.");

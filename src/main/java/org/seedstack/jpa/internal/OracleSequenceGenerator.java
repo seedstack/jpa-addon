@@ -11,11 +11,11 @@ import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.seedstack.business.domain.Entity;
 import org.seedstack.business.domain.SequenceGenerator;
-import org.seedstack.seed.ClassConfiguration;
 import org.seedstack.seed.SeedException;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import java.util.Map;
 
 /**
  * Handles oracle sequence for identity management. This handler needs the Oracle
@@ -28,7 +28,7 @@ class OracleSequenceGenerator implements SequenceGenerator<Long> {
     private EntityManager entityManager;
 
     @Override
-    public <E extends Entity<Long>> Long generate(Class<E> entityClass, ClassConfiguration<E> entityConfiguration) {
+    public <E extends Entity<Long>> Long generate(Class<E> entityClass, Map<String, String> entityConfiguration) {
         String sequence = entityConfiguration.get(SEQUENCE_NAME);
         if (StringUtils.isBlank(sequence)) {
             throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)

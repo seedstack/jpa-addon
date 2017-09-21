@@ -19,10 +19,10 @@ public abstract class JpaStringConverter<S extends StringSpecification> implemen
         if (options.isTrimmed()) {
             expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.BOTH, expression);
         } else {
-            if (options.isLeftTrimmed()) {
+            if (options.isLeadTrimmed()) {
                 expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.LEADING, expression);
             }
-            if (options.isRightTrimmed()) {
+            if (options.isTailTrimmed()) {
                 expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.TRAILING, expression);
             }
         }
