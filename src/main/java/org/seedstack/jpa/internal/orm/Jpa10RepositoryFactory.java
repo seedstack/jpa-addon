@@ -206,15 +206,15 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
 
     private void applyOffset(Query query, OffsetOption offsetOption) {
       long offset = offsetOption.getOffset();
-      checkArgument(offset > Integer.MAX_VALUE,
+      checkArgument(offset <= Integer.MAX_VALUE,
           "JPA only supports offsetting results up to " + Integer.MAX_VALUE);
       query.setFirstResult((int) offset);
     }
 
     private void applyLimit(Query query, LimitOption limitOption) {
       long limit = limitOption.getLimit();
-      checkArgument(limit > Integer.MAX_VALUE,
-          "JPA only supports result limiting up to " + Integer.MAX_VALUE);
+      checkArgument(limit <= Integer.MAX_VALUE,
+          "JPA only supports limiting results up to " + Integer.MAX_VALUE);
       query.setMaxResults((int) limit);
     }
 
