@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+/*
+ * Copyright © 2013-2017, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,5 +11,7 @@ import org.seedstack.jpa.BaseJpaRepository;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
 
-public class SampleBaseJpaRepository extends BaseJpaRepository<SampleBaseJpaAggregateRoot, String> implements SampleBaseRepository {
+public class SampleBaseJpaRepository extends
+    BaseJpaRepository<SampleBaseJpaAggregateRoot, String> implements SampleBaseRepository {
+
 }

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+/*
+ * Copyright © 2013-2017, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,34 +7,34 @@
  */
 package org.seedstack.jpa.fixtures.business.domain.tinyaggregate;
 
-import org.seedstack.business.domain.BaseAggregateRoot;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import org.seedstack.business.domain.BaseAggregateRoot;
 
 @Entity
 public class TinyAggRoot extends BaseAggregateRoot<String> {
-    @Id
-    private String id;
-    private String name;
 
-    public TinyAggRoot() {
-    }
+  @Id
+  private String id;
+  private String name;
 
-    TinyAggRoot(String id) {
-        this.id = id;
-    }
+  public TinyAggRoot() {
+  }
 
-    @Override
-    public String getId() {
-        return id;
-    }
+  TinyAggRoot(String id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }
