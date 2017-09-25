@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+    Copyright © 2013-2017, The SeedStack authors <http://seedstack.org>
 
     This Source Code Form is subject to the terms of the Mozilla Public
     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,23 +14,24 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
     <artifactId>jpa</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
 
     <properties>
-        <seed.version>3.3.0</seed.version>
-        <business.version>3.1.0</business.version>
+        <seed.version>3.3.2-SNAPSHOT</seed.version>
+        <business.version>4.0.0-SNAPSHOT</business.version>
         <jdbc.version>3.0.2</jdbc.version>
         <flyway.version>1.0.0</flyway.version>
         <powermock.version>1.6.3</powermock.version>
 
-        <compatibility.version>3.0.0</compatibility.version>
+        <compatibility.skip>true</compatibility.skip>
 
         <bintray.package>jpa-addon</bintray.package>
+        <hibernate.version>5.2.10.Final</hibernate.version>
     </properties>
 
     <build>
@@ -61,8 +62,12 @@
                             <licenseMerge>Apache 2|Apache License, version 2.0</licenseMerge>
                             <licenseMerge>Apache 2|Apache License Version 2.0</licenseMerge>
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
+                            <licenseMerge>BSD|BSD License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
+                            <licenseMerge>CDDL|GNU General Public License, Version 2 with the Classpath Exception</licenseMerge>
+                            <licenseMerge>CDDL|Common Development and Distribution License</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser Public License</licenseMerge>
+                            <licenseMerge>LGPL 3.0|GNU Lesser General Public License</licenseMerge>
 
                             <licenseMerge>IGNORED_LICENSE|MPL 1.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
@@ -95,6 +100,18 @@
             <artifactId>flyway</artifactId>
             <version>${flyway.version}</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml</groupId>
+                    <artifactId>classmate</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -136,7 +153,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.0.1.Final</version>
+            <version>${hibernate.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

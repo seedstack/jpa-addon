@@ -1,0 +1,86 @@
+#
+# Copyright © 2013-2017, The SeedStack authors <http://seedstack.org>
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+logging:
+  level: WARN
+  loggers:
+    org.hibernate.tool.schema.spi.CommandAcceptanceException: ERROR
+
+jdbc:
+  datasources:
+    datasource1:
+      url: jdbc:hsqldb:mem:testdb1
+    datasource2:
+      url: jdbc:hsqldb:mem:testdb2
+    datasource3:
+      url: jdbc:hsqldb:mem:testdb3
+    datasource4:
+      url: jdbc:hsqldb:mem:testdb4
+    business:
+      url: jdbc:hsqldb:mem:testdbbiz
+      properties:
+        sql.pad_space: false
+jpa:
+  defaultUnit: unit1
+  units:
+    unit1:
+      datasource: datasource1
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    unit2:
+      datasource: datasource1
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    unit3:
+      datasource: datasource3
+      exceptionHandler: org.seedstack.jpa.fixtures.simple.Unit3ExceptionHandler
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    unit4:
+      datasource: datasource4
+      mappingFiles: META-INF/otherItem.xml
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+    business:
+      datasource: business
+      properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate.hbm2ddl.auto: create
+        hibernate.show_sql: true
+
+classes:
+  org:
+    seedstack:
+      jpa:
+        fixtures:
+          simple:
+            Item1:
+              jpaUnit: unit1
+            Item2:
+              jpaUnit: unit2
+            Item3:
+              jpaUnit: unit3
+            Item4:
+              jpaUnit: unit4
+          business:
+            jpaUnit: business
+            domain:
+              identity:
+                MyAggregate:
+                  identityGenerator: inMemorySequence
+                  sequenceName: SEQTEST
+                MyEntity:
+                  identityGenerator: simpleUUID
+
+business:
+  events:
+    publishRepositoryEvents: true
