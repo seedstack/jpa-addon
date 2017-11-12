@@ -8,6 +8,7 @@
 /*
  * Creation : 18 mars 2015
  */
+
 package org.seedstack.jpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,22 +27,22 @@ import org.seedstack.seed.transaction.Transactional;
 @RunWith(SeedITRunner.class)
 public class ExternalMappingIT {
 
-  @Inject
-  private Item4Repository itemRepository;
+    @Inject
+    private Item4Repository itemRepository;
 
-  @Test
-  public void testRepository() {
-    Item4 item = new Item4();
-    item.setId(10L);
-    item.setName("itemName");
-    itemRepository.save(item);
-    assertThat(item.getId()).isEqualTo(10L);
-  }
+    @Test
+    public void testRepository() {
+        Item4 item = new Item4();
+        item.setId(10L);
+        item.setName("itemName");
+        itemRepository.save(item);
+        assertThat(item.getId()).isEqualTo(10L);
+    }
 
-  @Test
-  public void testOtherItem() {
-    OtherItem4 item = new OtherItem4();
-    item.setName("name");
-    itemRepository.save(item);
-  }
+    @Test
+    public void testOtherItem() {
+        OtherItem4 item = new OtherItem4();
+        item.setName("name");
+        itemRepository.save(item);
+    }
 }

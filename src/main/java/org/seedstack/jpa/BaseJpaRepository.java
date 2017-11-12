@@ -32,119 +32,119 @@ import org.seedstack.seed.SeedException;
  * @param <I> Identifier class
  */
 public abstract class BaseJpaRepository<A extends AggregateRoot<I>, I>
-    extends BaseRepository<A, I> {
+        extends BaseRepository<A, I> {
 
-  @Inject
-  private EntityManager entityManager;
-  @Inject
-  private Set<JpaRepositoryFactory> jpaRepositoryFactories;
+    @Inject
+    private EntityManager entityManager;
+    @Inject
+    private Set<JpaRepositoryFactory> jpaRepositoryFactories;
 
-  /**
-   * Default constructor.
-   */
-  public BaseJpaRepository() {
-  }
-
-  /**
-   * This protected constructor is intended to be used by JPA repositories that already know their
-   * aggregate root and key classes. It is notably used internally by {@link
-   * org.seedstack.jpa.internal.DefaultJpaRepository} for providing a default JPA repository for all
-   * aggregates.
-   *
-   * @param aggregateRootClass the aggregate root class.
-   * @param idClass            the id class.
-   */
-  protected BaseJpaRepository(Class<A> aggregateRootClass, Class<I> idClass) {
-    super(aggregateRootClass, idClass);
-  }
-
-  /**
-   * Provides access to the entity manager for implementing custom data access methods.
-   *
-   * @return the entity manager.
-   */
-  protected EntityManager getEntityManager() {
-    return entityManager;
-  }
-
-  @Override
-  public void add(A aggregate) throws AggregateExistsException {
-    resolveImplementation().add(aggregate);
-  }
-
-  @Override
-  public Stream<A> get(Specification<A> specification, Option... options) {
-    return resolveImplementation().get(specification, options);
-  }
-
-  @Override
-  public Optional<A> get(I id) {
-    return resolveImplementation().get(id);
-  }
-
-  @Override
-  public boolean contains(Specification<A> specification) {
-    return resolveImplementation().contains(specification);
-  }
-
-  @Override
-  public boolean contains(I id) {
-    return resolveImplementation().contains(id);
-  }
-
-  @Override
-  public boolean contains(A aggregate) {
-    return resolveImplementation().contains(aggregate);
-  }
-
-  @Override
-  public long count(Specification<A> specification) {
-    return resolveImplementation().count(specification);
-  }
-
-  @Override
-  public long size() {
-    return resolveImplementation().size();
-  }
-
-  @Override
-  public boolean isEmpty() {
-    return resolveImplementation().isEmpty();
-  }
-
-  @Override
-  public long remove(Specification<A> specification) {
-    return resolveImplementation().remove(specification);
-  }
-
-  @Override
-  public void remove(I id) throws AggregateNotFoundException {
-    resolveImplementation().remove(id);
-  }
-
-  @Override
-  public void remove(A aggregate) throws AggregateNotFoundException {
-    resolveImplementation().remove(aggregate);
-  }
-
-  @Override
-  public void update(A aggregate) throws AggregateNotFoundException {
-    resolveImplementation().update(aggregate);
-  }
-
-  @Override
-  public void clear() {
-    resolveImplementation().clear();
-  }
-
-  @SuppressWarnings("unchecked")
-  private Repository<A, I> resolveImplementation() {
-    for (JpaRepositoryFactory jpaRepositoryFactory : jpaRepositoryFactories) {
-      if (jpaRepositoryFactory.isSupporting(entityManager)) {
-        return jpaRepositoryFactory.createRepository(getAggregateRootClass(), getIdentifierClass());
-      }
+    /**
+     * Default constructor.
+     */
+    public BaseJpaRepository() {
     }
-    throw SeedException
-        .createNew(JpaErrorCode.UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION);
-  }
+
+    /**
+     * This protected constructor is intended to be used by JPA repositories that already know their
+     * aggregate root and key classes. It is notably used internally by {@link
+     * org.seedstack.jpa.internal.DefaultJpaRepository} for providing a default JPA repository for all
+     * aggregates.
+     *
+     * @param aggregateRootClass the aggregate root class.
+     * @param idClass            the id class.
+     */
+    protected BaseJpaRepository(Class<A> aggregateRootClass, Class<I> idClass) {
+        super(aggregateRootClass, idClass);
+    }
+
+    /**
+     * Provides access to the entity manager for implementing custom data access methods.
+     *
+     * @return the entity manager.
+     */
+    protected EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    @Override
+    public void add(A aggregate) throws AggregateExistsException {
+        resolveImplementation().add(aggregate);
+    }
+
+    @Override
+    public Stream<A> get(Specification<A> specification, Option... options) {
+        return resolveImplementation().get(specification, options);
+    }
+
+    @Override
+    public Optional<A> get(I id) {
+        return resolveImplementation().get(id);
+    }
+
+    @Override
+    public boolean contains(Specification<A> specification) {
+        return resolveImplementation().contains(specification);
+    }
+
+    @Override
+    public boolean contains(I id) {
+        return resolveImplementation().contains(id);
+    }
+
+    @Override
+    public boolean contains(A aggregate) {
+        return resolveImplementation().contains(aggregate);
+    }
+
+    @Override
+    public long count(Specification<A> specification) {
+        return resolveImplementation().count(specification);
+    }
+
+    @Override
+    public long size() {
+        return resolveImplementation().size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return resolveImplementation().isEmpty();
+    }
+
+    @Override
+    public long remove(Specification<A> specification) {
+        return resolveImplementation().remove(specification);
+    }
+
+    @Override
+    public void remove(I id) throws AggregateNotFoundException {
+        resolveImplementation().remove(id);
+    }
+
+    @Override
+    public void remove(A aggregate) throws AggregateNotFoundException {
+        resolveImplementation().remove(aggregate);
+    }
+
+    @Override
+    public void update(A aggregate) throws AggregateNotFoundException {
+        resolveImplementation().update(aggregate);
+    }
+
+    @Override
+    public void clear() {
+        resolveImplementation().clear();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Repository<A, I> resolveImplementation() {
+        for (JpaRepositoryFactory jpaRepositoryFactory : jpaRepositoryFactories) {
+            if (jpaRepositoryFactory.isSupporting(entityManager)) {
+                return jpaRepositoryFactory.createRepository(getAggregateRootClass(), getIdentifierClass());
+            }
+        }
+        throw SeedException
+                .createNew(JpaErrorCode.UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION);
+    }
 }

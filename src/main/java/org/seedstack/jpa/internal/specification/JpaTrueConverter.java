@@ -14,12 +14,12 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaTrueConverter implements
-    SpecificationConverter<TrueSpecification<?>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<TrueSpecification<?>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(TrueSpecification<?> specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    // this is always true
-    return context.getCriteriaBuilder().and();
-  }
+    @Override
+    public Predicate convert(TrueSpecification<?> specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        // this is always true
+        return context.getCriteriaBuilder().and();
+    }
 }

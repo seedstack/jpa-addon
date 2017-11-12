@@ -8,6 +8,7 @@
 /**
  *
  */
+
 package org.seedstack.jpa.fixtures.business.domain.identity;
 
 import org.seedstack.business.domain.Create;
@@ -16,6 +17,6 @@ import org.seedstack.business.domain.Factory;
 @Create
 public interface MyAggregateFactory extends Factory<MyAggregate> {
 
-  MyAggregate createMyAggregate(String name);
+    MyAggregate createMyAggregate(String name);
 
 }

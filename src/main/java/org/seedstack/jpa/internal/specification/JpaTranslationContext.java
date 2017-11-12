@@ -15,50 +15,50 @@ import javax.persistence.criteria.Root;
 
 public class JpaTranslationContext<T> {
 
-  private final CriteriaBuilder criteriaBuilder;
-  private final Root<T> root;
-  private Expression<?> expression;
+    private final CriteriaBuilder criteriaBuilder;
+    private final Root<T> root;
+    private Expression<?> expression;
 
-  public JpaTranslationContext(CriteriaBuilder criteriaBuilder, Root<T> root) {
-    this.criteriaBuilder = criteriaBuilder;
-    this.root = root;
-  }
+    public JpaTranslationContext(CriteriaBuilder criteriaBuilder, Root<T> root) {
+        this.criteriaBuilder = criteriaBuilder;
+        this.root = root;
+    }
 
-  public CriteriaBuilder getCriteriaBuilder() {
-    return criteriaBuilder;
-  }
+    public CriteriaBuilder getCriteriaBuilder() {
+        return criteriaBuilder;
+    }
 
-  /**
-   * Returns the JPA root entity used to build the criteria.
-   *
-   * @return the JPA root entity.
-   */
-  public Root<T> getRoot() {
-    return root;
-  }
+    /**
+     * Returns the JPA root entity used to build the criteria.
+     *
+     * @return the JPA root entity.
+     */
+    public Root<T> getRoot() {
+        return root;
+    }
 
-  /**
-   * Returns the expression currently active in the building context.
-   *
-   * @param <E> the type of the expression.
-   * @return the JPA expression.
-   */
-  @SuppressWarnings("unchecked")
-  public <E> Expression<E> pickExpression() {
-    Preconditions.checkState(this.expression != null, "No expression has been set");
-    Expression<E> result = (Expression<E>) this.expression;
-    expression = null;
-    return result;
-  }
+    /**
+     * Returns the expression currently active in the building context.
+     *
+     * @param <E> the type of the expression.
+     * @return the JPA expression.
+     */
+    @SuppressWarnings("unchecked")
+    public <E> Expression<E> pickExpression() {
+        Preconditions.checkState(this.expression != null, "No expression has been set");
+        Expression<E> result = (Expression<E>) this.expression;
+        expression = null;
+        return result;
+    }
 
-  /**
-   * Sets the expression currently active in the building context.
-   *
-   * @param expression the expression.
-   * @param <E>        the type of the expressions.
-   */
-  public <E> void setExpression(Expression<E> expression) {
-    Preconditions.checkState(this.expression == null, "An expression is already set");
-    this.expression = expression;
-  }
+    /**
+     * Sets the expression currently active in the building context.
+     *
+     * @param expression the expression.
+     * @param <E>        the type of the expressions.
+     */
+    public <E> void setExpression(Expression<E> expression) {
+        Preconditions.checkState(this.expression == null, "An expression is already set");
+        this.expression = expression;
+    }
 }

@@ -14,13 +14,13 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaGreaterThanConverter<V extends Comparable<? super V>> implements
-    SpecificationConverter<GreaterThanSpecification<V>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<GreaterThanSpecification<V>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(GreaterThanSpecification<V> specification,
-      JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    return context.getCriteriaBuilder()
-        .greaterThan(context.pickExpression(), specification.getExpectedValue());
-  }
+    @Override
+    public Predicate convert(GreaterThanSpecification<V> specification,
+            JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        return context.getCriteriaBuilder()
+                .greaterThan(context.pickExpression(), specification.getExpectedValue());
+    }
 }

@@ -14,9 +14,9 @@ import org.seedstack.business.domain.Repository;
 
 public interface JpaRepositoryFactory {
 
-  boolean isSupporting(EntityManager entityManager);
+    boolean isSupporting(EntityManager entityManager);
 
-  <A extends AggregateRoot<I>, I> Repository<A, I> createRepository(Class<A> aggregateRootClass,
-      Class<I> identifierClass);
+    <A extends AggregateRoot<I>, I> Repository<A, I> createRepository(Class<A> aggregateRootClass,
+            Class<I> identifierClass);
 
 }

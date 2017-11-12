@@ -8,21 +8,22 @@
 /**
  *
  */
+
 package org.seedstack.jpa.fixtures.business.domain.identity;
 
 import java.util.UUID;
 import org.seedstack.business.domain.BaseEntity;
 import org.seedstack.business.domain.Identity;
-import org.seedstack.business.domain.UuidGenerator;
+import org.seedstack.business.util.UuidGenerator;
 
 public class MyEntity extends BaseEntity<UUID> {
 
-  @Identity(generator = UuidGenerator.class)
-  private UUID id;
+    @Identity(generator = UuidGenerator.class)
+    private UUID id;
 
-  @Override
-  public UUID getId() {
-    return id;
-  }
+    @Override
+    public UUID getId() {
+        return id;
+    }
 
 }

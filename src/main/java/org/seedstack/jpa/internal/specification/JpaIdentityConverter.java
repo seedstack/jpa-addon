@@ -16,18 +16,18 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaIdentityConverter<A extends AggregateRoot<I>, I> implements
-    SpecificationConverter<IdentitySpecification<A, I>, JpaTranslationContext<A>, Predicate> {
+        SpecificationConverter<IdentitySpecification<A, I>, JpaTranslationContext<A>, Predicate> {
 
-  @Override
-  @SuppressWarnings("unchecked")
-  public Predicate convert(IdentitySpecification<A, I> specification,
-      JpaTranslationContext<A> context,
-      SpecificationTranslator<JpaTranslationContext<A>, Predicate> translator) {
-    I expectedIdentifier = specification.getExpectedIdentifier();
-    Root<A> root = context.getRoot();
-    return context.getCriteriaBuilder().equal(
-        root.get(root.getModel().getId((Class<I>) expectedIdentifier.getClass())),
-        expectedIdentifier
-    );
-  }
+    @Override
+    @SuppressWarnings("unchecked")
+    public Predicate convert(IdentitySpecification<A, I> specification,
+            JpaTranslationContext<A> context,
+            SpecificationTranslator<JpaTranslationContext<A>, Predicate> translator) {
+        I expectedIdentifier = specification.getExpectedIdentifier();
+        Root<A> root = context.getRoot();
+        return context.getCriteriaBuilder().equal(
+                root.get(root.getModel().getId((Class<I>) expectedIdentifier.getClass())),
+                expectedIdentifier
+        );
+    }
 }

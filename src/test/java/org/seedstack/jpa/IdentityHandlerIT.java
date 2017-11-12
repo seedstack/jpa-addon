@@ -8,6 +8,7 @@
 /**
  *
  */
+
 package org.seedstack.jpa;
 
 import com.google.inject.Inject;
@@ -23,24 +24,24 @@ import org.seedstack.seed.transaction.Transactional;
 @RunWith(SeedITRunner.class)
 public class IdentityHandlerIT {
 
-  @Inject
-  private MyAggregateFactory myAggregateFactory;
+    @Inject
+    private MyAggregateFactory myAggregateFactory;
 
-  @Test
-  @Transactional
-  @JpaUnit("business")
-  public void test_transactional_identityhandler() {
-    MyAggregate aggregate = myAggregateFactory.createMyAggregate("test");
-    Assertions.assertThat(aggregate.getId()).isNotNull();
-    Assertions.assertThat(aggregate.getMySubAggregate().getId()).isNotNull();
-    for (MyEntity entity : aggregate.getMySubAggregates()) {
-      Assertions.assertThat(entity.getId()).isNotNull();
+    @Test
+    @Transactional
+    @JpaUnit("business")
+    public void test_transactional_identityhandler() {
+        MyAggregate aggregate = myAggregateFactory.createMyAggregate("test");
+        Assertions.assertThat(aggregate.getId()).isNotNull();
+        Assertions.assertThat(aggregate.getMySubAggregate().getId()).isNotNull();
+        for (MyEntity entity : aggregate.getMySubAggregates()) {
+            Assertions.assertThat(entity.getId()).isNotNull();
+        }
+        MyAggregate aggregate2 = myAggregateFactory.createMyAggregate("test2");
+        Assertions.assertThat(aggregate2.getId()).isNotNull();
+        Assertions.assertThat(aggregate2.getMySubAggregate().getId()).isNotNull();
+        for (MyEntity entity : aggregate2.getMySubAggregates()) {
+            Assertions.assertThat(entity.getId()).isNotNull();
+        }
     }
-    MyAggregate aggregate2 = myAggregateFactory.createMyAggregate("test2");
-    Assertions.assertThat(aggregate2.getId()).isNotNull();
-    Assertions.assertThat(aggregate2.getMySubAggregate().getId()).isNotNull();
-    for (MyEntity entity : aggregate2.getMySubAggregates()) {
-      Assertions.assertThat(entity.getId()).isNotNull();
-    }
-  }
 }

@@ -5,8 +5,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.jpa.fixtures.simple;
 
+package org.seedstack.jpa.fixtures.simple;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -15,14 +15,14 @@ import org.seedstack.seed.it.ITBind;
 @ITBind
 public class Item2Repository {
 
-  private EntityManager entityManager;
+    private EntityManager entityManager;
 
-  @Inject
-  public Item2Repository(EntityManager entityManager) {
-    this.entityManager = entityManager;
-  }
+    @Inject
+    public Item2Repository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
-  public void save(Item2 item) {
-    entityManager.persist(item);
-  }
+    public void save(Item2 item) {
+        entityManager.persist(item);
+    }
 }

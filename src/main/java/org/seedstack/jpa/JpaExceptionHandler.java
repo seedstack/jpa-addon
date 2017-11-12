@@ -17,8 +17,8 @@ import org.seedstack.seed.transaction.spi.TransactionMetadata;
  */
 public interface JpaExceptionHandler extends ExceptionHandler<EntityTransaction> {
 
-  @Override
-  boolean handleException(Exception exception, TransactionMetadata associatedTransactionMetadata,
-      EntityTransaction associatedTransaction);
+    @Override
+    boolean handleException(Exception exception, TransactionMetadata associatedTransactionMetadata,
+            EntityTransaction associatedTransaction);
 
 }

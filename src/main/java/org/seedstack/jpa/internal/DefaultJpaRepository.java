@@ -33,14 +33,14 @@ import org.seedstack.jpa.Jpa;
 @GenericImplementation
 public class DefaultJpaRepository<A extends AggregateRoot<I>, I> extends BaseJpaRepository<A, I> {
 
-  /**
-   * Constructs a DefaultJpaRepository.
-   *
-   * @param genericClasses the resolved generics for the aggregate root class and the key class
-   */
-  @SuppressWarnings("unchecked")
-  @Inject
-  public DefaultJpaRepository(@Assisted Object[] genericClasses) {
-    super((Class<A>) genericClasses[0], (Class<I>) genericClasses[1]);
-  }
+    /**
+     * Constructs a DefaultJpaRepository.
+     *
+     * @param genericClasses the resolved generics for the aggregate root class and the key class
+     */
+    @SuppressWarnings("unchecked")
+    @Inject
+    public DefaultJpaRepository(@Assisted Object[] genericClasses) {
+        super((Class<A>) genericClasses[0], (Class<I>) genericClasses[1]);
+    }
 }

@@ -23,150 +23,150 @@ import org.seedstack.coffig.Config;
 @Config("jpa")
 public class JpaConfig {
 
-  private Map<String, PersistenceUnitConfig> units = new HashMap<>();
-  private String defaultUnit;
+    private Map<String, PersistenceUnitConfig> units = new HashMap<>();
+    private String defaultUnit;
 
-  public Map<String, PersistenceUnitConfig> getUnits() {
-    return Collections.unmodifiableMap(units);
-  }
-
-  public JpaConfig addUnit(String name, PersistenceUnitConfig config) {
-    units.put(name, config);
-    return this;
-  }
-
-  public String getDefaultUnit() {
-    return defaultUnit;
-  }
-
-  public JpaConfig setDefaultUnit(String defaultUnit) {
-    this.defaultUnit = defaultUnit;
-    return this;
-  }
-
-  public static class PersistenceUnitConfig {
-
-    private String datasource;
-    private Class<? extends PersistenceProvider> provider;
-    private PersistenceUnitTransactionType transactionType = PersistenceUnitTransactionType
-        .RESOURCE_LOCAL;
-    private List<String> mappingFiles = new ArrayList<>();
-    private List<Class<?>> classes = new ArrayList<>();
-    private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
-    private ValidationMode validationMode = ValidationMode.AUTO;
-    private Properties properties = new Properties();
-    private Class<? extends JpaExceptionHandler> exceptionHandler;
-
-    public String getDatasource() {
-      return datasource;
+    public Map<String, PersistenceUnitConfig> getUnits() {
+        return Collections.unmodifiableMap(units);
     }
 
-    public PersistenceUnitConfig setDatasource(String datasource) {
-      this.datasource = datasource;
-      return this;
+    public JpaConfig addUnit(String name, PersistenceUnitConfig config) {
+        units.put(name, config);
+        return this;
     }
 
-    public boolean isUsingDatasource() {
-      return datasource != null && !datasource.isEmpty();
+    public String getDefaultUnit() {
+        return defaultUnit;
     }
 
-    public Class<? extends PersistenceProvider> getProvider() {
-      return provider;
+    public JpaConfig setDefaultUnit(String defaultUnit) {
+        this.defaultUnit = defaultUnit;
+        return this;
     }
 
-    public PersistenceUnitConfig setProvider(Class<? extends PersistenceProvider> provider) {
-      this.provider = provider;
-      return this;
-    }
+    public static class PersistenceUnitConfig {
 
-    public PersistenceUnitTransactionType getTransactionType() {
-      return transactionType;
-    }
+        private String datasource;
+        private Class<? extends PersistenceProvider> provider;
+        private PersistenceUnitTransactionType transactionType = PersistenceUnitTransactionType
+                .RESOURCE_LOCAL;
+        private List<String> mappingFiles = new ArrayList<>();
+        private List<Class<?>> classes = new ArrayList<>();
+        private SharedCacheMode sharedCacheMode = SharedCacheMode.UNSPECIFIED;
+        private ValidationMode validationMode = ValidationMode.AUTO;
+        private Properties properties = new Properties();
+        private Class<? extends JpaExceptionHandler> exceptionHandler;
 
-    public PersistenceUnitConfig setTransactionType(
-        PersistenceUnitTransactionType transactionType) {
-      this.transactionType = transactionType;
-      return this;
-    }
+        public String getDatasource() {
+            return datasource;
+        }
 
-    public List<String> getMappingFiles() {
-      return Collections.unmodifiableList(mappingFiles);
-    }
+        public PersistenceUnitConfig setDatasource(String datasource) {
+            this.datasource = datasource;
+            return this;
+        }
 
-    public PersistenceUnitConfig setMappingFiles(List<String> mappingFiles) {
-      this.mappingFiles = new ArrayList<>(mappingFiles);
-      return this;
-    }
+        public boolean isUsingDatasource() {
+            return datasource != null && !datasource.isEmpty();
+        }
 
-    public boolean hasMappingFiles() {
-      return !mappingFiles.isEmpty();
-    }
+        public Class<? extends PersistenceProvider> getProvider() {
+            return provider;
+        }
 
-    public PersistenceUnitConfig addMappingFile(String mappingFile) {
-      this.mappingFiles.add(mappingFile);
-      return this;
-    }
+        public PersistenceUnitConfig setProvider(Class<? extends PersistenceProvider> provider) {
+            this.provider = provider;
+            return this;
+        }
 
-    public List<Class<?>> getClasses() {
-      return Collections.unmodifiableList(classes);
-    }
+        public PersistenceUnitTransactionType getTransactionType() {
+            return transactionType;
+        }
 
-    public PersistenceUnitConfig setClasses(List<Class<?>> classes) {
-      this.classes = new ArrayList<>(classes);
-      return this;
-    }
+        public PersistenceUnitConfig setTransactionType(
+                PersistenceUnitTransactionType transactionType) {
+            this.transactionType = transactionType;
+            return this;
+        }
 
-    public boolean hasClasses() {
-      return !classes.isEmpty();
-    }
+        public List<String> getMappingFiles() {
+            return Collections.unmodifiableList(mappingFiles);
+        }
 
-    public PersistenceUnitConfig addClass(Class<?> someClass) {
-      this.classes.add(someClass);
-      return this;
-    }
+        public PersistenceUnitConfig setMappingFiles(List<String> mappingFiles) {
+            this.mappingFiles = new ArrayList<>(mappingFiles);
+            return this;
+        }
 
-    public SharedCacheMode getSharedCacheMode() {
-      return sharedCacheMode;
-    }
+        public boolean hasMappingFiles() {
+            return !mappingFiles.isEmpty();
+        }
 
-    public void setSharedCacheMode(SharedCacheMode sharedCacheMode) {
-      this.sharedCacheMode = sharedCacheMode;
-    }
+        public PersistenceUnitConfig addMappingFile(String mappingFile) {
+            this.mappingFiles.add(mappingFile);
+            return this;
+        }
 
-    public ValidationMode getValidationMode() {
-      return validationMode;
-    }
+        public List<Class<?>> getClasses() {
+            return Collections.unmodifiableList(classes);
+        }
 
-    public void setValidationMode(ValidationMode validationMode) {
-      this.validationMode = validationMode;
-    }
+        public PersistenceUnitConfig setClasses(List<Class<?>> classes) {
+            this.classes = new ArrayList<>(classes);
+            return this;
+        }
 
-    public Properties getProperties() {
-      return properties;
-    }
+        public boolean hasClasses() {
+            return !classes.isEmpty();
+        }
 
-    public PersistenceUnitConfig setProperties(Properties properties) {
-      this.properties = properties;
-      return this;
-    }
+        public PersistenceUnitConfig addClass(Class<?> someClass) {
+            this.classes.add(someClass);
+            return this;
+        }
 
-    public PersistenceUnitConfig setProperty(String key, String value) {
-      this.properties.setProperty(key, value);
-      return this;
-    }
+        public SharedCacheMode getSharedCacheMode() {
+            return sharedCacheMode;
+        }
 
-    public Class<? extends JpaExceptionHandler> getExceptionHandler() {
-      return exceptionHandler;
-    }
+        public void setSharedCacheMode(SharedCacheMode sharedCacheMode) {
+            this.sharedCacheMode = sharedCacheMode;
+        }
 
-    public PersistenceUnitConfig setExceptionHandler(
-        Class<? extends JpaExceptionHandler> exceptionHandler) {
-      this.exceptionHandler = exceptionHandler;
-      return this;
-    }
+        public ValidationMode getValidationMode() {
+            return validationMode;
+        }
 
-    public boolean hasExceptionHandler() {
-      return exceptionHandler != null;
+        public void setValidationMode(ValidationMode validationMode) {
+            this.validationMode = validationMode;
+        }
+
+        public Properties getProperties() {
+            return properties;
+        }
+
+        public PersistenceUnitConfig setProperties(Properties properties) {
+            this.properties = properties;
+            return this;
+        }
+
+        public PersistenceUnitConfig setProperty(String key, String value) {
+            this.properties.setProperty(key, value);
+            return this;
+        }
+
+        public Class<? extends JpaExceptionHandler> getExceptionHandler() {
+            return exceptionHandler;
+        }
+
+        public PersistenceUnitConfig setExceptionHandler(
+                Class<? extends JpaExceptionHandler> exceptionHandler) {
+            this.exceptionHandler = exceptionHandler;
+            return this;
+        }
+
+        public boolean hasExceptionHandler() {
+            return exceptionHandler != null;
+        }
     }
-  }
 }

@@ -14,9 +14,9 @@ import org.seedstack.shed.reflect.StandardAnnotationResolver;
 
 class JpaUnitResolver extends StandardAnnotationResolver<Method, JpaUnit> {
 
-  static JpaUnitResolver INSTANCE = new JpaUnitResolver();
+    static JpaUnitResolver INSTANCE = new JpaUnitResolver();
 
-  private JpaUnitResolver() {
-    // no external instantiation allowed
-  }
+    private JpaUnitResolver() {
+        // no external instantiation allowed
+    }
 }

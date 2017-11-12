@@ -14,12 +14,12 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaFalseConverter implements
-    SpecificationConverter<FalseSpecification<?>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<FalseSpecification<?>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(FalseSpecification<?> specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    // this is always false
-    return context.getCriteriaBuilder().and().not();
-  }
+    @Override
+    public Predicate convert(FalseSpecification<?> specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        // this is always false
+        return context.getCriteriaBuilder().and().not();
+    }
 }

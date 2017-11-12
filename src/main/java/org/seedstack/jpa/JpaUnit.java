@@ -24,8 +24,8 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface JpaUnit {
 
-  /**
-   * @return the configured jpa unit name.
-   */
-  String value() default "";
+    /**
+     * @return the configured jpa unit name.
+     */
+    String value() default "";
 }

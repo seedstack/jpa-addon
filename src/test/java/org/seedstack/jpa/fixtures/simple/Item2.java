@@ -5,6 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.jpa.fixtures.simple;
 
 import java.io.Serializable;
@@ -15,23 +16,23 @@ import javax.persistence.Id;
 @Entity
 public class Item2 implements Serializable {
 
-  @Id
-  private long id;
-  private String name = "";
+    @Id
+    private long id;
+    private String name = "";
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 }

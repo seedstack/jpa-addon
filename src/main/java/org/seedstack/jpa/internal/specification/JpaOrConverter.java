@@ -15,15 +15,15 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaOrConverter implements
-    SpecificationConverter<OrSpecification<?>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<OrSpecification<?>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(OrSpecification<?> specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    return context.getCriteriaBuilder().or(
-        Arrays.stream(specification.getSpecifications())
-            .map(spec -> translator.translate(spec, context))
-            .toArray(Predicate[]::new)
-    );
-  }
+    @Override
+    public Predicate convert(OrSpecification<?> specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        return context.getCriteriaBuilder().or(
+                Arrays.stream(specification.getSpecifications())
+                        .map(spec -> translator.translate(spec, context))
+                        .toArray(Predicate[]::new)
+        );
+    }
 }

@@ -5,6 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.jpa;
 
 import javax.inject.Inject;
@@ -24,26 +25,26 @@ import org.seedstack.seed.transaction.Transactional;
 @RunWith(SeedITRunner.class)
 public class AutoRepositoriesIT {
 
-  @Inject
-  @Jpa
-  private Repository<TinyAggRoot, String> repository;
-  @Inject
-  private Factory<TinyAggRoot> factory;
+    @Inject
+    @Jpa
+    private Repository<TinyAggRoot, String> repository;
+    @Inject
+    private Factory<TinyAggRoot> factory;
 
-  @Before
-  public void setUp() throws Exception {
-    repository.clear();
-  }
+    @Before
+    public void setUp() throws Exception {
+        repository.clear();
+    }
 
-  @After
-  public void tearDown() throws Exception {
-    repository.clear();
-  }
+    @After
+    public void tearDown() throws Exception {
+        repository.clear();
+    }
 
-  @Test
-  public void retrieveAggregateFromRepository() {
-    repository.add(factory.create("hello"));
-    TinyAggRoot tinyAggRoot = repository.get("hello").get();
-    Assertions.assertThat(tinyAggRoot).isNotNull();
-  }
+    @Test
+    public void retrieveAggregateFromRepository() {
+        repository.add(factory.create("hello"));
+        TinyAggRoot tinyAggRoot = repository.get("hello").get();
+        Assertions.assertThat(tinyAggRoot).isNotNull();
+    }
 }

@@ -17,40 +17,40 @@ import org.seedstack.seed.transaction.spi.TransactionalLink;
 
 class EntityManagerLink implements TransactionalLink<EntityManager> {
 
-  private final ThreadLocal<Deque<EntityManager>> perThreadObjectContainer = ThreadLocal
-      .withInitial(ArrayDeque::new);
+    private final ThreadLocal<Deque<EntityManager>> perThreadObjectContainer = ThreadLocal
+            .withInitial(ArrayDeque::new);
 
-  @Override
-  public EntityManager get() {
-    EntityManager entityManager = this.perThreadObjectContainer.get().peek();
+    @Override
+    public EntityManager get() {
+        EntityManager entityManager = this.perThreadObjectContainer.get().peek();
 
-    if (entityManager == null) {
-      throw SeedException.createNew(JpaErrorCode.ACCESSING_ENTITY_MANAGER_OUTSIDE_TRANSACTION);
+        if (entityManager == null) {
+            throw SeedException.createNew(JpaErrorCode.ACCESSING_ENTITY_MANAGER_OUTSIDE_TRANSACTION);
+        }
+
+        return entityManager;
     }
 
-    return entityManager;
-  }
+    EntityTransaction getCurrentTransaction() {
+        EntityManager entityManager = this.perThreadObjectContainer.get().peek();
 
-  EntityTransaction getCurrentTransaction() {
-    EntityManager entityManager = this.perThreadObjectContainer.get().peek();
-
-    if (entityManager != null) {
-      return entityManager.getTransaction();
-    } else {
-      return null;
+        if (entityManager != null) {
+            return entityManager.getTransaction();
+        } else {
+            return null;
+        }
     }
-  }
 
-  void push(EntityManager entityManager) {
-    perThreadObjectContainer.get().push(entityManager);
-  }
-
-  EntityManager pop() {
-    Deque<EntityManager> entityManagers = perThreadObjectContainer.get();
-    EntityManager entityManager = entityManagers.pop();
-    if (entityManagers.isEmpty()) {
-      perThreadObjectContainer.remove();
+    void push(EntityManager entityManager) {
+        perThreadObjectContainer.get().push(entityManager);
     }
-    return entityManager;
-  }
+
+    EntityManager pop() {
+        Deque<EntityManager> entityManagers = perThreadObjectContainer.get();
+        EntityManager entityManager = entityManagers.pop();
+        if (entityManagers.isEmpty()) {
+            perThreadObjectContainer.remove();
+        }
+        return entityManager;
+    }
 }

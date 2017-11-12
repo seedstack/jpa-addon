@@ -15,23 +15,23 @@ import org.seedstack.business.specification.StringSpecification;
 import org.seedstack.business.spi.SpecificationConverter;
 
 abstract class JpaStringConverter<S extends StringSpecification> implements
-    SpecificationConverter<S, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<S, JpaTranslationContext<?>, Predicate> {
 
-  Expression<String> applyOptions(StringSpecification.Options options,
-      CriteriaBuilder criteriaBuilder, Expression<String> expression) {
-    if (options.isTrimmed()) {
-      expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.BOTH, expression);
-    } else {
-      if (options.isLeadTrimmed()) {
-        expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.LEADING, expression);
-      }
-      if (options.isTailTrimmed()) {
-        expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.TRAILING, expression);
-      }
+    Expression<String> applyOptions(StringSpecification.Options options,
+            CriteriaBuilder criteriaBuilder, Expression<String> expression) {
+        if (options.isTrimmed()) {
+            expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.BOTH, expression);
+        } else {
+            if (options.isLeadTrimmed()) {
+                expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.LEADING, expression);
+            }
+            if (options.isTailTrimmed()) {
+                expression = criteriaBuilder.trim(CriteriaBuilder.Trimspec.TRAILING, expression);
+            }
+        }
+        if (options.isIgnoringCase()) {
+            expression = criteriaBuilder.upper(expression);
+        }
+        return expression;
     }
-    if (options.isIgnoringCase()) {
-      expression = criteriaBuilder.upper(expression);
-    }
-    return expression;
-  }
 }

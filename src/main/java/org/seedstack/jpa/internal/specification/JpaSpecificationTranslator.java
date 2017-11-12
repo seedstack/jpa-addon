@@ -13,11 +13,11 @@ import org.seedstack.business.specification.Specification;
 import org.seedstack.business.spi.BaseSpecificationTranslator;
 
 class JpaSpecificationTranslator extends
-    BaseSpecificationTranslator<JpaTranslationContext<?>, Predicate> {
+        BaseSpecificationTranslator<JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public <S extends Specification<?>> Predicate translate(S specification,
-      JpaTranslationContext<?> context) {
-    return convert(specification, context);
-  }
+    @Override
+    public <S extends Specification<?>> Predicate translate(S specification,
+            JpaTranslationContext<?> context) {
+        return convert(specification, context);
+    }
 }

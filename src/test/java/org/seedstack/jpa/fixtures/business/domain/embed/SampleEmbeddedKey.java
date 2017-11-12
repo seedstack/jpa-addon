@@ -5,6 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.jpa.fixtures.business.domain.embed;
 
 import javax.persistence.Embeddable;
@@ -13,16 +14,16 @@ import org.seedstack.business.domain.BaseValueObject;
 @Embeddable
 class SampleEmbeddedKey extends BaseValueObject {
 
-  private Long keyValue;
+    private Long keyValue;
 
-  SampleEmbeddedKey() {
-  }
+    SampleEmbeddedKey() {
+    }
 
-  public SampleEmbeddedKey(Long keyValue) {
-    this.keyValue = keyValue;
-  }
+    public SampleEmbeddedKey(Long keyValue) {
+        this.keyValue = keyValue;
+    }
 
-  public Long getKeyValue() {
-    return keyValue;
-  }
+    public Long getKeyValue() {
+        return keyValue;
+    }
 }

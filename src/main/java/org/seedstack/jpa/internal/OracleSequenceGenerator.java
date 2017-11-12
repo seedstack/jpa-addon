@@ -9,12 +9,12 @@
 package org.seedstack.jpa.internal;
 
 import com.google.inject.Inject;
-import java.util.Map;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.apache.commons.lang.StringUtils;
 import org.seedstack.business.domain.Entity;
-import org.seedstack.business.domain.SequenceGenerator;
+import org.seedstack.business.util.SequenceGenerator;
+import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
 
 /**
@@ -22,26 +22,26 @@ import org.seedstack.seed.SeedException;
  * sequence name specified in class configuration in the 'identitySequenceName' property.
  */
 @Named("oracleSequence")
-class OracleSequenceGenerator implements SequenceGenerator<Long> {
+class OracleSequenceGenerator implements SequenceGenerator {
+    private static final String SEQUENCE_NAME = "identitySequenceName";
+    @Inject(optional = true)
+    private EntityManager entityManager;
+    @Inject
+    private Application application;
 
-  private static final String SEQUENCE_NAME = "identitySequenceName";
-  @Inject(optional = true)
-  private EntityManager entityManager;
+    @Override
+    public <E extends Entity<Long>> Long generate(Class<E> entityClass) {
+        String sequence = application.getConfiguration(entityClass).get(SEQUENCE_NAME);
+        if (StringUtils.isBlank(sequence)) {
+            throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)
+                    .put("entityClass", entityClass);
+        }
 
-  @Override
-  public <E extends Entity<Long>> Long generate(Class<E> entityClass,
-      Map<String, String> entityConfiguration) {
-    String sequence = entityConfiguration.get(SEQUENCE_NAME);
-    if (StringUtils.isBlank(sequence)) {
-      throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)
-          .put("entityClass", entityClass);
+        if (entityManager == null) {
+            throw SeedException.createNew(JpaErrorCode.MISSING_ENTITY_MANAGER);
+        }
+
+        return ((Number) entityManager.createNativeQuery("SELECT " + sequence + ".NEXTVAL FROM DUAL")
+                .getSingleResult()).longValue();
     }
-
-    if (entityManager == null) {
-      throw SeedException.createNew(JpaErrorCode.MISSING_ENTITY_MANAGER);
-    }
-
-    return ((Number) entityManager.createNativeQuery("SELECT " + sequence + ".NEXTVAL FROM DUAL")
-        .getSingleResult()).longValue();
-  }
 }

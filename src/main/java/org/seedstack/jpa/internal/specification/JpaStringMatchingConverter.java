@@ -17,31 +17,31 @@ import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaStringMatchingConverter extends JpaStringConverter<StringMatchingSpecification> {
 
-  @Override
-  @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default "
-      + "locale than force an english locale")
-  public Predicate convert(StringMatchingSpecification specification,
-      JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    String expectedValue = specification.getExpectedString();
-    CriteriaBuilder criteriaBuilder = context.getCriteriaBuilder();
-    StringSpecification.Options options = specification.getOptions();
+    @Override
+    @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default "
+            + "locale than force an english locale")
+    public Predicate convert(StringMatchingSpecification specification,
+            JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        String expectedValue = specification.getExpectedString();
+        CriteriaBuilder criteriaBuilder = context.getCriteriaBuilder();
+        StringSpecification.Options options = specification.getOptions();
 
-    if (expectedValue == null) {
-      return criteriaBuilder.isNull(applyOptions(
-          options,
-          criteriaBuilder, context.pickExpression())
-      );
-    } else {
-      return criteriaBuilder.like(
-          applyOptions(options, criteriaBuilder, context.pickExpression()),
-          convertPattern(options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue)
-      );
+        if (expectedValue == null) {
+            return criteriaBuilder.isNull(applyOptions(
+                    options,
+                    criteriaBuilder, context.pickExpression())
+            );
+        } else {
+            return criteriaBuilder.like(
+                    applyOptions(options, criteriaBuilder, context.pickExpression()),
+                    convertPattern(options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue)
+            );
+        }
     }
-  }
 
-  private String convertPattern(String pattern) {
-    return pattern.replace(StringMatchingSpecification.MULTI_CHARACTER_WILDCARD, "%")
-        .replace(StringMatchingSpecification.SINGLE_CHARACTER_WILDCARD, "_");
-  }
+    private String convertPattern(String pattern) {
+        return pattern.replace(StringMatchingSpecification.MULTI_CHARACTER_WILDCARD, "%")
+                .replace(StringMatchingSpecification.SINGLE_CHARACTER_WILDCARD, "_");
+    }
 }

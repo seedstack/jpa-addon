@@ -14,12 +14,12 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaNotConverter implements
-    SpecificationConverter<NotSpecification<?>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<NotSpecification<?>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(NotSpecification<?> specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    return context.getCriteriaBuilder()
-        .not(translator.translate(specification.getSpecification(), context));
-  }
+    @Override
+    public Predicate convert(NotSpecification<?> specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        return context.getCriteriaBuilder()
+                .not(translator.translate(specification.getSpecification(), context));
+    }
 }

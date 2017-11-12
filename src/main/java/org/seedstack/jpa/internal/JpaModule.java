@@ -24,65 +24,65 @@ import org.seedstack.seed.core.internal.transaction.TransactionalProxy;
 
 class JpaModule extends PrivateModule {
 
-  private final Map<String, EntityManagerFactory> entityManagerFactories;
-  private final Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses;
-  private final List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories;
+    private final Map<String, EntityManagerFactory> entityManagerFactories;
+    private final Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses;
+    private final List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories;
 
-  JpaModule(Map<String, EntityManagerFactory> entityManagerFactories,
-      Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses,
-      List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories) {
-    this.entityManagerFactories = entityManagerFactories;
-    this.jpaExceptionHandlerClasses = jpaExceptionHandlerClasses;
-    this.jpaRepositoryFactories = jpaRepositoryFactories;
-  }
-
-  @Override
-  protected void configure() {
-    if (entityManagerFactories != null && !entityManagerFactories.isEmpty()) {
-      EntityManagerLink entityManagerLink = new EntityManagerLink();
-
-      bind(EntityManager.class)
-          .toInstance(TransactionalProxy.create(EntityManager.class, entityManagerLink));
-      expose(EntityManager.class);
-
-      for (Map.Entry<String, EntityManagerFactory> entry : entityManagerFactories.entrySet()) {
-        bindUnit(entry.getKey(), entry.getValue(), entityManagerLink);
-      }
-
-      Multibinder<JpaRepositoryFactory> jpaRepositoryFactoryMultibinder = Multibinder
-          .newSetBinder(binder(), JpaRepositoryFactory.class);
-      for (Class<? extends JpaRepositoryFactory> jpaRepositoryFactory : jpaRepositoryFactories) {
-        jpaRepositoryFactoryMultibinder.addBinding().to(jpaRepositoryFactory);
-      }
-
-      expose(new JpaRepositoryFactoriesTypeLiteral());
-    }
-  }
-
-  private void bindUnit(String name, EntityManagerFactory entityManagerFactory,
-      EntityManagerLink entityManagerLink) {
-    Class<? extends JpaExceptionHandler> unitExceptionHandlerClass = jpaExceptionHandlerClasses
-        .get(name);
-
-    if (unitExceptionHandlerClass != null) {
-      bind(JpaExceptionHandler.class).annotatedWith(Names.named(name))
-          .to(unitExceptionHandlerClass);
-    } else {
-      bind(JpaExceptionHandler.class).annotatedWith(Names.named(name))
-          .toProvider(Providers.of(null));
+    JpaModule(Map<String, EntityManagerFactory> entityManagerFactories,
+            Map<String, Class<? extends JpaExceptionHandler>> jpaExceptionHandlerClasses,
+            List<Class<? extends JpaRepositoryFactory>> jpaRepositoryFactories) {
+        this.entityManagerFactories = entityManagerFactories;
+        this.jpaExceptionHandlerClasses = jpaExceptionHandlerClasses;
+        this.jpaRepositoryFactories = jpaRepositoryFactories;
     }
 
-    JpaTransactionHandler transactionHandler = new JpaTransactionHandler(entityManagerLink,
-        entityManagerFactory);
-    bind(JpaTransactionHandler.class).annotatedWith(Names.named(name))
-        .toInstance(transactionHandler);
+    @Override
+    protected void configure() {
+        if (entityManagerFactories != null && !entityManagerFactories.isEmpty()) {
+            EntityManagerLink entityManagerLink = new EntityManagerLink();
 
-    expose(JpaExceptionHandler.class).annotatedWith(Names.named(name));
-    expose(JpaTransactionHandler.class).annotatedWith(Names.named(name));
-  }
+            bind(EntityManager.class)
+                    .toInstance(TransactionalProxy.create(EntityManager.class, entityManagerLink));
+            expose(EntityManager.class);
 
-  private static class JpaRepositoryFactoriesTypeLiteral extends
-      TypeLiteral<Set<JpaRepositoryFactory>> {
+            for (Map.Entry<String, EntityManagerFactory> entry : entityManagerFactories.entrySet()) {
+                bindUnit(entry.getKey(), entry.getValue(), entityManagerLink);
+            }
 
-  }
+            Multibinder<JpaRepositoryFactory> jpaRepositoryFactoryMultibinder = Multibinder
+                    .newSetBinder(binder(), JpaRepositoryFactory.class);
+            for (Class<? extends JpaRepositoryFactory> jpaRepositoryFactory : jpaRepositoryFactories) {
+                jpaRepositoryFactoryMultibinder.addBinding().to(jpaRepositoryFactory);
+            }
+
+            expose(new JpaRepositoryFactoriesTypeLiteral());
+        }
+    }
+
+    private void bindUnit(String name, EntityManagerFactory entityManagerFactory,
+            EntityManagerLink entityManagerLink) {
+        Class<? extends JpaExceptionHandler> unitExceptionHandlerClass = jpaExceptionHandlerClasses
+                .get(name);
+
+        if (unitExceptionHandlerClass != null) {
+            bind(JpaExceptionHandler.class).annotatedWith(Names.named(name))
+                    .to(unitExceptionHandlerClass);
+        } else {
+            bind(JpaExceptionHandler.class).annotatedWith(Names.named(name))
+                    .toProvider(Providers.of(null));
+        }
+
+        JpaTransactionHandler transactionHandler = new JpaTransactionHandler(entityManagerLink,
+                entityManagerFactory);
+        bind(JpaTransactionHandler.class).annotatedWith(Names.named(name))
+                .toInstance(transactionHandler);
+
+        expose(JpaExceptionHandler.class).annotatedWith(Names.named(name));
+        expose(JpaTransactionHandler.class).annotatedWith(Names.named(name));
+    }
+
+    private static class JpaRepositoryFactoriesTypeLiteral extends
+            TypeLiteral<Set<JpaRepositoryFactory>> {
+
+    }
 }

@@ -16,20 +16,20 @@ import org.seedstack.jpa.spi.JpaRepositoryFactory;
 
 public abstract class BaseJpaRepositoryFactory implements JpaRepositoryFactory {
 
-  @Inject
-  private Injector injector;
+    @Inject
+    private Injector injector;
 
-  @Override
-  public <A extends AggregateRoot<I>, I> Repository<A, I> createRepository(
-      Class<A> aggregateRootClass, Class<I> identifierClass) {
-    Repository<A, I> repository = doCreateRepository(
-        aggregateRootClass,
-        identifierClass
-    );
-    injector.injectMembers(repository);
-    return repository;
-  }
+    @Override
+    public <A extends AggregateRoot<I>, I> Repository<A, I> createRepository(
+            Class<A> aggregateRootClass, Class<I> identifierClass) {
+        Repository<A, I> repository = doCreateRepository(
+                aggregateRootClass,
+                identifierClass
+        );
+        injector.injectMembers(repository);
+        return repository;
+    }
 
-  public abstract <A extends AggregateRoot<I>, I> Repository<A, I> doCreateRepository(
-      Class<A> aggregateRootClass, Class<I> identifierClass);
+    public abstract <A extends AggregateRoot<I>, I> Repository<A, I> doCreateRepository(
+            Class<A> aggregateRootClass, Class<I> identifierClass);
 }

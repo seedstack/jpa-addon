@@ -8,4 +8,5 @@
 /**
  * Provides classes to use JPA with Seed and the Business Framework.
  */
+
 package org.seedstack.jpa;

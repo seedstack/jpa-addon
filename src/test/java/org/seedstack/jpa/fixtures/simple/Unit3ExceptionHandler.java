@@ -5,6 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.jpa.fixtures.simple;
 
 import javax.persistence.EntityTransaction;
@@ -15,19 +16,19 @@ import org.slf4j.Logger;
 
 public class Unit3ExceptionHandler implements JpaExceptionHandler {
 
-  @Logging
-  private Logger logger;
-  private boolean handled = false;
+    @Logging
+    private Logger logger;
+    private boolean handled = false;
 
-  @Override
-  public boolean handleException(Exception exception,
-      TransactionMetadata associatedTransactionMetadata, EntityTransaction associatedTransaction) {
-    logger.debug("inside exception handler");
-    handled = true;
-    return true;
-  }
+    @Override
+    public boolean handleException(Exception exception,
+            TransactionMetadata associatedTransactionMetadata, EntityTransaction associatedTransaction) {
+        logger.debug("inside exception handler");
+        handled = true;
+        return true;
+    }
 
-  public boolean hasHandled() {
-    return handled;
-  }
+    public boolean hasHandled() {
+        return handled;
+    }
 }

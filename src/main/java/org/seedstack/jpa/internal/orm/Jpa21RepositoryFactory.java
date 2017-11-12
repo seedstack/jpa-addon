@@ -22,51 +22,51 @@ import org.seedstack.shed.reflect.Classes;
 @Priority(JpaRepositoryFactoryPriority.JPA_21_PRIORITY)
 public class Jpa21RepositoryFactory extends BaseJpaRepositoryFactory {
 
-  private static final String CRITERIA_DELETE = "javax.persistence.criteria.CriteriaDelete";
-  private static final boolean jpa21Available = isJpa21Available();
+    private static final String CRITERIA_DELETE = "javax.persistence.criteria.CriteriaDelete";
+    private static final boolean jpa21Available = isJpa21Available();
 
-  private static boolean isJpa21Available() {
-    return Classes.optional(CRITERIA_DELETE).isPresent();
-  }
-
-  @Override
-  public boolean isSupporting(EntityManager entityManager) {
-    return jpa21Available;
-  }
-
-  @Override
-  public <A extends AggregateRoot<I>, I> Repository<A, I> doCreateRepository(
-      Class<A> aggregateRootClass, Class<I> identifierClass) {
-    return new Jpa21Repository<>(aggregateRootClass, identifierClass);
-  }
-
-  /**
-   * Extending {@link Jpa20RepositoryFactory.Jpa20Repository}, this implementation of business
-   * framework repository takes advantage of JPA 2.1 features. Specifications are fully supported on
-   * {@link #get(Specification, Option...)}, {@link #count(Specification)} and {@link
-   * #remove(Specification)} methods.
-   *
-   * @param <A> the aggregate root class.
-   * @param <I> the aggregate root identifier class.
-   */
-  public static class Jpa21Repository<A extends AggregateRoot<I>, I>
-      extends Jpa20RepositoryFactory.Jpa20Repository<A, I> {
-
-    protected Jpa21Repository(Class<A> aggregateRootClass, Class<I> idClass) {
-      super(aggregateRootClass, idClass);
+    private static boolean isJpa21Available() {
+        return Classes.optional(CRITERIA_DELETE).isPresent();
     }
 
     @Override
-    public long remove(Specification<A> specification) {
-      CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-      Class<A> entityClass = getAggregateRootClass();
-      CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
-
-      cd.where(specificationTranslator
-          .translate(specification, new JpaTranslationContext<>(cb, cd.from(entityClass))));
-
-      return entityManager.createQuery(cd).executeUpdate();
+    public boolean isSupporting(EntityManager entityManager) {
+        return jpa21Available;
     }
 
-  }
+    @Override
+    public <A extends AggregateRoot<I>, I> Repository<A, I> doCreateRepository(
+            Class<A> aggregateRootClass, Class<I> identifierClass) {
+        return new Jpa21Repository<>(aggregateRootClass, identifierClass);
+    }
+
+    /**
+     * Extending {@link Jpa20RepositoryFactory.Jpa20Repository}, this implementation of business
+     * framework repository takes advantage of JPA 2.1 features. Specifications are fully supported on
+     * {@link #get(Specification, Option...)}, {@link #count(Specification)} and {@link
+     * #remove(Specification)} methods.
+     *
+     * @param <A> the aggregate root class.
+     * @param <I> the aggregate root identifier class.
+     */
+    public static class Jpa21Repository<A extends AggregateRoot<I>, I>
+            extends Jpa20RepositoryFactory.Jpa20Repository<A, I> {
+
+        protected Jpa21Repository(Class<A> aggregateRootClass, Class<I> idClass) {
+            super(aggregateRootClass, idClass);
+        }
+
+        @Override
+        public long remove(Specification<A> specification) {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            Class<A> entityClass = getAggregateRootClass();
+            CriteriaDelete<A> cd = cb.createCriteriaDelete(entityClass);
+
+            cd.where(specificationTranslator
+                    .translate(specification, new JpaTranslationContext<>(cb, cd.from(entityClass))));
+
+            return entityManager.createQuery(cd).executeUpdate();
+        }
+
+    }
 }

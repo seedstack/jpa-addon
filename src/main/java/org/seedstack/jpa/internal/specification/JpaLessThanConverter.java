@@ -14,12 +14,12 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaLessThanConverter<V extends Comparable<? super V>> implements
-    SpecificationConverter<LessThanSpecification<V>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<LessThanSpecification<V>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(LessThanSpecification<V> specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    return context.getCriteriaBuilder()
-        .lessThan(context.pickExpression(), specification.getExpectedValue());
-  }
+    @Override
+    public Predicate convert(LessThanSpecification<V> specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        return context.getCriteriaBuilder()
+                .lessThan(context.pickExpression(), specification.getExpectedValue());
+    }
 }

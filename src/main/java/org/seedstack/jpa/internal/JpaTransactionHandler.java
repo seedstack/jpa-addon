@@ -14,68 +14,67 @@ import javax.persistence.EntityTransaction;
 import org.seedstack.seed.transaction.spi.TransactionHandler;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
 
-
 class JpaTransactionHandler implements TransactionHandler<EntityTransaction> {
 
-  private final EntityManagerLink entityManagerLink;
-  private final EntityManagerFactory entityManagerFactory;
+    private final EntityManagerLink entityManagerLink;
+    private final EntityManagerFactory entityManagerFactory;
 
-  JpaTransactionHandler(EntityManagerLink entityManagerLink,
-      EntityManagerFactory entityManagerFactory) {
-    this.entityManagerLink = entityManagerLink;
-    this.entityManagerFactory = entityManagerFactory;
-  }
-
-  @Override
-  public void doInitialize(TransactionMetadata transactionMetadata) {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    this.entityManagerLink.push(entityManager);
-  }
-
-  @Override
-  public void doJoinGlobalTransaction() {
-    this.entityManagerLink.get().joinTransaction();
-  }
-
-  @Override
-  public EntityTransaction doCreateTransaction() {
-    return this.entityManagerLink.get().getTransaction();
-  }
-
-  @Override
-  public void doBeginTransaction(EntityTransaction entityTransaction) {
-    entityTransaction.begin();
-  }
-
-  @Override
-  public void doCommitTransaction(EntityTransaction entityTransaction) {
-    entityTransaction.commit();
-  }
-
-  @Override
-  public void doMarkTransactionAsRollbackOnly(EntityTransaction entityTransaction) {
-    entityTransaction.setRollbackOnly();
-  }
-
-  @Override
-  public void doRollbackTransaction(EntityTransaction entityTransaction) {
-    entityTransaction.rollback();
-  }
-
-  @Override
-  public void doReleaseTransaction(EntityTransaction entityTransaction) {
-    if (entityTransaction.isActive()) {
-      entityTransaction.rollback();
+    JpaTransactionHandler(EntityManagerLink entityManagerLink,
+            EntityManagerFactory entityManagerFactory) {
+        this.entityManagerLink = entityManagerLink;
+        this.entityManagerFactory = entityManagerFactory;
     }
-  }
 
-  @Override
-  public void doCleanup() {
-    this.entityManagerLink.pop().close();
-  }
+    @Override
+    public void doInitialize(TransactionMetadata transactionMetadata) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        this.entityManagerLink.push(entityManager);
+    }
 
-  @Override
-  public EntityTransaction getCurrentTransaction() {
-    return this.entityManagerLink.getCurrentTransaction();
-  }
+    @Override
+    public void doJoinGlobalTransaction() {
+        this.entityManagerLink.get().joinTransaction();
+    }
+
+    @Override
+    public EntityTransaction doCreateTransaction() {
+        return this.entityManagerLink.get().getTransaction();
+    }
+
+    @Override
+    public void doBeginTransaction(EntityTransaction entityTransaction) {
+        entityTransaction.begin();
+    }
+
+    @Override
+    public void doCommitTransaction(EntityTransaction entityTransaction) {
+        entityTransaction.commit();
+    }
+
+    @Override
+    public void doMarkTransactionAsRollbackOnly(EntityTransaction entityTransaction) {
+        entityTransaction.setRollbackOnly();
+    }
+
+    @Override
+    public void doRollbackTransaction(EntityTransaction entityTransaction) {
+        entityTransaction.rollback();
+    }
+
+    @Override
+    public void doReleaseTransaction(EntityTransaction entityTransaction) {
+        if (entityTransaction.isActive()) {
+            entityTransaction.rollback();
+        }
+    }
+
+    @Override
+    public void doCleanup() {
+        this.entityManagerLink.pop().close();
+    }
+
+    @Override
+    public EntityTransaction getCurrentTransaction() {
+        return this.entityManagerLink.getCurrentTransaction();
+    }
 }

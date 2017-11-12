@@ -76,10 +76,10 @@ classes:
             domain:
               identity:
                 MyAggregate:
-                  identityGenerator: inMemorySequence
+                  defaultGenerator: org.seedstack.business.util.inmemory.InMemory
                   sequenceName: SEQTEST
                 MyEntity:
-                  identityGenerator: simpleUUID
+                  defaultGenerator: org.seedstack.business.util.random.Random
 
 business:
   events:

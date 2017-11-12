@@ -5,6 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.jpa.fixtures.business.domain.embed;
 
 import java.util.Date;
@@ -15,46 +16,41 @@ import org.seedstack.business.domain.BaseEntity;
 @Entity
 public class SampleEmbedJpaEntity extends BaseEntity<SampleEmbeddedKey> {
 
-  @EmbeddedId
-  private SampleEmbeddedKey entityId;
-  private String field1;
-  private String field2;
-  private Date field3;
+    @EmbeddedId
+    private SampleEmbeddedKey entityId;
+    private String field1;
+    private String field2;
+    private Date field3;
 
-  SampleEmbedJpaEntity() {
-  }
+    SampleEmbedJpaEntity() {
+    }
 
-  @Override
-  public SampleEmbeddedKey getId() {
-    return entityId;
-  }
+    @Override
+    public SampleEmbeddedKey getId() {
+        return entityId;
+    }
 
-  public String getField1() {
-    return field1;
-  }
+    public String getField1() {
+        return field1;
+    }
 
+    public void setField1(String field1) {
+        this.field1 = field1;
+    }
 
-  public void setField1(String field1) {
-    this.field1 = field1;
-  }
+    public String getField2() {
+        return field2;
+    }
 
+    public void setField2(String field2) {
+        this.field2 = field2;
+    }
 
-  public String getField2() {
-    return field2;
-  }
+    public Date getField3() {
+        return field3;
+    }
 
-
-  public void setField2(String field2) {
-    this.field2 = field2;
-  }
-
-
-  public Date getField3() {
-    return field3;
-  }
-
-
-  public void setField3(Date field3) {
-    this.field3 = field3;
-  }
+    public void setField3(Date field3) {
+        this.field3 = field3;
+    }
 }

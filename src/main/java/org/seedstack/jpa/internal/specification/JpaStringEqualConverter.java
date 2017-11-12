@@ -17,25 +17,25 @@ import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaStringEqualConverter extends JpaStringConverter<StringEqualSpecification> {
 
-  @Override
-  @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default "
-      + "locale than force an english locale")
-  public Predicate convert(StringEqualSpecification specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    String expectedValue = specification.getExpectedString();
-    CriteriaBuilder criteriaBuilder = context.getCriteriaBuilder();
-    StringSpecification.Options options = specification.getOptions();
+    @Override
+    @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "Better to use the default "
+            + "locale than force an english locale")
+    public Predicate convert(StringEqualSpecification specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        String expectedValue = specification.getExpectedString();
+        CriteriaBuilder criteriaBuilder = context.getCriteriaBuilder();
+        StringSpecification.Options options = specification.getOptions();
 
-    if (expectedValue == null) {
-      return criteriaBuilder.isNull(applyOptions(
-          options,
-          criteriaBuilder, context.pickExpression())
-      );
-    } else {
-      return criteriaBuilder.equal(
-          applyOptions(options, criteriaBuilder, context.pickExpression()),
-          options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue
-      );
+        if (expectedValue == null) {
+            return criteriaBuilder.isNull(applyOptions(
+                    options,
+                    criteriaBuilder, context.pickExpression())
+            );
+        } else {
+            return criteriaBuilder.equal(
+                    applyOptions(options, criteriaBuilder, context.pickExpression()),
+                    options.isIgnoringCase() ? expectedValue.toUpperCase() : expectedValue
+            );
+        }
     }
-  }
 }

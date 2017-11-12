@@ -14,16 +14,16 @@ import org.seedstack.business.spi.SpecificationConverter;
 import org.seedstack.business.spi.SpecificationTranslator;
 
 class JpaEqualConverter implements
-    SpecificationConverter<EqualSpecification<?>, JpaTranslationContext<?>, Predicate> {
+        SpecificationConverter<EqualSpecification<?>, JpaTranslationContext<?>, Predicate> {
 
-  @Override
-  public Predicate convert(EqualSpecification<?> specification, JpaTranslationContext<?> context,
-      SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
-    if (specification.getExpectedValue() == null) {
-      return context.getCriteriaBuilder().isNull(context.pickExpression());
-    } else {
-      return context.getCriteriaBuilder()
-          .equal(context.pickExpression(), specification.getExpectedValue());
+    @Override
+    public Predicate convert(EqualSpecification<?> specification, JpaTranslationContext<?> context,
+            SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
+        if (specification.getExpectedValue() == null) {
+            return context.getCriteriaBuilder().isNull(context.pickExpression());
+        } else {
+            return context.getCriteriaBuilder()
+                    .equal(context.pickExpression(), specification.getExpectedValue());
+        }
     }
-  }
 }
