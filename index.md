@@ -77,7 +77,7 @@ jpa:
  
 ## Class configuration
 
-To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a [class configuration]({{< ref "docs/seed/configuration.md#class-configuration" >}}) 
+To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}}) 
 property:
 
 ```yaml
@@ -126,7 +126,7 @@ public class MyRepository {
 ```
 
 {{% callout info %}}
-All JPA interactions have to be done inside a transaction. Refer to the [transaction support documentation]({{< ref "docs/seed/manual/transactions.md" >}}) for details. 
+All JPA interactions have to be done inside a transaction. Refer to the [transaction support documentation]({{< ref "docs/core/transactions.md" >}}) for details. 
 {{% /callout %}}
 
 # Using a persistence.xml file
