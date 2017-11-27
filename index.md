@@ -1,5 +1,6 @@
 ---
 title: "JPA"
+addon: "JPA"
 repo: "https://github.com/seedstack/jpa-addon"
 author: Adrien LAUER
 description: "Provides configuration, injection and transactions for Java Persistence API."
@@ -8,15 +9,13 @@ tags:
     - transactions
 zones:
     - Addons
-menu:
-    AddonJPA:
-        weight: 10
+noMenu: true    
 ---
 
 SeedStack JPA add-on supports any JPA-compliant [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) to allow 
 your application to interface with relational databases.<!--more--> 
 
-# Dependencies
+## Dependencies
 
 {{< dependency g="org.seedstack.addons.jpa" a="jpa" >}}
 
@@ -29,9 +28,9 @@ If you need to have the JPA API without implementation in some project modules, 
  
 {{< dependency g="org.hibernate.javax.persistence" a="hibernate-jpa-2.1-api" v="1.0.0.Final" s="provided" >}}
  
-# Configuration
+## Configuration
 
-## JPA units
+### JPA units
 
 By default, SeedStack is able to automatically detect the JPA classes in your project. No `persistence.xml` must be present
 in this mode. You just have to declare the JPA units:
@@ -75,7 +74,7 @@ jpa:
 ```
 {{% /config %}}   
  
-## Class configuration
+### Class configuration
 
 To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}}) 
 property:
@@ -93,7 +92,7 @@ classes:
 This configuration will assign every class in the `org.myorg.myapp.domain.model` package and its sub-packages to the 
 JPA unit `unit1`.
 
-## Example
+### Example
 
 Assuming we are using Hibernate, the following configuration defines a unit named `unit1` using the data-source 
 `datasource1` defined in the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}):
@@ -108,7 +107,7 @@ jpa:
         hibernate.hbm2ddl.auto: create
 ```
 
-# Usage
+## Usage
 
 To use the Entity Manager in your code, simply inject it:
 
@@ -129,7 +128,7 @@ public class MyRepository {
 All JPA interactions have to be done inside a transaction. Refer to the [transaction support documentation]({{< ref "docs/core/transactions.md" >}}) for details. 
 {{% /callout %}}
 
-# Using a persistence.xml file
+## Using a persistence.xml file
 
 Instead of using JPA auto-configuration, you can choose to use a standard `META-INF/persistence.xml` file instead.
 This is **NOT recommended** as your loose a significant number of features: 
@@ -141,7 +140,7 @@ have no effect and must be configured in the `persistence.xml` instead (which is
 * You can still specify provider properties in the configuration. They override properties declared in the `persistence.xml`
 file if any.
 
-## Example
+### Example
 
 Configuration:
 
