@@ -184,13 +184,13 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
         }
 
         @Override
-        public void update(A aggregate) throws AggregateNotFoundException {
+        public A update(A aggregate) throws AggregateNotFoundException {
             if (!contains(aggregate)) {
                 throw new AggregateNotFoundException(
                         "Non-existent aggregate " + getAggregateRootClass() + " identified with " + aggregate
                                 .getId() + " cannot be updated");
             }
-            entityManager.merge(aggregate);
+            return entityManager.merge(aggregate);
         }
 
         protected Query applyOffsetAndLimit(Query query, Option... options) {

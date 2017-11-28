@@ -128,8 +128,8 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<I>, I>
     }
 
     @Override
-    public void update(A aggregate) throws AggregateNotFoundException {
-        resolveImplementation().update(aggregate);
+    public A update(A aggregate) throws AggregateNotFoundException {
+        return resolveImplementation().update(aggregate);
     }
 
     @Override

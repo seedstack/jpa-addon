@@ -18,10 +18,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.seedstack.business.domain.IdentityService;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.business.domain.SortOption;
 import org.seedstack.business.specification.Specification;
 import org.seedstack.business.specification.dsl.SpecificationBuilder;
+import org.seedstack.jpa.fixtures.business.domain.product.Picture;
 import org.seedstack.jpa.fixtures.business.domain.product.Product;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
@@ -30,22 +32,31 @@ import org.seedstack.seed.transaction.Transactional;
 @JpaUnit("business")
 @RunWith(SeedITRunner.class)
 public class SpecificationIT {
-
-    private final Product product1 = createProduct(1L, "product1", "url1", "picture1", 2d);
-    private final Product product2 = createProduct(2L, "product2", "url2", "picture2", 2d);
-    private final Product product3 = createProduct(3L, "product3", "url3", "picture3", 2d);
-    private final Product product4 = createProduct(4L, "product4", "url2", "   picture4", 6d);
-    private final Product product5 = createProduct(5L, "product5", "url5", "picture4   ", 1d);
-    private final Product product6 = createProduct(6L, "product6", "url6", "picture5", 5d);
+    private Product product1;
+    private Product product2;
+    private Product product3;
+    private Product product4;
+    private Product product5;
+    private Product product6;
     @Inject
     @Jpa
     private Repository<Product, Long> repository;
     @Inject
     private SpecificationBuilder specificationBuilder;
+    @Inject
+    private IdentityService identityService;
 
     @Before
     public void setUp() throws Exception {
+        product1 = createProduct(1L, "product1", "url1", "picture1", 2d);
+        product2 = createProduct(2L, "product2", "url2", "picture2", 2d);
+        product3 = createProduct(3L, "product3", "url3", "picture3", 2d);
+        product4 = createProduct(4L, "product4", "url2", "   picture4", 6d);
+        product5 = createProduct(5L, "product5", "url5", "picture4   ", 1d);
+        product6 = createProduct(6L, "product6", "url6", "picture5", 5d);
+
         repository.clear();
+
         repository.add(product1);
         repository.add(product2);
         repository.add(product3);
@@ -284,8 +295,8 @@ public class SpecificationIT {
     }
 
     public Product createProduct(long id, String designation, String mainPictureUrl, String pictureUrl, double price) {
-        List<String> pictures = new ArrayList<>();
-        pictures.add(pictureUrl);
+        List<Picture> pictures = new ArrayList<>();
+        pictures.add(identityService.identify(new Picture(pictureUrl, id)));
         return new Product(id, designation, "summary", "details", mainPictureUrl, pictures, price);
     }
 }

@@ -8,10 +8,8 @@
 
 package org.seedstack.jpa.fixtures.business.domain.product;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -35,20 +33,13 @@ public class Product extends BaseAggregateRoot<Long> {
     }
 
     public Product(long productId, String designation, String summary, String details, String mainPicture,
-            List<String> pictures, Double price) {
+            List<Picture> pictures, Double price) {
         id = productId;
         setDesignation(designation);
         setSummary(summary);
         setDetails(details);
         setMainPicture(new PictureURL(mainPicture));
-        List<Picture> pics = null;
-        if (pictures != null && !pictures.isEmpty()) {
-            pics = new ArrayList<>();
-            for (String picture : pictures) {
-                pics.add(new Picture(picture, productId));
-            }
-        }
-        setPictures(pics);
+        setPictures(pictures);
         setPrice(price);
     }
 

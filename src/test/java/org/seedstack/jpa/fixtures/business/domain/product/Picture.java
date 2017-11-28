@@ -13,17 +13,19 @@ package org.seedstack.jpa.fixtures.business.domain.product;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import org.seedstack.business.domain.BaseEntity;
+import org.seedstack.business.domain.Identity;
+import org.seedstack.business.util.SequenceGenerator;
+import org.seedstack.business.util.inmemory.InMemory;
 
 @Entity
 public class Picture extends BaseEntity<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long entityId;
+    @Identity(generator = SequenceGenerator.class)
+    @InMemory
+    private Long id;
     @Embedded
     private PictureURL url;
     private Long productId;
@@ -40,7 +42,7 @@ public class Picture extends BaseEntity<Long> {
 
     @Override
     public Long getId() {
-        return entityId;
+        return id;
     }
 
     public PictureURL getUrl() {
