@@ -121,6 +121,20 @@ public class BaseJpaRepositoryIT {
     }
 
     @Test
+    public void addOrUpdate() {
+        SampleBaseJpaAggregateRoot test = sampleBaseJpaFactory.create("test");
+        test.setField1("before");
+        sampleBaseRepository.addOrUpdate(test);
+        assertThat(sampleBaseRepository.contains("test")).isTrue();
+        assertThat(sampleBaseRepository.get("test").get().getField1()).isEqualTo("before");
+        SampleBaseJpaAggregateRoot test2 = sampleBaseJpaFactory.create("test");
+        test2.setField1("after");
+        sampleBaseRepository.addOrUpdate(test2);
+        assertThat(sampleBaseRepository.contains("test")).isTrue();
+        assertThat(sampleBaseRepository.get("test").get().getField1()).isEqualTo("after");
+    }
+
+    @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void clear() {
         prepareClear();

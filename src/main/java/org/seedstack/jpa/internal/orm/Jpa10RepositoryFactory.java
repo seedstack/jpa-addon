@@ -193,6 +193,16 @@ public class Jpa10RepositoryFactory extends BaseJpaRepositoryFactory {
             return entityManager.merge(aggregate);
         }
 
+        @Override
+        public A addOrUpdate(A aggregate) {
+            try {
+                entityManager.persist(aggregate);
+                return aggregate;
+            } catch (EntityExistsException e) {
+                return entityManager.merge(aggregate);
+            }
+        }
+
         protected Query applyOffsetAndLimit(Query query, Option... options) {
             for (Option option : options) {
                 if (option instanceof OffsetOption) {
