@@ -23,7 +23,7 @@
 
     <properties>
         <seed.version>3.4.0</seed.version>
-        <business.version>4.0.0-SNAPSHOT</business.version>
+        <business.version>4.0.0</business.version>
         <jdbc.version>3.0.2</jdbc.version>
         <flyway.version>1.0.0</flyway.version>
         <powermock.version>1.6.3</powermock.version>
