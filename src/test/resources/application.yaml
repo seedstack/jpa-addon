@@ -80,7 +80,3 @@ classes:
                   sequenceName: SEQTEST
                 MyEntity:
                   defaultGenerator: org.seedstack.business.util.random.Random
-
-business:
-  events:
-    publishRepositoryEvents: true

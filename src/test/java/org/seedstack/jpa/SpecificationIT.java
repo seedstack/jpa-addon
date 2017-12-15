@@ -25,6 +25,8 @@ import org.seedstack.business.specification.Specification;
 import org.seedstack.business.specification.dsl.SpecificationBuilder;
 import org.seedstack.jpa.fixtures.business.domain.product.Picture;
 import org.seedstack.jpa.fixtures.business.domain.product.Product;
+import org.seedstack.jpa.fixtures.business.domain.test.VehicleType;
+import org.seedstack.jpa.fixtures.business.domain.test.VehicleTypeId;
 import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
@@ -38,9 +40,15 @@ public class SpecificationIT {
     private Product product4;
     private Product product5;
     private Product product6;
+    private VehicleType vehicleType1 = new VehicleType(new VehicleTypeId("APFR", "code"));
+    private VehicleType vehicleType2 = new VehicleType(new VehicleTypeId("ACFR", "code"));
+
     @Inject
     @Jpa
     private Repository<Product, Long> repository;
+    @Inject
+    @Jpa
+    private Repository<VehicleType, VehicleTypeId> repository2;
     @Inject
     private SpecificationBuilder specificationBuilder;
     @Inject
@@ -63,11 +71,17 @@ public class SpecificationIT {
         repository.add(product4);
         repository.add(product5);
         repository.add(product6);
+
+        repository2.clear();
+
+        repository2.add(vehicleType1);
+        repository2.add(vehicleType2);
     }
 
     @After
     public void tearDown() throws Exception {
         repository.clear();
+        repository2.clear();
     }
 
     @Test
@@ -292,6 +306,14 @@ public class SpecificationIT {
         ).isSortedAccordingTo(Comparator.comparing(Product::getPrice)
                 .thenComparing(
                         Comparator.comparing((Product product) -> product.getMainPicture().getUrl()).reversed()));
+    }
+
+    @Test
+    public void testCompositeKey() throws Exception {
+        assertThat(repository2.get(specificationBuilder.of(VehicleType.class)
+                .property("id.brandCountryCode").equalTo("APFR")
+                .build())
+        ).contains(vehicleType1);
     }
 
     public Product createProduct(long id, String designation, String mainPictureUrl, String pictureUrl, double price) {
