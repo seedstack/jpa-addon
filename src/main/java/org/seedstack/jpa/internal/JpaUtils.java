@@ -5,6 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.jpa.internal;
 
 import javax.persistence.criteria.Expression;
@@ -17,6 +18,13 @@ public final class JpaUtils {
         // no instantiation allowed
     }
 
+    /**
+     * Create a new join or find an existing join on the specified attribute.
+     *
+     * @param attribute The attribute to join on.
+     * @param from      The entity from.
+     * @return the join expression.
+     */
     public static Expression<?> join(String attribute, From<?, ?> from) {
         Expression<?> path;
         try {
