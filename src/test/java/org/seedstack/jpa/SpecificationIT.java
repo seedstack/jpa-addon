@@ -243,7 +243,8 @@ public class SpecificationIT {
     @Test
     public void testNot() throws Exception {
         assertThat(repository.get(specificationBuilder.of(Product.class)
-                .property("pictures.url.url").not().equalTo("picture2")
+                .property("pictures.url.url").not().equalTo("picture2").and()
+                .property("pictures.url.url").not().equalTo("picture2/2")
                 .build())
         ).containsExactly(product1, product3, product4, product5, product6);
     }
@@ -284,7 +285,8 @@ public class SpecificationIT {
                 new SortOption()
                         .add("id", SortOption.Direction.DESCENDING)
                 )
-        ).isSortedAccordingTo(Comparator.comparing(Product::getId).reversed());
+        ).isSortedAccordingTo(Comparator.comparing(Product::getId).reversed())
+                .hasSize(6);
     }
 
     @Test
@@ -293,7 +295,17 @@ public class SpecificationIT {
                 new SortOption()
                         .add("mainPicture.url", SortOption.Direction.DESCENDING)
                 )
-        ).isSortedAccordingTo(Comparator.comparing((Product p) -> p.getMainPicture().getUrl()).reversed());
+        ).isSortedAccordingTo(Comparator.comparing((Product p) -> p.getMainPicture().getUrl()).reversed())
+                .hasSize(6);
+    }
+
+    @Test
+    public void testNestedEmbeddedSort() throws Exception {
+        assertThat(repository2.get(Specification.any(),
+                new SortOption()
+                        .add("id.brandCountryCode", SortOption.Direction.ASCENDING)
+                )
+        ).isSortedAccordingTo(Comparator.comparing((VehicleType vt) -> vt.getId().getBrandCountryCode())).hasSize(2);
     }
 
     @Test
@@ -304,8 +316,8 @@ public class SpecificationIT {
                         .add("mainPicture.url", SortOption.Direction.DESCENDING)
                 )
         ).isSortedAccordingTo(Comparator.comparing(Product::getPrice)
-                .thenComparing(
-                        Comparator.comparing((Product product) -> product.getMainPicture().getUrl()).reversed()));
+                .thenComparing(Comparator.comparing((Product product) -> product.getMainPicture().getUrl()).reversed()))
+                .hasSize(6);
     }
 
     @Test
@@ -319,6 +331,7 @@ public class SpecificationIT {
     public Product createProduct(long id, String designation, String mainPictureUrl, String pictureUrl, double price) {
         List<Picture> pictures = new ArrayList<>();
         pictures.add(identityService.identify(new Picture(pictureUrl, id)));
+        pictures.add(identityService.identify(new Picture(pictureUrl + "/2", id)));
         return new Product(id, designation, "summary", "details", mainPictureUrl, pictures, price);
     }
 }
