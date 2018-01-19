@@ -74,10 +74,8 @@ jpa:
 ```
 {{% /config %}}   
  
-### Class configuration
-
-To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}}) 
-property:
+To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a 
+[class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}}) property:
 
 ```yaml
 classes:
@@ -89,22 +87,37 @@ classes:
             jpaUnit: unit1
 ```
 
-This configuration will assign every class in the `org.myorg.myapp.domain.model` package and its sub-packages to the 
+This will assign every class in the `org.myorg.myapp.domain.model` package and its sub-packages to the 
 JPA unit `unit1`.
 
 ### Example
 
-Assuming we are using Hibernate, the following configuration defines a unit named `unit1` using the data-source 
-`datasource1` defined in the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}):
+Assuming we are using Hibernate and Hikari connection pool, the configuration below: 
+
+* Defines a unit named `unit1`,
+* Using the data-source `datasource1` defined with the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}),
+* Affects every JPA entity of packages `org.myorg.myapp.domain.model.*` to `unit1`. 
 
 ```yaml
+jdbc:
+  datasources:
+    datasource1:
+      provider: org.seedstack.jdbc.internal.datasource.HikariDataSourceProvider
+      url: jdbc:hsqldb:mem:testdb1
 jpa:
   units:
     unit1:
       datasource: datasource1
       properties:
         hibernate.dialect: org.hibernate.dialect.HSQLDialect
-        hibernate.hbm2ddl.auto: create
+        hibernate.hbm2ddl.auto: update
+classes:
+  org:
+    myorg:
+      myapp:
+        domain:
+          model:
+            jpaUnit: unit1
 ```
 
 ## Usage
@@ -127,6 +140,47 @@ public class MyRepository {
 {{% callout info %}}
 All JPA interactions have to be done inside a transaction. Refer to the [transaction support documentation]({{< ref "docs/core/transactions.md" >}}) for details. 
 {{% /callout %}}
+
+## Sequence generators
+
+The JPA add-on provides several implementations of the business framework {{< java "org.seedstack.business.util.SequenceGenerator" >}}
+to enable the use of a database sequence to generate an identity. 
+
+This is done by adding the {{< java "org.seedstack.business.domain.Identity" "@" >}} annotation along with a qualifier
+corresponding to the chosen database implementation:
+
+```java
+public class MyAggregate extends BaseAggregateRoot<Long> {
+    @Identity(generator = SequenceGenerator.class)
+    @Named("postgreSqlSequence")
+    private Long id;
+}
+```
+
+Available implementations are:
+
+* **PostgreSQL**: use the `@Named("postgreSqlSequence")` qualifier.
+* **Oracle**: use the `@Named("oracleSequence")` qualifier.
+
+The database sequence name must be specified in [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}})
+as the `identitySequenceName` property:
+
+```yaml
+classes:
+  org:
+    myorg:
+      myapp:
+        domain:
+          model:
+            myaggregate:
+              identitySequenceName: MY_SEQUENCE
+``` 
+
+{{% callout info %}}
+Refer to the [business framework identity generation documentation]({{< ref "docs/business/factories.md#identity-generation" >}}) for 
+instructions about how to actually use the chosen sequence generator when creating entities. 
+{{% /callout %}}
+
 
 ## Using a persistence.xml file
 
@@ -162,9 +216,9 @@ The `persistence.xml` file:
              version="2.1">
     <persistence-unit name="unit1" transaction-type="RESOURCE_LOCAL">
         <non-jta-data-source>java:comp/env/jdbc/my-datasource</non-jta-data-source>
-        <class>org.myorg.myapp.domain.model.SomeClass</class>
+        <class>org.myorg.myapp.domain.model.myaggregate.MyAggregate</class>
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="create"></property>
+            <property name="hibernate.hbm2ddl.auto" value="update"></property>
         </properties>
     </persistence-unit>
 </persistence>
