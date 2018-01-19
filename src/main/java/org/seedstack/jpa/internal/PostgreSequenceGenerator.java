@@ -18,11 +18,11 @@ import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
 
 /**
- * Uses an Oracle sequence for identity management. This handler needs the Oracle
+ * Uses a PostgreSQL sequence for identity management. This handler needs the PostgreSQL
  * sequence name to be specified in class configuration as the 'identitySequenceName' property.
  */
-@Named("oracleSequence")
-class OracleSequenceGenerator implements SequenceGenerator {
+@Named("postgreSqlSequence")
+class PostgreSequenceGenerator implements SequenceGenerator {
     private static final String SEQUENCE_NAME = "identitySequenceName";
     @Inject(optional = true)
     private EntityManager entityManager;
@@ -41,7 +41,7 @@ class OracleSequenceGenerator implements SequenceGenerator {
             throw SeedException.createNew(JpaErrorCode.MISSING_ENTITY_MANAGER);
         }
 
-        return ((Number) entityManager.createNativeQuery(String.format("SELECT %s.NEXTVAL FROM DUAL", sequence))
+        return ((Number) entityManager.createNativeQuery(String.format("SELECT nextval('%s')", sequence))
                 .getSingleResult()).longValue();
     }
 }
