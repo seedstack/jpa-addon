@@ -1,3 +1,7 @@
+# Version 4.0.1 (2018-02-28)
+
+* [new] Java 9 compatibility.
+
 # Version 4.0.0 (2017-11-30)
 
 * [new] Implements automatic translation of business specifications to JPA criteria. 

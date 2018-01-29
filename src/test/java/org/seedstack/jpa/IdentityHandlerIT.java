@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013-2017, The SeedStack authors <http://seedstack.org>
+ * Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +8,7 @@
 /**
  *
  */
+
 
 package org.seedstack.jpa;
 
@@ -18,7 +19,7 @@ import org.junit.runner.RunWith;
 import org.seedstack.jpa.fixtures.business.domain.identity.MyAggregate;
 import org.seedstack.jpa.fixtures.business.domain.identity.MyAggregateFactory;
 import org.seedstack.jpa.fixtures.business.domain.identity.MyEntity;
-import org.seedstack.seed.it.SeedITRunner;
+import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
 @RunWith(SeedITRunner.class)
