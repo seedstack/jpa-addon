@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import org.seedstack.jpa.fixtures.business.domain.identity.MyAggregate;
 import org.seedstack.jpa.fixtures.business.domain.identity.MyAggregateFactory;
 import org.seedstack.jpa.fixtures.business.domain.identity.MyEntity;
-import org.seedstack.seed.testing.junit4.SeedITRunner;
+import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
 @RunWith(SeedITRunner.class)

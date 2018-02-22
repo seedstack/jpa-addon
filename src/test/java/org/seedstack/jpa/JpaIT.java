@@ -23,7 +23,7 @@ import org.seedstack.jpa.fixtures.simple.Item2;
 import org.seedstack.jpa.fixtures.simple.Item2Repository;
 import org.seedstack.jpa.fixtures.simple.Item3Repository;
 import org.seedstack.jpa.fixtures.simple.Unit3ExceptionHandler;
-import org.seedstack.seed.testing.junit4.SeedITRunner;
+import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 

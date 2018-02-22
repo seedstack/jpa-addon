@@ -1,6 +1,6 @@
-# Version 4.0.1 (2018-02-28)
+# Version 4.0.1 (2018-02-22)
 
-* [new] Java 9 compatibility.
+* [new] Adds a sequence generator for PostgreSQL.
 
 # Version 4.0.0 (2017-11-30)
 

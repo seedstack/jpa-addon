@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.seedstack.jpa.fixtures.simple.Item4;
 import org.seedstack.jpa.fixtures.simple.Item4Repository;
 import org.seedstack.jpa.fixtures.simple.OtherItem4;
-import org.seedstack.seed.testing.junit4.SeedITRunner;
+import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
 @Transactional

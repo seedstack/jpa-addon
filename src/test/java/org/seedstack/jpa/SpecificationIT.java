@@ -28,7 +28,7 @@ import org.seedstack.jpa.fixtures.business.domain.product.Picture;
 import org.seedstack.jpa.fixtures.business.domain.product.Product;
 import org.seedstack.jpa.fixtures.business.domain.test.VehicleType;
 import org.seedstack.jpa.fixtures.business.domain.test.VehicleTypeId;
-import org.seedstack.seed.testing.junit4.SeedITRunner;
+import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
 @Transactional

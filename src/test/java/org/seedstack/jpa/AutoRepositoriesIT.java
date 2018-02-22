@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import org.seedstack.business.domain.Factory;
 import org.seedstack.business.domain.Repository;
 import org.seedstack.jpa.fixtures.business.domain.tinyaggregate.TinyAggRoot;
-import org.seedstack.seed.testing.junit4.SeedITRunner;
+import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.transaction.Transactional;
 
 @Transactional
