@@ -40,10 +40,11 @@ import org.slf4j.LoggerFactory;
  * per persistence unit configured.
  */
 public class JpaPlugin extends AbstractSeedPlugin {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaPlugin.class);
     private static final boolean flywayAvailable = Classes
             .optional("org.seedstack.flyway.spi.FlywayProvider").isPresent();
+    private static final boolean businessAvailable = Classes
+            .optional("org.seedstack.business.domain.Repository").isPresent();
     private final Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<>();
     private final Map<String, Class<? extends JpaExceptionHandler>> exceptionHandlerClasses = new
             HashMap<>();
@@ -79,15 +80,38 @@ public class JpaPlugin extends AbstractSeedPlugin {
     public InitState initialize(InitContext initContext) {
         JpaConfig jpaConfig = getConfiguration(JpaConfig.class);
 
-        if (jpaConfig.getUnits().isEmpty()) {
-            LOGGER.info("No JPA persistence unit configured, JPA support disabled");
-            return InitState.INITIALIZED;
+        if (businessAvailable) {
+            detectJpaRepositoryFactories(initContext);
         }
 
+        if (!jpaConfig.getUnits().isEmpty()) {
+            initializeEntityManagerFactories(initContext, jpaConfig);
+        } else {
+            LOGGER.info("No JPA persistence unit configured");
+        }
+
+        return InitState.INITIALIZED;
+    }
+
+    private void detectJpaRepositoryFactories(InitContext initContext) {
+        Collection<Class<?>> jpaRepositoryFactoryCandidates = initContext.scannedTypesBySpecification()
+                .get(JpaRepositoryFactorySpecification.INSTANCE);
+        if (jpaRepositoryFactoryCandidates != null) {
+            for (Class<?> candidate : jpaRepositoryFactoryCandidates) {
+                if (JpaRepositoryFactory.class.isAssignableFrom(candidate)) {
+                    jpaRepositoryFactories.add(candidate.asSubclass(JpaRepositoryFactory.class));
+                    LOGGER.debug("Detected JPA repository implementation {}", candidate.getName());
+                }
+            }
+        }
+        sortByPriority(jpaRepositoryFactories);
+        LOGGER.debug("Detected {} JPA repository implementation(s)", jpaRepositoryFactories.size());
+    }
+
+    private void initializeEntityManagerFactories(InitContext initContext, JpaConfig jpaConfig) {
         EntityManagerFactoryFactory entityManagerFactoryFactory = new EntityManagerFactoryFactory(
                 initContext.dependency(JdbcProvider.class), getApplication());
-        for (Map.Entry<String, JpaConfig.PersistenceUnitConfig> entry : jpaConfig.getUnits()
-                .entrySet()) {
+        for (Map.Entry<String, JpaConfig.PersistenceUnitConfig> entry : jpaConfig.getUnits().entrySet()) {
             String persistenceUnitName = entry.getKey();
             JpaConfig.PersistenceUnitConfig persistenceUnitConfig = entry.getValue();
 
@@ -98,40 +122,26 @@ public class JpaPlugin extends AbstractSeedPlugin {
                     scannedClasses.addAll(initContext.scannedClassesByAnnotationClass().get(Entity.class));
                 }
                 if (initContext.scannedClassesByAnnotationClass().get(Embeddable.class) != null) {
-                    scannedClasses
-                            .addAll(initContext.scannedClassesByAnnotationClass().get(Embeddable.class));
+                    scannedClasses.addAll(initContext.scannedClassesByAnnotationClass().get(Embeddable.class));
                 }
-                LOGGER.info("Creating JPA unit {} with {} scanned classes", persistenceUnitName,
-                        scannedClasses.size());
-                emf = entityManagerFactoryFactory
-                        .createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig, scannedClasses);
+                LOGGER.info("Creating JPA unit {} from {} scanned classes", persistenceUnitName, scannedClasses.size());
+                emf = entityManagerFactoryFactory.createEntityManagerFactory(
+                        persistenceUnitName,
+                        persistenceUnitConfig,
+                        scannedClasses);
             } else {
-                emf = entityManagerFactoryFactory
-                        .createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig);
-                LOGGER.info("Creating JPA unit {} with explicit persistence.xml", persistenceUnitName);
+                emf = entityManagerFactoryFactory.createEntityManagerFactory(
+                        persistenceUnitName,
+                        persistenceUnitConfig);
+                LOGGER.info("Creating JPA unit {} from persistence.xml", persistenceUnitName);
             }
             entityManagerFactories.put(persistenceUnitName, emf);
 
             if (persistenceUnitConfig.hasExceptionHandler()) {
-                exceptionHandlerClasses
-                        .put(persistenceUnitName, persistenceUnitConfig.getExceptionHandler());
+                exceptionHandlerClasses.put(persistenceUnitName, persistenceUnitConfig.getExceptionHandler());
             }
         }
-
-        Collection<Class<?>> jpaRepositoryFactoryCandidates = initContext.scannedTypesBySpecification()
-                .get(JpaRepositoryFactorySpecification.INSTANCE);
-        if (jpaRepositoryFactoryCandidates != null) {
-            for (Class<?> candidate : jpaRepositoryFactoryCandidates) {
-                if (JpaRepositoryFactory.class.isAssignableFrom(candidate)) {
-                    jpaRepositoryFactories.add(candidate.asSubclass(JpaRepositoryFactory.class));
-                    LOGGER.trace("Detected JPA repository implementation {}", candidate.getName());
-                }
-            }
-        }
-        sortByPriority(jpaRepositoryFactories);
-        LOGGER.debug("Detected {} JPA repository implementation(s)", jpaRepositoryFactories.size());
-
-        return InitState.INITIALIZED;
+        LOGGER.info("Created {} JPA unit(s)", jpaConfig.getUnits().size());
     }
 
     @Override
@@ -158,5 +168,4 @@ public class JpaPlugin extends AbstractSeedPlugin {
                 jpaRepositoryFactories
         );
     }
-
 }

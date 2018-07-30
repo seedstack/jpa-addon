@@ -31,9 +31,7 @@ import org.seedstack.seed.SeedException;
  * @param <A> Aggregate root class
  * @param <I> Identifier class
  */
-public abstract class BaseJpaRepository<A extends AggregateRoot<I>, I>
-        extends BaseRepository<A, I> {
-
+public abstract class BaseJpaRepository<A extends AggregateRoot<I>, I> extends BaseRepository<A, I> {
     @Inject
     private EntityManager entityManager;
     @Inject
@@ -144,7 +142,6 @@ public abstract class BaseJpaRepository<A extends AggregateRoot<I>, I>
                 return jpaRepositoryFactory.createRepository(getAggregateRootClass(), getIdentifierClass());
             }
         }
-        throw SeedException
-                .createNew(JpaErrorCode.UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION);
+        throw SeedException.createNew(JpaErrorCode.UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION);
     }
 }

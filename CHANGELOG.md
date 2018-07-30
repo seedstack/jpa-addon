@@ -1,3 +1,8 @@
+# Version 4.0.2 (2018-07-30)
+
+* [chg] Always bind entity manager even without JPA unit configured.
+* [fix] Do not detect classes implementing `JpaRepositoryFactory` if business framework is not available.
+
 # Version 4.0.1 (2018-02-22)
 
 * [new] Adds a sequence generator for PostgreSQL.
