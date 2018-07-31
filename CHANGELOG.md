@@ -1,3 +1,7 @@
+# Version 4.0.3 (2018-08-01)
+
+* [chg] Only use JSR-330 injection in sequence generators.
+
 # Version 4.0.2 (2018-07-30)
 
 * [chg] Always bind entity manager even without JPA unit configured.

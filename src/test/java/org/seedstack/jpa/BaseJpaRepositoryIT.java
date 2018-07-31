@@ -25,7 +25,7 @@ import org.seedstack.business.specification.Specification;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaFactory;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
-import org.seedstack.seed.it.SeedITRunner;
+import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 

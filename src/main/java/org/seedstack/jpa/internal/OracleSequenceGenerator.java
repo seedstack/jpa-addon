@@ -8,7 +8,7 @@
 
 package org.seedstack.jpa.internal;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.apache.commons.lang.StringUtils;
@@ -24,7 +24,7 @@ import org.seedstack.seed.SeedException;
 @Named("oracleSequence")
 class OracleSequenceGenerator implements SequenceGenerator {
     private static final String SEQUENCE_NAME = "identitySequenceName";
-    @Inject(optional = true)
+    @Inject
     private EntityManager entityManager;
     @Inject
     private Application application;

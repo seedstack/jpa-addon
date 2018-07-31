@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.2.0</version>
+        <version>3.4.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
@@ -22,8 +22,8 @@
     <version>4.0.2-SNAPSHOT</version>
 
     <properties>
-        <seed.version>3.4.2</seed.version>
-        <business.version>4.2.0</business.version>
+        <seed.version>3.6.2</seed.version>
+        <business.version>4.2.1</business.version>
         <jdbc.version>3.0.2</jdbc.version>
         <flyway.version>1.0.0</flyway.version>
         <powermock.version>1.6.3</powermock.version>
@@ -61,6 +61,7 @@
                             <licenseMerge>Apache 2|Apache License 2.0</licenseMerge>
                             <licenseMerge>Apache 2|Apache License, version 2.0</licenseMerge>
                             <licenseMerge>Apache 2|Apache License Version 2.0</licenseMerge>
+                            <licenseMerge>Apache 2|Apache 2.0</licenseMerge>
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
                             <licenseMerge>BSD|BSD License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
@@ -68,9 +69,12 @@
                             <licenseMerge>CDDL|Common Development and Distribution License</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser Public License</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser General Public License</licenseMerge>
+                            <licenseMerge>MIT License|The MIT License</licenseMerge>
+                            <licenseMerge>MIT License|MIT license</licenseMerge>
 
                             <licenseMerge>IGNORED_LICENSE|MPL 1.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
+                            <licenseMerge>IGNORED_LICENSE|GNU General Public License, version 2 (GPL2), with the classpath exception</licenseMerge>
                         </licenseMerges>
                     </configuration>
                 </plugin>
@@ -129,7 +133,7 @@
 
         <dependency>
             <groupId>org.seedstack.seed</groupId>
-            <artifactId>seed-testing</artifactId>
+            <artifactId>seed-testing-junit4</artifactId>
             <version>${seed.version}</version>
             <scope>test</scope>
         </dependency>
