@@ -1,6 +1,7 @@
-# Version 4.0.3 (2018-08-01)
+# Version 4.0.3 (2018-08-06)
 
 * [chg] Only use JSR-330 injection in sequence generators.
+* [chg] Moved `OracleSequenceGenerator` and `PostgreSequenceGenerator` to `org.seedstack.jpa.identity` package and made them public. 
 
 # Version 4.0.2 (2018-07-30)
 

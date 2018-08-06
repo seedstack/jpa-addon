@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.seedstack.jpa.internal;
+package org.seedstack.jpa.identity;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import org.apache.commons.lang.StringUtils;
 import org.seedstack.business.domain.Entity;
 import org.seedstack.business.util.SequenceGenerator;
+import org.seedstack.jpa.internal.JpaErrorCode;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
 
@@ -22,7 +23,7 @@ import org.seedstack.seed.SeedException;
  * sequence name to be specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("postgreSqlSequence")
-class PostgreSequenceGenerator implements SequenceGenerator {
+public class PostgreSequenceGenerator implements SequenceGenerator {
     private static final String SEQUENCE_NAME = "identitySequenceName";
     @Inject
     private EntityManager entityManager;
