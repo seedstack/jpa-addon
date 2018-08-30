@@ -6,18 +6,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- *
+ * 
  */
+package org.seedstack.jpa.fixtures.business.domain.identity.entities;
 
+import org.seedstack.business.domain.BaseEntity;
 
-package org.seedstack.jpa.fixtures.business.domain.identity;
-
-import org.seedstack.business.domain.Create;
-import org.seedstack.business.domain.Factory;
-
-@Create
-public interface MyAggregateFactory extends Factory<MyAggregate> {
-
-    MyAggregate createMyAggregate(String name);
-
+public abstract class AbstractBook extends BaseEntity<Long> {
+    //nester class
 }
