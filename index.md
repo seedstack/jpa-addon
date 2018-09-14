@@ -18,16 +18,20 @@ your application to interface with relational databases.<!--more-->
 ## Dependencies
 
 {{< dependency g="org.seedstack.addons.jpa" a="jpa" >}}
-
-A JPA provider is also required in the classpath. We recommend the popular [Hibernate ORM](http://hibernate.org/orm/), that
-you can add with the following Maven dependency:
+{{% tabs list="Hibernate|EclipseLink" %}}
+{{% tab "Hibernate" true %}}
+Hibernate is a very popular JPA implementation. When using Hibernate, SeedStack is able to stream results from the database 
+without putting them all in memory (useful when retrieving for result sets).
 
 {{< dependency g="org.hibernate" a="hibernate-entitymanager">}}
+{{% /tab %}}
+{{% tab "EclipseLink" %}}
+Eclipse link is a also popular and is the reference JPA implementation.
 
-If you need to have the JPA API without implementation in some project modules, you can use the following dependency:
- 
-{{< dependency g="org.hibernate.javax.persistence" a="hibernate-jpa-2.1-api" v="1.0.0.Final" s="provided" >}}
- 
+{{< dependency g="org.eclipse.persistence" a="eclipselink">}}
+{{% /tab %}}
+{{% /tabs %}}
+
 ## Configuration
 
 ### JPA units
@@ -74,8 +78,8 @@ jpa:
 ```
 {{% /config %}}   
  
-To allow SeedStack to assign auto-detected JPA classes to the right unit, you must configure them with a 
-[class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}}) property:
+To allow SeedStack to associate auto-detected JPA classes to a particular JPA unit, you must configure them with a 
+[class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}}) tag:
 
 ```yaml
 classes:
@@ -90,9 +94,111 @@ classes:
 This will assign every class in the `org.myorg.myapp.domain.model` package and its sub-packages to the 
 JPA unit `unit1`.
 
-### Example
+## Usage
 
-Assuming we are using Hibernate and Hikari connection pool, the configuration below: 
+To use the Entity Manager directly, simply inject it:
+
+```java
+public class MyRepository {
+    @Inject
+    private EntityManager entityManager;
+    
+    @Transactional
+    @JpaUnit("unit1")
+    public void doSomethingWithMyJpaUnit() {
+        // do something
+    }
+}
+```
+
+{{% callout info %}}
+All JPA interactions have to be done inside a transaction. Refer to the [transaction documentation]({{< ref "docs/core/transactions.md" >}}) for details. 
+{{% /callout %}}
+
+### With the business framework
+
+With the [business framework]({{< ref "docs/business/index.md" >}}), you do your persistence interactions within 
+[Repositories]({{< ref "docs/business/repositories.md" >}}). To obtain a JPA-capable implementation of a repository, qualify
+the injection point with the {{< java "org.seedstack.jpa.Jpa" "@" >}} annotation:
+
+```java
+public class SomeClass {
+    @Inject
+    @Jpa
+    private Repository<Customer, CustomerId> customerRepository;
+    
+    public void doSomething() {
+        // do work with customerRepository
+    }
+}
+```
+
+If you need to write a JPA implementation of a custom repository interface, just extend the {{< java "org.seedstack.jpa.BaseJpaRepository" >}} 
+class and only add your custom method(s) implementation(s):
+
+```java
+public class CustomerJpaRepository extends BaseJpaRepository<Customer, CustomerId> 
+                                   implements CustomerRepository {
+    @Override
+    public Customer findCustomerByName(String name) {
+        EntityManager entityManager = getEntityManager();
+        // do work with entityManager
+    }
+}
+```
+
+## Sequence generators
+
+The JPA add-on provides several implementations of the business framework {{< java "org.seedstack.business.util.SequenceGenerator" >}}
+to enable the use of a database sequence to generate an identity. 
+
+This is done by adding the {{< java "org.seedstack.business.domain.Identity" "@" >}} annotation along with a qualifier
+corresponding to the chosen database implementation:
+
+```java
+public class MyAggregate extends BaseAggregateRoot<Long> {
+    @Identity(generator = SequenceGenerator.class)
+    @Named("postgreSqlSequence")
+    private Long id;
+}
+```
+
+Available implementations are:
+
+* **PostgreSQL**: use the `@Named("postgreSqlSequence")` qualifier.
+* **Oracle**: use the `@Named("oracleSequence")` qualifier.
+
+The database sequence name must be specified in [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}})
+as the `identitySequenceName` tag:
+
+```yaml
+classes:
+  org:
+    myorg:
+      myapp:
+        domain:
+          model:
+            myaggregate:
+              identitySequenceName: MY_SEQUENCE
+``` 
+
+{{% callout info %}}
+Refer to the [business framework identity generation documentation]({{< ref "docs/business/factories.md#identity-generation" >}}) for 
+instructions about how to actually use the chosen sequence generator when creating entities. 
+{{% /callout %}}
+
+
+## Full example
+
+### Connection pool
+
+In addition to the JPA add-on and the Hibernate dependencies, we'll add an HikariCP connection pool:
+
+{{< dependency g="com.zaxxer" a="HikariCP" >}}
+
+### Configuration
+
+Assuming we are using Hibernate and an Hikari connection pool, the configuration below: 
 
 * Defines a unit named `unit1`,
 * Using the data-source `datasource1` defined with the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}),
@@ -120,69 +226,95 @@ classes:
             jpaUnit: unit1
 ```
 
-## Usage
+### DDD Aggregate with JPA annotations
 
-To use the Entity Manager in your code, simply inject it:
+This aggregate models a `Customer` with its identity being the `CustomerId` value-object.
+
+The `CustomerId` class: 
 
 ```java
-public class MyRepository {
-    @Inject
-    private EntityManager entityManager;
-    
-    @Transactional
-    @JpaUnit("unit1")
-    public void doSomethingWithMyJpaUnit() {
-        // do something
+import javax.persistence.Embeddable;
+import org.seedstack.business.domain.BaseValueObject;
+
+@Embeddable
+public class CustomerId extends BaseValueObject {
+
+    private String value;
+
+    private CustomerId() {
+        // A default constructor is needed by JPA but can be kept private
+    }
+
+    public CustomerId(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 }
 ```
 
-{{% callout info %}}
-All JPA interactions have to be done inside a transaction. Refer to the [transaction support documentation]({{< ref "docs/core/transactions.md" >}}) for details. 
-{{% /callout %}}
-
-## Sequence generators
-
-The JPA add-on provides several implementations of the business framework {{< java "org.seedstack.business.util.SequenceGenerator" >}}
-to enable the use of a database sequence to generate an identity. 
-
-This is done by adding the {{< java "org.seedstack.business.domain.Identity" "@" >}} annotation along with a qualifier
-corresponding to the chosen database implementation:
+The `Customer` class: 
 
 ```java
-public class MyAggregate extends BaseAggregateRoot<Long> {
-    @Identity(generator = SequenceGenerator.class)
-    @Named("postgreSqlSequence")
-    private Long id;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import org.seedstack.business.domain.BaseAggregateRoot;
+
+@Entity
+public class Customer extends BaseAggregateRoot<CustomerId> {
+    @EmbeddedId
+    private CustomerId id;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String deliveryAddress;
+    private String password;
+
+    private Customer() {
+        // A default constructor is needed by JPA but can be kept private
+    }
+
+    public Customer(CustomerId customerId) {
+        this.id = customerId;
+    }
+
+    @Override
+    public CustomerId getId() {
+        return id;
+    }
 }
 ```
 
-Available implementations are:
+### Aggregate persistence through a JPA repository
 
-* **PostgreSQL**: use the `@Named("postgreSqlSequence")` qualifier.
-* **Oracle**: use the `@Named("oracleSequence")` qualifier.
+The {{< java "org.seedstack.jpa.Jpa" "@" >}} annotation is used to qualify the repository injection so we get a JPA 
+implementation of the repository:
 
-The database sequence name must be specified in [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}})
-as the `identitySequenceName` property:
+```java
+@Service
+public interface SomeService {
+    void sendEmail(CustomerId customerId, String content);
+}
+```
 
-```yaml
-classes:
-  org:
-    myorg:
-      myapp:
-        domain:
-          model:
-            myaggregate:
-              identitySequenceName: MY_SEQUENCE
-``` 
+```java
+public class SomeServiceImpl implements SomeService {
+    @Inject
+    @Jpa
+    private Repository<Customer, CustomerId> customerRepository;
+    
+    public void sendEmail(CustomerId customerId, String content) {
+        Customer customer = customerRepository.get(customerId)
+                            .orElseThrow(() -> new CustomerNotFoundException(customerId));
+        
+        // ... do the work
+    }
+}
+```
 
-{{% callout info %}}
-Refer to the [business framework identity generation documentation]({{< ref "docs/business/factories.md#identity-generation" >}}) for 
-instructions about how to actually use the chosen sequence generator when creating entities. 
-{{% /callout %}}
-
-
-## Using a persistence.xml file
+## Persistence.xml file
 
 Instead of using JPA auto-configuration, you can choose to use a standard `META-INF/persistence.xml` file instead.
 This is **NOT recommended** as your loose a significant number of features: 
@@ -193,33 +325,3 @@ have no effect and must be configured in the `persistence.xml` instead (which is
 * You still have to list every JPA unit in the configuration with a name corresponding to those in the `persistence.xml` file.
 * You can still specify provider properties in the configuration. They override properties declared in the `persistence.xml`
 file if any.
-
-### Example
-
-Configuration:
-
-```yaml
-jpa:
-  units:
-    unit1:
-      properties:
-        hibernate.dialect: org.hibernate.dialect.HSQLDialect
-```
-
-The `persistence.xml` file:
-
-```xml
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
-             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
-             version="2.1">
-    <persistence-unit name="unit1" transaction-type="RESOURCE_LOCAL">
-        <non-jta-data-source>java:comp/env/jdbc/my-datasource</non-jta-data-source>
-        <class>org.myorg.myapp.domain.model.myaggregate.MyAggregate</class>
-        <properties>
-            <property name="hibernate.hbm2ddl.auto" value="update"></property>
-        </properties>
-    </persistence-unit>
-</persistence>
-```
