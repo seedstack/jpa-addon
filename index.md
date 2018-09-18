@@ -1,5 +1,5 @@
 ---
-title: "JPA"
+title: "JPA Configuration"
 addon: "JPA"
 repo: "https://github.com/seedstack/jpa-addon"
 author: Adrien LAUER
@@ -9,7 +9,10 @@ tags:
     - transactions
 zones:
     - Addons
-noMenu: true    
+menu:
+    JPA:
+        parent: "contents"
+        weight: 10
 ---
 
 SeedStack JPA add-on supports any JPA-compliant [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) to allow 
@@ -34,17 +37,15 @@ Eclipse link is a also popular and is the reference JPA implementation.
 
 ## Configuration
 
-### JPA units
-
-By default, SeedStack is able to automatically detect the JPA classes in your project. No `persistence.xml` must be present
-in this mode. You just have to declare the JPA units:
+SeedStack is able to automatically detect the JPA classes in your project, without `persistence.xml` file. You just have 
+to declare the JPA units:
 
 {{% config p="jpa" %}}
 ```yaml
 jpa:
   # Configured JPA units with the name of the JPA unit as key
   units: 
-    unit1:
+    myUnit:
       # The name of the data-source declared in the JDBC add-on to use
       datasource: (String)
       
@@ -88,11 +89,23 @@ classes:
       myapp:
         domain:
           model:
-            jpaUnit: unit1
+            jpaUnit: myUnit
 ```
 
 This will assign every class in the `org.myorg.myapp.domain.model` package and its sub-packages to the 
-JPA unit `unit1`.
+JPA unit `myUnit`.
+
+### Persistence.xml file
+
+Instead of using JPA auto-configuration, you can choose to use a standard `META-INF/persistence.xml` file instead. In this
+case: 
+
+* Ensure that the JPA units declared in the configuration above are matching the ones specified in the `persistence.xml` file.
+* The datasource must be configured in the `persistence.xml` file and not in the configuration above. 
+* The `classes`, `mappingFiles`, `provider`, `transactionType`, `sharedCacheMode` and `validationMode` configuration options
+above have no effect and must be specified in `persistence.xml` instead.
+* You can still specify JPA provider properties in the configuration. They override properties declared in the `persistence.xml`
+file if any.
 
 ## Usage
 
@@ -104,7 +117,7 @@ public class MyRepository {
     private EntityManager entityManager;
     
     @Transactional
-    @JpaUnit("unit1")
+    @JpaUnit("myUnit")
     public void doSomethingWithMyJpaUnit() {
         // do something
     }
@@ -115,80 +128,7 @@ public class MyRepository {
 All JPA interactions have to be done inside a transaction. Refer to the [transaction documentation]({{< ref "docs/core/transactions.md" >}}) for details. 
 {{% /callout %}}
 
-### With the business framework
-
-With the [business framework]({{< ref "docs/business/index.md" >}}), you do your persistence interactions within 
-[Repositories]({{< ref "docs/business/repositories.md" >}}). To obtain a JPA-capable implementation of a repository, qualify
-the injection point with the {{< java "org.seedstack.jpa.Jpa" "@" >}} annotation:
-
-```java
-public class SomeClass {
-    @Inject
-    @Jpa
-    private Repository<Customer, CustomerId> customerRepository;
-    
-    public void doSomething() {
-        // do work with customerRepository
-    }
-}
-```
-
-If you need to write a JPA implementation of a custom repository interface, just extend the {{< java "org.seedstack.jpa.BaseJpaRepository" >}} 
-class and only add your custom method(s) implementation(s):
-
-```java
-public class CustomerJpaRepository extends BaseJpaRepository<Customer, CustomerId> 
-                                   implements CustomerRepository {
-    @Override
-    public Customer findCustomerByName(String name) {
-        EntityManager entityManager = getEntityManager();
-        // do work with entityManager
-    }
-}
-```
-
-## Sequence generators
-
-The JPA add-on provides several implementations of the business framework {{< java "org.seedstack.business.util.SequenceGenerator" >}}
-to enable the use of a database sequence to generate an identity. 
-
-This is done by adding the {{< java "org.seedstack.business.domain.Identity" "@" >}} annotation along with a qualifier
-corresponding to the chosen database implementation:
-
-```java
-public class MyAggregate extends BaseAggregateRoot<Long> {
-    @Identity(generator = SequenceGenerator.class)
-    @Named("postgreSqlSequence")
-    private Long id;
-}
-```
-
-Available implementations are:
-
-* **PostgreSQL**: use the `@Named("postgreSqlSequence")` qualifier.
-* **Oracle**: use the `@Named("oracleSequence")` qualifier.
-
-The database sequence name must be specified in [class configuration]({{< ref "docs/core/configuration.md#class-configuration" >}})
-as the `identitySequenceName` tag:
-
-```yaml
-classes:
-  org:
-    myorg:
-      myapp:
-        domain:
-          model:
-            myaggregate:
-              identitySequenceName: MY_SEQUENCE
-``` 
-
-{{% callout info %}}
-Refer to the [business framework identity generation documentation]({{< ref "docs/business/factories.md#identity-generation" >}}) for 
-instructions about how to actually use the chosen sequence generator when creating entities. 
-{{% /callout %}}
-
-
-## Full example
+## Example
 
 ### Connection pool
 
@@ -200,128 +140,29 @@ In addition to the JPA add-on and the Hibernate dependencies, we'll add an Hikar
 
 Assuming we are using Hibernate and an Hikari connection pool, the configuration below: 
 
-* Defines a unit named `unit1`,
-* Using the data-source `datasource1` defined with the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}),
-* Affects every JPA entity of packages `org.myorg.myapp.domain.model.*` to `unit1`. 
+* Defines a unit named `myUnit`,
+* Using the data-source `myDatasource` defined with the [JDBC add-on]({{< ref "addons/jdbc/index.md" >}}),
+* Affects every JPA entity of packages `org.generated.project.domain.model.*` to `myUnit`. 
 
 ```yaml
 jdbc:
   datasources:
-    datasource1:
+    myDatasource:
       provider: org.seedstack.jdbc.internal.datasource.HikariDataSourceProvider
       url: jdbc:hsqldb:mem:testdb1
 jpa:
   units:
-    unit1:
-      datasource: datasource1
+    myUnit:
+      datasource: myDatasource
       properties:
         hibernate.dialect: org.hibernate.dialect.HSQLDialect
         hibernate.hbm2ddl.auto: update
 classes:
   org:
-    myorg:
-      myapp:
+    generated:
+      project:
         domain:
           model:
-            jpaUnit: unit1
+            jpaUnit: myUnit
 ```
 
-### DDD Aggregate with JPA annotations
-
-This aggregate models a `Customer` with its identity being the `CustomerId` value-object.
-
-The `CustomerId` class: 
-
-```java
-import javax.persistence.Embeddable;
-import org.seedstack.business.domain.BaseValueObject;
-
-@Embeddable
-public class CustomerId extends BaseValueObject {
-
-    private String value;
-
-    private CustomerId() {
-        // A default constructor is needed by JPA but can be kept private
-    }
-
-    public CustomerId(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-}
-```
-
-The `Customer` class: 
-
-```java
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import org.seedstack.business.domain.BaseAggregateRoot;
-
-@Entity
-public class Customer extends BaseAggregateRoot<CustomerId> {
-    @EmbeddedId
-    private CustomerId id;
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String deliveryAddress;
-    private String password;
-
-    private Customer() {
-        // A default constructor is needed by JPA but can be kept private
-    }
-
-    public Customer(CustomerId customerId) {
-        this.id = customerId;
-    }
-
-    @Override
-    public CustomerId getId() {
-        return id;
-    }
-}
-```
-
-### Aggregate persistence through a JPA repository
-
-The {{< java "org.seedstack.jpa.Jpa" "@" >}} annotation is used to qualify the repository injection so we get a JPA 
-implementation of the repository:
-
-```java
-@Service
-public interface SomeService {
-    void sendEmail(CustomerId customerId, String content);
-}
-```
-
-```java
-public class SomeServiceImpl implements SomeService {
-    @Inject
-    @Jpa
-    private Repository<Customer, CustomerId> customerRepository;
-    
-    public void sendEmail(CustomerId customerId, String content) {
-        Customer customer = customerRepository.get(customerId)
-                            .orElseThrow(() -> new CustomerNotFoundException(customerId));
-        
-        // ... do the work
-    }
-}
-```
-
-## Persistence.xml file
-
-Instead of using JPA auto-configuration, you can choose to use a standard `META-INF/persistence.xml` file instead.
-This is **NOT recommended** as your loose a significant number of features: 
- 
-* In this mode, you don't specify a data-source from the JDBC add-on but configure it in the `persistence.xml` file. 
-* The `classes`, `mappingFiles`, `provider`, `transactionType`, `sharedCacheMode` and `validationMode` configuration options
-have no effect and must be configured in the `persistence.xml` instead (which is mostly static).
-* You still have to list every JPA unit in the configuration with a name corresponding to those in the `persistence.xml` file.
-* You can still specify provider properties in the configuration. They override properties declared in the `persistence.xml`
-file if any.
