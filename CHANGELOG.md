@@ -1,6 +1,7 @@
 # Version 4.0.4 (2018-12-04)
 
 * [new] If only one JPA unit is configured, automatically make all JPA entities belong to it. 
+* [chg] Built and tested with OpenJDK 11 (minimum Java version still being 8).
 
 # Version 4.0.3 (2018-08-06)
 
