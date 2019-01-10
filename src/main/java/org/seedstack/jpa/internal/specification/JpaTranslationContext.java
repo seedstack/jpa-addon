@@ -14,7 +14,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 public class JpaTranslationContext<T> {
-
     private final CriteriaBuilder criteriaBuilder;
     private final Root<T> root;
     private Expression<?> expression;
@@ -22,6 +21,12 @@ public class JpaTranslationContext<T> {
     public JpaTranslationContext(CriteriaBuilder criteriaBuilder, Root<T> root) {
         this.criteriaBuilder = criteriaBuilder;
         this.root = root;
+    }
+
+    public JpaTranslationContext(JpaTranslationContext<T> source) {
+        this.criteriaBuilder = source.criteriaBuilder;
+        this.root = source.root;
+        this.expression = source.expression;
     }
 
     public CriteriaBuilder getCriteriaBuilder() {

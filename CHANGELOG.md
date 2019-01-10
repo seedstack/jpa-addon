@@ -1,3 +1,7 @@
+# Version 4.0.5 (2019-01-10)
+
+* [fix] During translation of composite specifications (or, and), set the JPA expression for each member (avoid "No expression has been set" exception).  
+
 # Version 4.0.4 (2018-12-04)
 
 * [new] If only one JPA unit is configured, automatically make all JPA entities belong to it. 

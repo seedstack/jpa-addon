@@ -90,7 +90,7 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .all()
                 .build())
-        ).containsExactly(product1, product2, product3, product4, product5, product6);
+        ).containsExactlyInAnyOrder(product1, product2, product3, product4, product5, product6);
     }
 
     @Test
@@ -106,11 +106,11 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.ofAggregate(Product.class)
                 .identity().is(3L)
                 .build())
-        ).containsExactly(product3);
+        ).containsExactlyInAnyOrder(product3);
         assertThat(repository.get(specificationBuilder.ofAggregate(Product.class)
                 .identity().isNot(3L)
                 .build())
-        ).containsExactly(product1, product2, product4, product5, product6);
+        ).containsExactlyInAnyOrder(product1, product2, product4, product5, product6);
     }
 
     @Test
@@ -118,7 +118,15 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("id").greaterThan(3)
                 .build())
-        ).containsExactly(product4, product5, product6);
+        ).containsExactlyInAnyOrder(product4, product5, product6);
+    }
+
+    @Test
+    public void testGreaterThanOrEqualTo() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("id").greaterThanOrEqualTo(3)
+                .build())
+        ).containsExactlyInAnyOrder(product3, product4, product5, product6);
     }
 
     @Test
@@ -126,7 +134,15 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("id").lessThan(3)
                 .build())
-        ).containsExactly(product1, product2);
+        ).containsExactlyInAnyOrder(product1, product2);
+    }
+
+    @Test
+    public void testLessThanOrEqualTo() throws Exception {
+        assertThat(repository.get(specificationBuilder.of(Product.class)
+                .property("id").lessThanOrEqualTo(3)
+                .build())
+        ).containsExactlyInAnyOrder(product1, product2, product3);
     }
 
     @Test
@@ -134,11 +150,11 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("price").equalTo(2d)
                 .build())
-        ).containsExactly(product1, product2, product3);
+        ).containsExactlyInAnyOrder(product1, product2, product3);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("price").equalTo(5d)
                 .build())
-        ).containsExactly(product6);
+        ).containsExactlyInAnyOrder(product6);
     }
 
     @Test
@@ -146,7 +162,7 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").equalTo("picture1")
                 .build())
-        ).containsExactly(product1);
+        ).containsExactlyInAnyOrder(product1);
     }
 
     @Test
@@ -158,15 +174,15 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").equalTo("picture4").trimmingLead()
                 .build())
-        ).containsExactly(product4);
+        ).containsExactlyInAnyOrder(product4);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").equalTo("picture4").trimmingTail()
                 .build())
-        ).containsExactly(product5);
+        ).containsExactlyInAnyOrder(product5);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").equalTo("picture4").trimming()
                 .build())
-        ).containsExactly(product4, product5);
+        ).containsExactlyInAnyOrder(product4, product5);
     }
 
     @Test
@@ -178,7 +194,7 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").equalTo("PICTurE3").ignoringCase()
                 .build())
-        ).containsExactly(product3);
+        ).containsExactlyInAnyOrder(product3);
     }
 
     @Test
@@ -186,27 +202,27 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("picture?")
                 .build())
-        ).containsExactly(product1, product2, product3, product6);
+        ).containsExactlyInAnyOrder(product1, product2, product3, product6);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("picture*")
                 .build())
-        ).containsExactly(product1, product2, product3, product5, product6);
+        ).containsExactlyInAnyOrder(product1, product2, product3, product5, product6);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("pict?re5")
                 .build())
-        ).containsExactly(product6);
+        ).containsExactlyInAnyOrder(product6);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("pic*re5")
                 .build())
-        ).containsExactly(product6);
+        ).containsExactlyInAnyOrder(product6);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("?ict?re5")
                 .build())
-        ).containsExactly(product6);
+        ).containsExactlyInAnyOrder(product6);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("*cture5")
                 .build())
-        ).containsExactly(product6);
+        ).containsExactlyInAnyOrder(product6);
     }
 
     @Test
@@ -218,15 +234,15 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("pict?re4").trimmingLead()
                 .build())
-        ).containsExactly(product4);
+        ).containsExactlyInAnyOrder(product4);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("pict?re4").trimmingTail()
                 .build())
-        ).containsExactly(product5);
+        ).containsExactlyInAnyOrder(product5);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("pict?re4").trimming()
                 .build())
-        ).containsExactly(product4, product5);
+        ).containsExactlyInAnyOrder(product4, product5);
     }
 
     @Test
@@ -238,7 +254,7 @@ public class SpecificationIT {
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").matching("PI*urE3").ignoringCase()
                 .build())
-        ).containsExactly(product3);
+        ).containsExactlyInAnyOrder(product3);
     }
 
     @Test
@@ -247,7 +263,7 @@ public class SpecificationIT {
                 .property("pictures.url.url").not().equalTo("picture2").and()
                 .property("pictures.url.url").not().equalTo("picture2/2")
                 .build())
-        ).containsExactly(product1, product3, product4, product5, product6);
+        ).containsExactlyInAnyOrder(product1, product3, product4, product5, product6);
     }
 
     @Test
@@ -259,7 +275,7 @@ public class SpecificationIT {
                 .or()
                 .property("designation").equalTo("product4")
                 .build())
-        ).containsExactly(product2, product3, product4);
+        ).containsExactlyInAnyOrder(product2, product3, product4);
     }
 
     @Test
@@ -271,7 +287,7 @@ public class SpecificationIT {
                 .and()
                 .property("price").equalTo(2d)
                 .build())
-        ).containsExactly(product2);
+        ).containsExactlyInAnyOrder(product2);
         assertThat(repository.get(specificationBuilder.of(Product.class)
                 .property("pictures.url.url").equalTo("picture3")
                 .and()
