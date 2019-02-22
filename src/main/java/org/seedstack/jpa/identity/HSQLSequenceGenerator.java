@@ -17,7 +17,7 @@ import org.seedstack.business.util.SequenceGenerator;
  * specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("hsqlSequence")
-public class HSQLSequenceGenerator extends BaseSequenceGenerator implements SequenceGenerator {
+public class HSQLSequenceGenerator extends BaseBufferedSequenceGenerator  implements SequenceGenerator {
 
     static final String HSQL_SEQUENCE_QUERY = "VALUES NEXT VALUE FOR %1$s";
 

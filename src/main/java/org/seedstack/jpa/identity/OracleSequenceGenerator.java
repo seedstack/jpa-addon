@@ -17,7 +17,7 @@ import org.seedstack.business.util.SequenceGenerator;
  * be specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("oracleSequence")
-public class OracleSequenceGenerator extends BaseSequenceGenerator
+public class OracleSequenceGenerator extends BaseBufferedSequenceGenerator
         implements SequenceGenerator {
 
     private static final String ORACLE_SEQUENCE_QUERY = "SELECT %1$s.NEXTVAL FROM DUAL";

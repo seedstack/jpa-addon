@@ -17,7 +17,7 @@ import org.seedstack.business.util.SequenceGenerator;
  * name to be specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("postgreSqlSequence")
-public class PostgreSequenceGenerator extends BaseSequenceGenerator
+public class PostgreSequenceGenerator extends BaseBufferedSequenceGenerator
         implements SequenceGenerator {
 
     private static final String POSTGRE_SEQUENCE_QUERY = "SELECT nextval('%1$s')";
