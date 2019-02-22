@@ -22,7 +22,7 @@ class JpaOrConverter implements
             SpecificationTranslator<JpaTranslationContext<?>, Predicate> translator) {
         return context.getCriteriaBuilder().or(
                 Arrays.stream(specification.getSpecifications())
-                        .map(spec -> translator.translate(spec, context))
+                        .map(spec -> translator.translate(spec, new JpaTranslationContext<>(context)))
                         .toArray(Predicate[]::new)
         );
     }

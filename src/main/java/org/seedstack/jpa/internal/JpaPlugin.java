@@ -128,7 +128,8 @@ public class JpaPlugin extends AbstractSeedPlugin {
                 emf = entityManagerFactoryFactory.createEntityManagerFactory(
                         persistenceUnitName,
                         persistenceUnitConfig,
-                        scannedClasses);
+                        scannedClasses,
+                        jpaConfig.isAllClassesInUnit() && jpaConfig.getUnits().size() == 1);
             } else {
                 emf = entityManagerFactoryFactory.createEntityManagerFactory(
                         persistenceUnitName,

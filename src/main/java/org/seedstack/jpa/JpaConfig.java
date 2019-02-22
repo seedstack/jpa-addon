@@ -22,9 +22,9 @@ import org.seedstack.coffig.Config;
 
 @Config("jpa")
 public class JpaConfig {
-
     private Map<String, PersistenceUnitConfig> units = new HashMap<>();
     private String defaultUnit;
+    private boolean allClassesInUnit = true;
 
     public Map<String, PersistenceUnitConfig> getUnits() {
         return Collections.unmodifiableMap(units);
@@ -41,6 +41,15 @@ public class JpaConfig {
 
     public JpaConfig setDefaultUnit(String defaultUnit) {
         this.defaultUnit = defaultUnit;
+        return this;
+    }
+
+    public boolean isAllClassesInUnit() {
+        return allClassesInUnit;
+    }
+
+    public JpaConfig setAllClassesInUnit(boolean allClassesInUnit) {
+        this.allClassesInUnit = allClassesInUnit;
         return this;
     }
 

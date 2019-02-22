@@ -14,12 +14,12 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.3</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
     <artifactId>jpa</artifactId>
-    <version>4.0.3-SNAPSHOT</version>
+    <version>4.0.5-SNAPSHOT</version>
 
     <properties>
         <seed.version>3.7.0</seed.version>
@@ -31,7 +31,7 @@
         <compatibility.skip>true</compatibility.skip>
 
         <bintray.package>jpa-addon</bintray.package>
-        <hibernate.version>5.3.4.Final</hibernate.version>
+        <hibernate.version>5.3.7.Final</hibernate.version>
     </properties>
 
     <build>
@@ -65,6 +65,7 @@
                             <licenseMerge>Apache 2|Apache 2.0</licenseMerge>
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
                             <licenseMerge>BSD|BSD License</licenseMerge>
+                            <licenseMerge>BSD|BSD 3-clause New License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
                             <licenseMerge>CDDL|CDDL/GPLv2+CE</licenseMerge>
                             <licenseMerge>CDDL|GNU General Public License, Version 2 with the Classpath Exception</licenseMerge>
@@ -82,6 +83,7 @@
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|GNU General Public License, version 2 (GPL2), with the classpath exception</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|Eclipse Distribution License v. 1.0</licenseMerge>
+                            <licenseMerge>IGNORED_LICENSE|Unknown license</licenseMerge>
                         </licenseMerges>
                     </configuration>
                 </plugin>
@@ -121,6 +123,10 @@
                 <exclusion>
                     <groupId>com.fasterxml</groupId>
                     <artifactId>classmate</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.bytebuddy</groupId>
+                    <artifactId>byte-buddy</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -167,6 +173,12 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.bytebuddy</groupId>
+                    <artifactId>byte-buddy</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hsqldb</groupId>

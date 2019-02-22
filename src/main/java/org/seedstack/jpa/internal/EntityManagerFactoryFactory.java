@@ -43,7 +43,8 @@ class EntityManagerFactoryFactory {
     }
 
     EntityManagerFactory createEntityManagerFactory(String persistenceUnitName,
-            JpaConfig.PersistenceUnitConfig persistenceUnitConfig, Collection<Class<?>> scannedClasses) {
+            JpaConfig.PersistenceUnitConfig persistenceUnitConfig, Collection<Class<?>> scannedClasses,
+            boolean allClassesInUnit) {
         InternalPersistenceUnitInfo unitInfo = new InternalPersistenceUnitInfo(persistenceUnitName);
 
         String dataSourceName = persistenceUnitConfig.getDatasource();
@@ -55,7 +56,7 @@ class EntityManagerFactoryFactory {
 
         Set<String> classNames = Stream
                 .concat(scannedClasses.stream(), persistenceUnitConfig.getClasses().stream())
-                .filter(scannedClass -> unitInfo.getPersistenceUnitName()
+                .filter(scannedClass -> allClassesInUnit || unitInfo.getPersistenceUnitName()
                         .equals(application.getConfiguration(scannedClass).get(JPA_UNIT)))
                 .map(Class::getName)
                 .collect(Collectors.toSet());
