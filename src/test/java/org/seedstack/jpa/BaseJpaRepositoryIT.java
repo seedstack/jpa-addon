@@ -6,7 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 package org.seedstack.jpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,15 +15,18 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.business.domain.AggregateExistsException;
 import org.seedstack.business.domain.AggregateNotFoundException;
+import org.seedstack.business.domain.Repository;
 import org.seedstack.business.domain.SortOption;
 import org.seedstack.business.specification.Specification;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaAggregateRoot;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseJpaFactory;
 import org.seedstack.jpa.fixtures.business.domain.base.SampleBaseRepository;
+import org.seedstack.jpa.fixtures.business.infrastructure.jpa.repository.SampleBaseJpaRepository;
 import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
@@ -33,9 +35,11 @@ import org.seedstack.seed.transaction.Transactional;
 @JpaUnit("business")
 @RunWith(SeedITRunner.class)
 public class BaseJpaRepositoryIT {
-
     @Inject
     private SampleBaseRepository sampleBaseRepository;
+    @Inject
+    @Jpa
+    private Repository<SampleBaseJpaAggregateRoot, String> sampleBaseRepository2;
     @Inject
     private SampleBaseJpaFactory sampleBaseJpaFactory;
 
@@ -47,6 +51,14 @@ public class BaseJpaRepositoryIT {
     @After
     public void tearDown() throws Exception {
         sampleBaseRepository.clear();
+    }
+
+    @Test
+    @Ignore("not working yet") // FIXME
+    public void customImplIsAlwaysInjected() {
+        assertThat(sampleBaseRepository).isInstanceOf(SampleBaseJpaRepository.class);
+        assertThat(sampleBaseRepository2).isInstanceOf(SampleBaseJpaRepository.class);
+        assertThat(sampleBaseRepository2).isInstanceOf(sampleBaseRepository.getClass());
     }
 
     @Test

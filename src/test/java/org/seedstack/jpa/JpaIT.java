@@ -14,6 +14,7 @@ import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.RollbackException;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -155,5 +156,22 @@ public class JpaIT {
         Assertions.assertThat(((Unit3ExceptionHandler) jpaExceptionHandler).hasHandled()).isFalse();
         item3Repository.saveWithException();
         assertThat(((Unit3ExceptionHandler) jpaExceptionHandler).hasHandled()).isTrue();
+    }
+
+    @Test(expected = RollbackException.class)
+    @Transactional(readOnly = true)
+    @JpaUnit("unit1")
+    public void readOnlyIsPreventingWrites() {
+        Item1 item1 = new Item1();
+        item1.setId(1L);
+        item1.setName("item1Name");
+        item1Repository.save(item1);
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    @JpaUnit("unit1")
+    public void readOnlyIsAllowingReads() {
+        item1Repository.load(1L);
     }
 }

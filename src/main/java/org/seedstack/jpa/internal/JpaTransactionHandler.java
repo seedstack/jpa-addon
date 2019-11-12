@@ -11,13 +11,18 @@ package org.seedstack.jpa.internal;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import org.hibernate.Session;
 import org.seedstack.seed.transaction.spi.TransactionHandler;
 import org.seedstack.seed.transaction.spi.TransactionMetadata;
+import org.seedstack.shed.reflect.Classes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class JpaTransactionHandler implements TransactionHandler<EntityTransaction> {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(JpaTransactionHandler.class);
     private final EntityManagerLink entityManagerLink;
     private final EntityManagerFactory entityManagerFactory;
+    private final boolean isHibernate = Classes.optional("org.hibernate.Session").isPresent();
 
     JpaTransactionHandler(EntityManagerLink entityManagerLink,
             EntityManagerFactory entityManagerFactory) {
@@ -28,6 +33,15 @@ class JpaTransactionHandler implements TransactionHandler<EntityTransaction> {
     @Override
     public void doInitialize(TransactionMetadata transactionMetadata) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        if (transactionMetadata.isReadOnly()) {
+            if (isHibernate) {
+                Session session = entityManager.unwrap(Session.class);
+                session.setDefaultReadOnly(true);
+                session.doWork(connection -> connection.setReadOnly(true));
+            } else {
+                LOGGER.warn("Unsupported read-only option with current JPA provider");
+            }
+        }
         this.entityManagerLink.push(entityManager);
     }
 

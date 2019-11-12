@@ -1,3 +1,7 @@
+# Version 4.1.0 (2019-11-30)
+
+* [new] Add support for read-only transactions
+
 # Version 4.0.5 (2019-01-10)
 
 * [fix] During translation of composite specifications (or, and), set the JPA expression for each member (avoid "No expression has been set" exception).  
