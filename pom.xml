@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.seedstack.poms</groupId>
         <artifactId>parent-internal</artifactId>
-        <version>3.4.7-SNAPSHOT</version>
+        <version>3.4.8</version>
     </parent>
 
     <groupId>org.seedstack.addons.jpa</groupId>
@@ -22,8 +22,8 @@
     <version>4.1.0-SNAPSHOT</version>
 
     <properties>
-        <seed.version>3.7.0</seed.version>
-        <business.version>4.2.1</business.version>
+        <seed.version>3.9.1</seed.version>
+        <business.version>4.3.0</business.version>
         <jdbc.version>3.0.2</jdbc.version>
         <flyway.version>1.0.0</flyway.version>
         <powermock.version>1.6.3</powermock.version>
@@ -31,7 +31,7 @@
         <compatibility.skip>true</compatibility.skip>
 
         <bintray.package>jpa-addon</bintray.package>
-        <hibernate.version>5.3.7.Final</hibernate.version>
+        <hibernate.version>5.4.10.Final</hibernate.version>
     </properties>
 
     <build>
@@ -70,6 +70,9 @@
                             <licenseMerge>CDDL|CDDL/GPLv2+CE</licenseMerge>
                             <licenseMerge>CDDL|GNU General Public License, Version 2 with the Classpath Exception</licenseMerge>
                             <licenseMerge>CDDL|Common Development and Distribution License</licenseMerge>
+                            <licenseMerge>CDDL|CDDL 1.1</licenseMerge>
+                            <licenseMerge>CDDL|Dual license consisting of the CDDL v1.1 and GPL v2</licenseMerge>
+                            <licenseMerge>CDDL|CDDL+GPL License</licenseMerge>
                             <licenseMerge>EPL 1.0|Eclipse Public License (EPL), Version 1.0</licenseMerge>
                             <licenseMerge>EPL 1.0|Eclipse Public License v1.0</licenseMerge>
                             <licenseMerge>LGPL 2.1|GNU Library General Public License v2.1 or later</licenseMerge>
@@ -83,6 +86,7 @@
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|GNU General Public License, version 2 (GPL2), with the classpath exception</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|Eclipse Distribution License v. 1.0</licenseMerge>
+                            <licenseMerge>IGNORED_LICENSE|GPL2 w/ CPE</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|Unknown license</licenseMerge>
                         </licenseMerges>
                     </configuration>
@@ -119,16 +123,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
             <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml</groupId>
-                    <artifactId>classmate</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.bytebuddy</groupId>
-                    <artifactId>byte-buddy</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -173,12 +167,6 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.bytebuddy</groupId>
-                    <artifactId>byte-buddy</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hsqldb</groupId>
