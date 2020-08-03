@@ -8,26 +8,21 @@
 
 package org.seedstack.jpa;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.RollbackException;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.jpa.fixtures.simple.Item1;
-import org.seedstack.jpa.fixtures.simple.Item1Repository;
-import org.seedstack.jpa.fixtures.simple.Item2;
-import org.seedstack.jpa.fixtures.simple.Item2Repository;
-import org.seedstack.jpa.fixtures.simple.Item3Repository;
-import org.seedstack.jpa.fixtures.simple.Unit3ExceptionHandler;
+import org.seedstack.jpa.fixtures.simple.*;
 import org.seedstack.seed.testing.junit4.SeedITRunner;
 import org.seedstack.seed.transaction.Propagation;
 import org.seedstack.seed.transaction.Transactional;
 
-@Transactional
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.RollbackException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+
 @RunWith(SeedITRunner.class)
 public class JpaIT {
     @Inject
@@ -37,10 +32,13 @@ public class JpaIT {
     @Inject
     private Item3Repository item3Repository;
     @Inject
+    private Item5Repository item5Repository;
+    @Inject
     @Named("unit3")
     private JpaExceptionHandler jpaExceptionHandler;
 
     @Test
+    @Transactional
     @JpaUnit("unit1")
     public void basicJpa() throws Exception {
         Item1 item1 = new Item1();
@@ -139,6 +137,7 @@ public class JpaIT {
     }
 
     @Test
+    @Transactional
     @JpaUnit
     public void defaultUnit() throws Exception {
         Item1 item1 = new Item1();
@@ -172,5 +171,31 @@ public class JpaIT {
     @JpaUnit("unit1")
     public void readOnlyIsAllowingReads() {
         item1Repository.load(1L);
+    }
+
+    @Test
+    public void entityAccessedFromTwoUnits() {
+        accessItem5ThroughUnit1();
+        accessItem5ThroughUnit2();
+    }
+
+    @Transactional
+    @JpaUnit("unit1")
+    protected void accessItem5ThroughUnit1() {
+        Item5 item5 = new Item5();
+        item5.setId(1L);
+        item5.setName("item5Name");
+        item5Repository.save(item5);
+        assertThat(item5.getId()).isEqualTo(1L);
+    }
+
+    @Transactional
+    @JpaUnit("unit2")
+    protected void accessItem5ThroughUnit2() {
+        Item5 item5 = new Item5();
+        item5.setId(2L);
+        item5.setName("item5Name");
+        item5Repository.save(item5);
+        assertThat(item5.getId()).isEqualTo(2L);
     }
 }

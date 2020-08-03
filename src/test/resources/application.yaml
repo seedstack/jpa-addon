@@ -70,6 +70,8 @@ classes:
               jpaUnit: unit3
             Item4:
               jpaUnit: unit4
+            Item5:
+              jpaUnit: unit1, unit2
           business:
             jpaUnit: business
             domain:

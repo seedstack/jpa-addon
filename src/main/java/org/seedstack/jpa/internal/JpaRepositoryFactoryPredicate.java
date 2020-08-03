@@ -7,24 +7,24 @@
  */
 package org.seedstack.jpa.internal;
 
-import java.lang.reflect.Modifier;
-import org.kametic.specifications.AbstractSpecification;
 import org.seedstack.jpa.spi.JpaRepositoryFactory;
 import org.seedstack.shed.reflect.ClassPredicates;
+
+import java.lang.reflect.Modifier;
+import java.util.function.Predicate;
 
 /**
  * Matches JPA repository factories.
  */
-class JpaRepositoryFactorySpecification extends AbstractSpecification<Class<?>> {
+class JpaRepositoryFactoryPredicate implements Predicate<Class<?>> {
+    static final JpaRepositoryFactoryPredicate INSTANCE = new JpaRepositoryFactoryPredicate();
 
-    static final JpaRepositoryFactorySpecification INSTANCE = new JpaRepositoryFactorySpecification();
-
-    private JpaRepositoryFactorySpecification() {
+    private JpaRepositoryFactoryPredicate() {
         // no instantiation allowed
     }
 
     @Override
-    public boolean isSatisfiedBy(Class<?> candidate) {
+    public boolean test(Class<?> candidate) {
         return ClassPredicates.classIsAssignableFrom(JpaRepositoryFactory.class)
                 .and(ClassPredicates.classModifierIs(Modifier.ABSTRACT)
                         .or(ClassPredicates.classIsInterface())).negate()

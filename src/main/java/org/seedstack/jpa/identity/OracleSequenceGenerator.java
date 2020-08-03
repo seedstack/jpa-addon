@@ -7,15 +7,16 @@
  */
 package org.seedstack.jpa.identity;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import org.apache.commons.lang.StringUtils;
+import com.google.common.base.Strings;
 import org.seedstack.business.domain.Entity;
 import org.seedstack.business.util.SequenceGenerator;
 import org.seedstack.jpa.internal.JpaErrorCode;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 /**
  * Uses an Oracle sequence for identity management. This handler needs the Oracle
@@ -32,7 +33,7 @@ public class OracleSequenceGenerator implements SequenceGenerator {
     @Override
     public <E extends Entity<Long>> Long generate(Class<E> entityClass) {
         String sequence = application.getConfiguration(entityClass).get(SEQUENCE_NAME);
-        if (StringUtils.isBlank(sequence)) {
+        if (Strings.isNullOrEmpty(sequence)) {
             throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)
                     .put("entityClass", entityClass);
         }

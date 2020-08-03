@@ -1,3 +1,7 @@
+# Version 4.1.1 (2020-08-05)
+
+* [new] Support assigning JPA classes to multiple units using comma-separated class configuration (ex: `jpaUnit: unit1, unit2`).
+
 # Version 4.1.0 (2019-11-30)
 
 * [new] Add support for read-only transactions

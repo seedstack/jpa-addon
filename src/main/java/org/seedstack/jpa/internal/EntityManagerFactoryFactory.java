@@ -7,23 +7,20 @@
  */
 package org.seedstack.jpa.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.seedstack.jdbc.spi.JdbcProvider;
+import org.seedstack.jpa.JpaConfig;
+import org.seedstack.seed.Application;
+import org.seedstack.seed.SeedException;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceProviderResolverHolder;
 import javax.sql.DataSource;
-import org.seedstack.jdbc.spi.JdbcProvider;
-import org.seedstack.jpa.JpaConfig;
-import org.seedstack.seed.Application;
-import org.seedstack.seed.SeedException;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class EntityManagerFactoryFactory {
     private static final String JPA_UNIT = "jpaUnit";
@@ -36,14 +33,14 @@ class EntityManagerFactoryFactory {
     }
 
     EntityManagerFactory createEntityManagerFactory(String persistenceUnitName,
-            JpaConfig.PersistenceUnitConfig persistenceUnitConfig) {
+                                                    JpaConfig.PersistenceUnitConfig persistenceUnitConfig) {
         return Persistence
                 .createEntityManagerFactory(persistenceUnitName, persistenceUnitConfig.getProperties());
     }
 
     EntityManagerFactory createEntityManagerFactory(String persistenceUnitName,
-            JpaConfig.PersistenceUnitConfig persistenceUnitConfig, Collection<Class<?>> scannedClasses,
-            boolean allClassesInUnit) {
+                                                    JpaConfig.PersistenceUnitConfig persistenceUnitConfig, Collection<Class<?>> scannedClasses,
+                                                    boolean allClassesInUnit) {
         InternalPersistenceUnitInfo unitInfo = new InternalPersistenceUnitInfo(persistenceUnitName);
 
         String dataSourceName = persistenceUnitConfig.getDatasource();
@@ -55,8 +52,7 @@ class EntityManagerFactoryFactory {
 
         Set<String> classNames = Stream
                 .concat(scannedClasses.stream(), persistenceUnitConfig.getClasses().stream())
-                .filter(scannedClass -> allClassesInUnit || unitInfo.getPersistenceUnitName()
-                        .equals(application.getConfiguration(scannedClass).get(JPA_UNIT)))
+                .filter(scannedClass -> allClassesInUnit || belongToJpaUnit(unitInfo, scannedClass))
                 .map(Class::getName)
                 .collect(Collectors.toSet());
         unitInfo.setManagedClassNames(new ArrayList<>(classNames));
@@ -90,6 +86,18 @@ class EntityManagerFactoryFactory {
         }
 
         return createEntityManagerFactory(unitInfo);
+    }
+
+    private boolean belongToJpaUnit(InternalPersistenceUnitInfo unitInfo, Class<?> scannedClass) {
+        String[] jpaUnits = application.getConfiguration(scannedClass).getArray(JPA_UNIT);
+        if (jpaUnits != null) {
+            for (String jpaUnit : jpaUnits) {
+                if (unitInfo.getPersistenceUnitName().equals(jpaUnit)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private EntityManagerFactory createEntityManagerFactory(InternalPersistenceUnitInfo info) {
