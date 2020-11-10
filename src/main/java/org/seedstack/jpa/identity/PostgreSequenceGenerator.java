@@ -7,42 +7,31 @@
  */
 package org.seedstack.jpa.identity;
 
-import com.google.common.base.Strings;
-import org.seedstack.business.domain.Entity;
+import javax.inject.Named;
+
 import org.seedstack.business.util.SequenceGenerator;
-import org.seedstack.jpa.internal.JpaErrorCode;
-import org.seedstack.seed.Application;
-import org.seedstack.seed.SeedException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 /**
- * Uses a PostgreSQL sequence for identity management. This handler needs the PostgreSQL
- * sequence name to be specified in class configuration as the 'identitySequenceName' property.
+ * Uses a PostgreSQL sequence for identity management. This handler needs the PostgreSQL sequence
+ * name to be specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("postgreSqlSequence")
-public class PostgreSequenceGenerator implements SequenceGenerator {
-    private static final String SEQUENCE_NAME = "identitySequenceName";
-    @Inject
-    private EntityManager entityManager;
-    @Inject
-    private Application application;
+public class PostgreSequenceGenerator extends BaseBufferedSequenceGenerator
+        implements SequenceGenerator {
+
+    private static final String POSTGRE_SEQUENCE_QUERY = "SELECT nextval('%1$s')";
+
+    public PostgreSequenceGenerator() {
+        super(POSTGRE_SEQUENCE_QUERY);
+    }
 
     @Override
-    public <E extends Entity<Long>> Long generate(Class<E> entityClass) {
-        String sequence = application.getConfiguration(entityClass).get(SEQUENCE_NAME);
-        if (Strings.isNullOrEmpty(sequence)) {
-            throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)
-                    .put("entityClass", entityClass);
-        }
-
-        if (entityManager == null) {
-            throw SeedException.createNew(JpaErrorCode.MISSING_ENTITY_MANAGER);
-        }
-
-        return ((Number) entityManager.createNativeQuery(String.format("SELECT nextval('%s')", sequence))
-                .getSingleResult()).longValue();
+    protected void ensureSequenceExistence(String sequenceName) {
+        // Not Needed
     }
+
 }
