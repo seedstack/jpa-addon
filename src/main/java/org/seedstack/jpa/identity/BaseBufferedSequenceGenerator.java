@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
+ * Copyright © 2013-2020, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import org.apache.commons.lang.StringUtils;
 import org.seedstack.business.domain.Entity;
 import org.seedstack.business.util.SequenceGenerator;
 import org.seedstack.jpa.internal.JpaErrorCode;
@@ -23,8 +22,7 @@ import org.seedstack.seed.SeedException;
 
 import com.google.common.base.Strings;
 
-public abstract class BaseBufferedSequenceGenerator // extends BaseSequenceGenerator
-        implements SequenceGenerator {
+public abstract class BaseBufferedSequenceGenerator implements SequenceGenerator {
 
     private static final String ALLOCATION_SIZE = "allocationSize";
     private static final String SANITIZING_EXPRESSION = "^[A-Za-z0-9_-]*$";
@@ -51,7 +49,7 @@ public abstract class BaseBufferedSequenceGenerator // extends BaseSequenceGener
 
     @Override
     public <E extends Entity<Long>> Long generate(Class<E> entityClass) {
-        if (StringUtils.isEmpty(this.setSequenceSQL)) {
+        if (Strings.isNullOrEmpty(this.setSequenceSQL)) {
             // If sequence is not set, ignore allocation retrieval
             sequenceMap.putIfAbsent(entityClass.getName(), new SequenceBufferHolder(1L));
         } else {
@@ -84,7 +82,7 @@ public abstract class BaseBufferedSequenceGenerator // extends BaseSequenceGener
 
     protected <E extends Entity<Long>> String getSequence(Class<E> entityClass) {
         String sequence = application.getConfiguration(entityClass).get(SEQUENCE_NAME);
-        if (StringUtils.isBlank(sequence)) {
+        if (Strings.isNullOrEmpty(sequence)) {
             throw SeedException.createNew(JpaErrorCode.NO_SEQUENCE_NAME_FOUND_FOR_ENTITY)
                     .put("entityClass", entityClass);
         }
@@ -107,7 +105,7 @@ public abstract class BaseBufferedSequenceGenerator // extends BaseSequenceGener
     }
 
     protected final void validateSequence(String sequence) {
-        if (StringUtils.isEmpty(sequence) || !sequence.matches(SANITIZING_EXPRESSION)) {
+        if (Strings.isNullOrEmpty(sequence) || !sequence.matches(SANITIZING_EXPRESSION)) {
             throw new RuntimeException("Injection attempt detected");
         }
         ensureSequenceExistence(sequence);
