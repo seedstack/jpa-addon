@@ -9,19 +9,12 @@ package org.seedstack.jpa.identity;
 
 import javax.inject.Named;
 
-import org.seedstack.business.util.SequenceGenerator;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-
 /**
  * Uses an Oracle sequence for identity management. This handler needs the Oracle sequence name to
  * be specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("oracleSequence")
-public class OracleSequenceGenerator extends BaseBufferedSequenceGenerator
-        implements SequenceGenerator {
+public class OracleSequenceGenerator extends BaseBufferedSequenceGenerator {
 
     private static final String ORACLE_SEQUENCE_QUERY = "SELECT %1$s.NEXTVAL FROM DUAL";
 

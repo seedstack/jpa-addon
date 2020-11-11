@@ -9,19 +9,12 @@ package org.seedstack.jpa.identity;
 
 import javax.inject.Named;
 
-import org.seedstack.business.util.SequenceGenerator;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-
 /**
  * Uses a PostgreSQL sequence for identity management. This handler needs the PostgreSQL sequence
  * name to be specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("postgreSqlSequence")
-public class PostgreSequenceGenerator extends BaseBufferedSequenceGenerator
-        implements SequenceGenerator {
+public class PostgreSequenceGenerator extends BaseBufferedSequenceGenerator {
 
     private static final String POSTGRE_SEQUENCE_QUERY = "SELECT nextval('%1$s')";
 

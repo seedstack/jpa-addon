@@ -9,14 +9,12 @@ package org.seedstack.jpa.identity;
 
 import javax.inject.Named;
 
-import org.seedstack.business.util.SequenceGenerator;
-
 /**
  * Uses a H2 sequence for identity management. This handler needs the H2 sequence name to be
  * specified in class configuration as the 'identitySequenceName' property.
  */
 @Named("hsqlSequence")
-public class HSQLSequenceGenerator extends BaseBufferedSequenceGenerator  implements SequenceGenerator {
+public class HSQLSequenceGenerator extends BaseBufferedSequenceGenerator {
 
     static final String HSQL_SEQUENCE_QUERY = "VALUES NEXT VALUE FOR %1$s";
 
