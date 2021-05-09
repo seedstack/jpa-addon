@@ -20,7 +20,7 @@ jdbc:
     datasource4:
       url: jdbc:hsqldb:mem:testdb4
     business:
-      url: jdbc:hsqldb:mem:testdbbiz
+      url: jdbc:hsqldb:mem:testbusiness
       properties:
         sql.pad_space: false
 jpa:
@@ -76,8 +76,16 @@ classes:
             jpaUnit: business
             domain:
               identity:
-                MyAggregate:
-                  defaultGenerator: org.seedstack.business.util.inmemory.InMemory
-                  sequenceName: SEQTEST
-                MyEntity:
-                  defaultGenerator: org.seedstack.business.util.random.Random
+                entities:
+                  BookEntity:
+                    defaultGenerator: hsqlInterceptor
+                    sequenceName: BOOKSeq
+                    allocationSize: 10
+                  DigitalBookEntity:
+                    defaultGenerator: hsqlInterceptor
+                    sequenceName: BOOKSeq
+                    allocationSize: 100
+                  ShelvingEntity:
+                    sequenceName: SHELVSeq
+                  LibraryAggregate:
+                    defaultGenerator: org.seedstack.business.util.random.Random
