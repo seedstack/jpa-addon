@@ -1,3 +1,8 @@
+# Version 4.2.0 (2021-05-09)
+
+* [new] New base class `BaseBufferedSequenceGenerator` for building "buffered sequence" generators which reserve a range of identifiers instead of issuing a query for each generation.
+* [chg] Update `OracleSequenceGenerator` and `PostgreSequenceGenerator` to benefit from buffered sequence generation.
+
 # Version 4.1.1 (2020-08-05)
 
 * [new] Support assigning JPA classes to multiple units using comma-separated class configuration (ex: `jpaUnit: unit1, unit2`).

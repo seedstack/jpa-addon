@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013-2020, The SeedStack authors <http://seedstack.org>
+ * Copyright © 2013-2021, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,5 +17,6 @@ public enum JpaErrorCode implements ErrorCode {
     NO_PERSISTED_CLASSES_IN_UNIT,
     NO_SEQUENCE_NAME_FOUND_FOR_ENTITY,
     UNABLE_TO_CREATE_JPA_JOIN_FOR_SPECIFICATION,
-    UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION
+    UNABLE_TO_FIND_A_SUITABLE_JPA_REPOSITORY_IMPLEMENTATION,
+    INVALID_VALUE_FOR_ALLOCATION_SIZE
 }

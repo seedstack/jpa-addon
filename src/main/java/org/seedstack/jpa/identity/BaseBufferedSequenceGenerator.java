@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013-2020, The SeedStack authors <http://seedstack.org>
+ * Copyright © 2013-2021, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,23 +7,20 @@
  */
 package org.seedstack.jpa.identity;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
+import com.google.common.base.Strings;
 import org.seedstack.business.domain.Entity;
 import org.seedstack.business.util.SequenceGenerator;
 import org.seedstack.jpa.internal.JpaErrorCode;
 import org.seedstack.seed.Application;
 import org.seedstack.seed.SeedException;
 
-import com.google.common.base.Strings;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class BaseBufferedSequenceGenerator implements SequenceGenerator {
-
     private static final String ALLOCATION_SIZE = "allocationSize";
     private static final String SANITIZING_EXPRESSION = "^[A-Za-z0-9_-]*$";
     private static final String SEQUENCE_NAME = "sequenceName";
@@ -66,12 +63,11 @@ public abstract class BaseBufferedSequenceGenerator implements SequenceGenerator
             sequenceHolder.setChunkBaseId(baseId);
             return sequenceHolder.getNextId();
         }
-
     }
 
     /**
      * If the sequence has to be initialized, we notify the implementation the intent
-     * 
+     *
      * @param sequenceName
      */
     protected abstract void ensureSequenceExistence(String sequenceName);
@@ -90,7 +86,7 @@ public abstract class BaseBufferedSequenceGenerator implements SequenceGenerator
     }
 
     protected <E extends Entity<Long>> Long retrieveNextSegment(long chunkSize,
-            Class<E> entityClass) {
+                                                                Class<E> entityClass) {
 
         Long nextId = internalGeneration(entityClass);
         Long segmentLimit = nextId + chunkSize;
@@ -111,26 +107,23 @@ public abstract class BaseBufferedSequenceGenerator implements SequenceGenerator
         ensureSequenceExistence(sequence);
     }
 
-    // TODO: use Seedstack wrapped exceptions instead of RuntimeException
     private SequenceBufferHolder createSequenceHolder(Class<?> entityClass) {
-
         String allocationSize = application.getConfiguration(entityClass)
                 .getOrDefault(ALLOCATION_SIZE, "1");
 
-        Long alocation;
+        long allocation;
         try {
-            alocation = Long.parseLong(allocationSize);
+            allocation = Long.parseLong(allocationSize);
         } catch (NumberFormatException ex) {
-            throw new RuntimeException(String.format("Invalid value for allocationSize at class %s",
-                    entityClass.getClass().getName()), ex);
+            throw SeedException.wrap(ex, JpaErrorCode.INVALID_VALUE_FOR_ALLOCATION_SIZE)
+                    .put("entityClass", entityClass.getName());
         }
 
-        return new SequenceBufferHolder(alocation);
+        return new SequenceBufferHolder(allocation);
 
     }
 
     private <E extends Entity<Long>> Long internalGeneration(Class<E> entityClass) {
-
         String sequence = getSequence(entityClass);
 
         if (entityManager == null) {
@@ -140,7 +133,7 @@ public abstract class BaseBufferedSequenceGenerator implements SequenceGenerator
         return ((Number) entityManager
                 .createNativeQuery(String.format(sequenceQuery, sequence))
                 .getSingleResult())
-                        .longValue();
+                .longValue();
     }
 
     private static final class SequenceBufferHolder {
